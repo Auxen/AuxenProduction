@@ -1,0 +1,125 @@
+body {
+  background-color: #1E1D1D;
+  overflow: hidden;
+}
+
+a:hover {
+  text-decoration:none;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.right {
+  display: flex;
+}
+
+.text {
+  color: white;
+  font-family: Futura;
+  display: flex;
+  justify-content: center;
+}
+
+.standard-text {
+  color: white;
+  font-family: Futura;
+}
+
+.headertext {
+  font-size: 55px;
+}
+
+.middle {
+  font-size: 25px;
+  margin-bottom: 25px;
+}
+
+.label-text {
+  font-size: 30px;
+}
+
+.small {
+  font-size: 20px;
+}
+
+.raise {
+  box-shadow: 0 1px 2px #999;
+  -moz-transition: box-shadow 0.25s;
+  -o-transition: box-shadow 0.25s;
+  -webkit-transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+}
+
+.raise:hover {
+  box-shadow: 0 1px 20px #999;
+}
+
+.topLevel {
+  margin-top: 10%;
+}
+
+.grow { transition: all .2s ease-in-out; }
+
+.grow:hover {
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.boxed {
+  border: 1px solid white;
+  border-radius: 10px;
+  width: inherit;
+  padding: 5px 30px 5px 30px;
+  cursor: pointer;
+}
+
+
+.ghost-input {
+  display: block;
+  font-weight:300;
+  width: 100%;
+  font-size: 55px;
+  border:0px;
+  outline: none;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  color: white;
+  background: #1E1D1D;
+  font-family: Futura;
+  padding: 10px 15px;
+  margin: 30px 0px;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+  border-bottom:1px solid grey;
+
+}
+.ghost-input:focus {
+  border-bottom:1px solid #ddd;
+}
+
+
+.raise-room {
+  -moz-transition: box-shadow 0.25s;
+  -o-transition: box-shadow 0.25s;
+  -webkit-transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.raise-room:hover {
+  box-shadow: 0 1px 5px grey;
+  cursor: pointer;
+
+}

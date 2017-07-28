@@ -1,0 +1,32 @@
+body {
+	background-image: url('../images/linda-xu-104584.jpg');
+	background-size: cover;
+	background-position: center center;
+
+}
+
+h1, h2 {
+	color: white;
+	font-family: Futura
+}
+
+h1 {
+	font-size: 45px;
+
+}
+
+h2 {
+	font-size: 25px;
+	margin-bottom: 25px;
+}
+
+.login-button {
+	margin: auto;
+	width: 200px;
+	cursor: pointer
+}
+
+
+.logo{
+	margin: auto;
+}
