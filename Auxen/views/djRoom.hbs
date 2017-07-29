@@ -3,6 +3,7 @@
   <div class="row">
     <div class="col-sm-2">
       <h1 data-id="{{newRoom.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom?roomName={{newRoom.roomName}}'>Close</a></h1>
+
     </div>
     <div class="col-sm-offset-1 col-sm-6">
       <h1 class="text-center standard-text medium animated slideInDown">{{newRoom.roomName}}</h1>
@@ -67,7 +68,10 @@
       var djObject = {
         roomName: roomName,
         spotifyId: localStorage.getItem('spotifyId'),
-        imageURL: localStorage.getItem('imageURL')
+        imageURL: localStorage.getItem('imageURL'),
+        refreshToken: localStorage.getItem('refreshToken'),
+        accessToken: localStorage.getItem('accessToken'),
+        username: localStorage.getItem.('username')
       }
       socket.emit('createRoom', djObject);
     })
