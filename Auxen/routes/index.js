@@ -36,7 +36,7 @@ router.get('/getRooms', function(req, res, next){
   Room.find(function(err, rooms){
     var roomNameArray = [];
     roomNameArray = rooms.map(function(room){
-      return {roomName: room.name, roomId: room._id};
+      return {roomName: room.roomName, roomId: room._id};
     })
     existingRoomNames = roomNameArray;
     res.render('getRooms', {
