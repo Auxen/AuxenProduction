@@ -3,8 +3,13 @@ body {
   overflow: hidden;
 }
 
+a {
+  color: white;
+}
+
 a:hover {
   text-decoration:none;
+  color: white;
 }
 
 .center {
