@@ -7,7 +7,7 @@
   </div>
   <div id="listofRooms" class="text-center standard-text" style="width: 35%; margin-right: auto; margin-left: auto; overflow: auto;">
     {{#each rooms}}
-      <a href="/joinRoom?roomName={{this}}"><h1 class="raise-room text joinexistingRoom" data-id="{{this}}" >{{this}}</h1></a>
+      <a href="/joinRoom?roomId={{roomId}}"><h1 class="raise-room text joinexistingRoom" data-id="{{roomId}}" >{{roomName}}</h1></a>
     {{/each}}
   </div>
   <div class="center">

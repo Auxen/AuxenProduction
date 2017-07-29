@@ -36,7 +36,7 @@ router.get('/getRooms', function(req, res, next){
   Room.find(function(err, rooms){
     var roomNameArray = [];
     roomNameArray = rooms.map(function(room){
-      return room.roomName;
+      return {roomName: room.name, roomId: room._id};
     })
     existingRoomNames = roomNameArray;
     res.render('getRooms', {
@@ -69,14 +69,54 @@ router.post('/createRoom', function(req, res, next){
   })
 })
 
-/* Join a room and render room page. */
-router.get('/joinRoom:roomName', function(req, res, next){
-  var roomName = req.query.roomName;
-  // we can get stuff from db and then render all existing info, and then use jquery to get new users.
-  Room.findOne({'roomName':roomName}, function(err, room){
-    res.render('userRoom', {
-      room
-    });
+/* Join a room, add to db array and render room page. */
+router.get('/joinRoom', function(req, res, next){
+  var roomId = req.query.roomId;
+  Room.findById(roomId, function(err, room){
+    var userObject = {
+      spotifyId : req.user.spotifyId,
+      imageURL : req.user.imageURL,
+      username : req.user.username
+    }
+    room.usersInRoom.push(userObject);
+    room.save(function(err, user){
+      if(err){
+        res.render('error');
+      }else{
+        res.render('userRoom', {
+          room
+        });
+      }
+    })
+
+  })
+})
+
+/* Closes room redirects dj to home. */
+router.get('/closeRoom', function(req, res, next){
+  var roomId = req.query.roomId;
+  Room.remove({'_id': roomId})
+  .then(() => {
+    existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
+    res.redirect('/');
+  })
+  .catch(error => {
+    console.log("error", error);
+  })
+})
+
+/* makes user leave room, deletes him from db as well*/
+router.get('/leaveRoom', function(req, res, next){
+  var roomId = req.query.roomId;
+  Room.findById(roomId)
+  .then(room => {
+    room.usersInRoom = room.usersInRoom.filter(function(user){
+      return user.spotifyId === !req.user.spotifyId;
+    })
+    room.save();
+  })
+  .catch(error => {
+    console.log("error", error);
   })
 })
 

@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-sm-3">
-      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise">Leave</h1>
+      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="leaveRoom"><a href='/leaveRoom?roomId={{room._id}}'>Leave</a></h1>
     </div>
     <div class="col-sm-6">
       <h1 class="text-center standard-text medium animated slideInDown">{{room.roomName}}</h1>
@@ -40,10 +40,8 @@
 
     <div class="activeUsersforUser col-sm-offset-2 center">
         {{#each room.usersInRoom}}
-          <div data-id="{{this.spotifyId}}" class="center" style ="width: 20%">
-              <div data-id="{{this.spotifyId}}" >
+          <div id="{{this.spotifyId}}" class="center" style ="width: 20%">
                 <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
-            </div>
           </div>
         {{/each}}
     </div >
@@ -56,4 +54,60 @@
 
 <script>
     var djRefreshToken = '{{room.djRefreshToken}}';
+    var roomName = '{{room.roomName}}';
+    var socket = io();
+    var clearId = -1;
+
+    /* if user wants to leave room it comes here */
+    $('#leaveRoom').on('click', function(event){
+      event.preventDefault();
+      socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+      window.location = '/';
+    })
+
+    /* Checking connnection to socket */
+    socket.on('connect', function(){
+      console.log('Connected!');
+      socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      socket.emit('joinRoom', roomName);
+    });
+
+    /* Setting access token in localStorage */
+    socket.on('setAccessToken', function(accessToken){
+      localStorage.setItem('accessToken', accessToken);
+    });
+
+    /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
+    socket.emit('setRefreshToken', function(refreshToken){
+      localStorage.setItem('refreshToken', refreshToken);
+      setInterval(function () {
+        socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+      }, 60000 * 30);
+    });
+
+    /* clearInterval for refresh token once disconnected. */
+    socket.on('disconnect', function() {
+      if (clearId !== -1) {
+        clearInterval(clearId);
+        clearId = -1;
+      }
+    })
+
+    /* if dj closes room it will come here and redirect to home after leaveingRoom */
+    socket.on('roomClosed', function(){
+      socket.emit('leaveRoom');
+      //do an alert here about room being closed by dj
+      window.location = '/';
+    })
+
+    /* new user has joined */
+    socket.on('userJoined', function(userData){
+
+    })
+
+    /* some other user has left room */
+    socket.on('userLeaving', function(userSpotifyId){
+      $('#' + userSpotifyId).remove();
+    });
+
 </script>
