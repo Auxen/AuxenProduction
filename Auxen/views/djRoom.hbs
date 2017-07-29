@@ -1,10 +1,10 @@
 <div>
 
   <div class="row">
-    <div class="col-sm-3">
-      <h1 data-id="{{newRoom.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom?roomName={{newRoom.roomName}}'>Close Room</a></h1>
+    <div class="col-sm-2">
+      <h1 data-id="{{newRoom.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom?roomName={{newRoom.roomName}}'>Close</a></h1>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-offset-1 col-sm-6">
       <h1 class="text-center standard-text medium animated slideInDown">{{newRoom.roomName}}</h1>
       <div id="djphoto" class='center'>
         <img src='{{newRoom.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
@@ -17,7 +17,7 @@
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Played Songs</h1>
   </div>
 
-  <!-- <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"> -->
+  <!-- <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="row">
     <div class="activeUsersforDJ col-sm-offset-2 center">
