@@ -48,7 +48,6 @@ router.get('/getRooms', function(req, res, next){
 /* Create a room and render djroom page. */
 router.post('/createRoom', function(req, res, next){
   var roomName = req.body.roomNameBar;
-  console.log("in index.js", req.user.imageURL);
   var newRoom = new Room({
     roomName:roomName,
     djRefreshToken:req.user.refreshToken,

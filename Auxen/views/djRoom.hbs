@@ -58,8 +58,15 @@
     socket.on('connect', function(){
       console.log('Connected!');
       socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
-
     })
+
+    /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
+    socket.emit('setRefreshToken', function(refreshToken){
+      localStorage.setItem('refreshToken', refreshToken);
+      clearId = setInterval(function () {
+        socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+      }, 60000 * 30);
+    });
 
     /* Setting access token in localStorage */
     socket.on('setAccessToken', function(accessToken){
@@ -74,14 +81,6 @@
       }
       socket.emit('createRoom', djObject);
     })
-
-    /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
-    socket.emit('setRefreshToken', function(refreshToken){
-      localStorage.setItem('refreshToken', refreshToken);
-      clearId = setInterval(function () {
-        socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 60000 * 30);
-    });
 
     /* clearInterval for refresh token once disconnected. */
     socket.on('disconnect', function() {
@@ -99,7 +98,11 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-
+        var data = `<div id="{{userData.spotifyId}}" class="center" style ="width: 20%">
+                  <img class="grow raise" style="border-radius: 50%;
+                  width: 45%; height: auto; margin-top: 5%;" src="{{userData.imageURL}}" alt="">
+                </div>`
+        $('.activeUsersforUser').append(data);
     })
 
     /* some other user has left room */

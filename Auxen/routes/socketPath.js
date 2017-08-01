@@ -127,5 +127,11 @@ module.exports = function(io) {
       }, 5000);
     })
 
+    socket.on('joinRoom', function(userObject){
+      if(socket.room)socket.leave(socket.room);
+      socket.join(userObject.roomName);
+      socket.to(roomName).emit('userJoined', userObject);
+    })
+
   })
 }

@@ -72,17 +72,24 @@
       socket.emit('joinRoom', roomName);
     });
 
-    /* Setting access token in localStorage */
-    socket.on('setAccessToken', function(accessToken){
-      localStorage.setItem('accessToken', accessToken);
-    });
-
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
     socket.emit('setRefreshToken', function(refreshToken){
       localStorage.setItem('refreshToken', refreshToken);
       setInterval(function () {
         socket.emit("toRefresh", localStorage.getItem("refreshToken"));
       }, 60000 * 30);
+    });
+
+    /* Setting access token in localStorage */
+    socket.on('setAccessToken', function(accessToken){
+      localStorage.setItem('accessToken', accessToken);
+      var userObject = {
+        roomName: roomName,
+        spotifyId: localStorage.getItem('spotifyId'),
+        imageURL: localStorage.getItem('imageURL'),
+        username: localStorage.getItem.('username')
+      }
+      socket.emit('joinRoom', userObject);
     });
 
     /* clearInterval for refresh token once disconnected. */
@@ -102,7 +109,11 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-
+      var data = `<div id="{{userData.spotifyId}}" class="center" style ="width: 20%">
+                <img class="grow raise" style="border-radius: 50%;
+                width: 45%; height: auto; margin-top: 5%;" src="{{userData.imageURL}}" alt="">
+              </div>`
+      $('.activeUsersforUser').append(data);
     })
 
     /* some other user has left room */
