@@ -19,7 +19,7 @@ router.use('/', function (req, res, next) {
 router.get('/', function(req, res, next) {
   res.render('home', {
     spotifyId: req.user.spotifyId,
-    imageURL: req.user.image,
+    imageURL: req.user.imageURL,
     username: req.user.username
   });
 });
@@ -92,8 +92,11 @@ router.get('/joinRoom', function(req, res, next){
 })
 
 /* Closes room redirects dj to home. */
-router.get('/closeRoom', function(req, res, next){
+router.get('/closeRoom/:name', function(req, res, next){
+  console.log("reached back end destination");
   var roomId = req.query.roomId;
+  var roomName = req.params.name;
+  console.log("reached here", roomId, roomName);
   Room.remove({'_id': roomId})
   .then(() => {
     existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
@@ -107,12 +110,15 @@ router.get('/closeRoom', function(req, res, next){
 /* makes user leave room, deletes him from db as well*/
 router.get('/leaveRoom', function(req, res, next){
   var roomId = req.query.roomId;
+  console.log("*****", roomId);
   Room.findById(roomId)
   .then(room => {
     room.usersInRoom = room.usersInRoom.filter(function(user){
       return user.spotifyId === !req.user.spotifyId;
     })
-    room.save();
+    room.save(function(err, room){
+      res.redirect('/');
+    });
   })
   .catch(error => {
     console.log("error", error);

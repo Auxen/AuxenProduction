@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-sm-2">
-      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="leaveRoom"><a href='/leaveRoom?roomId={{room._id}}'>Leave</a></h1>
+      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="userLeave"><a href='/leaveRoom?roomId={{room._id}}'>Leave</a></h1>
     </div>
     <div class="col-sm-offset-1 col-sm-6">
       <h1 class="text-center standard-text medium animated slideInDown">{{room.roomName}}</h1>
@@ -59,10 +59,10 @@
     var clearId = -1;
 
     /* if user wants to leave room it comes here */
-    $('#leaveRoom').on('click', function(event){
-      event.preventDefault();
+    $('#userLeave').on('click', function(event){
+      //event.preventDefault();
       socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
-      window.location = '/';
+      //window.location = '/';
     })
 
     /* Checking connnection to socket */
@@ -87,7 +87,7 @@
         roomName: roomName,
         spotifyId: localStorage.getItem('spotifyId'),
         imageURL: localStorage.getItem('imageURL'),
-        username: localStorage.getItem.('username')
+        username: localStorage.getItem('username')
       }
       socket.emit('joinRoom', userObject);
     });
@@ -100,7 +100,7 @@
       }
     })
 
-    /* if dj closes room it will come here and redirect to home after leaveingRoom */
+    /* if dj closes room it will come here and redirect to home after leavingRoom */
     socket.on('roomClosed', function(){
       socket.emit('leaveRoom');
       //do an alert here about room being closed by dj

@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-sm-2">
-      <h1 data-id="{{newRoom.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom?roomName={{newRoom.roomName}}'>Close</a></h1>
+      <h1 data-id="{{newRoom.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom/{{newRoom.roomName}}/?roomId={{newRoom._id}}'>Close</a></h1>
 
     </div>
     <div class="col-sm-offset-1 col-sm-6">
@@ -78,7 +78,7 @@
         imageURL: localStorage.getItem('imageURL'),
         refreshToken: localStorage.getItem('refreshToken'),
         accessToken: localStorage.getItem('accessToken'),
-        username: localStorage.getItem.('username')
+        username: localStorage.getItem('username')
       }
       socket.emit('createRoom', djObject);
     })
@@ -93,7 +93,8 @@
 
     /* dj closes room emits event to server which then kicks people out of the room */
     $('#closeRoom').on('click', function(event){
-      event.preventDefault();
+      console.log("reached front end destination");
+      //event.preventDefault();
       socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
     })
 
