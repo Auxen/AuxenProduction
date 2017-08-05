@@ -1,5 +1,4 @@
 <div>
-
   <div class="row">
     <div class="col-sm-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="leaveRoom"><a href='/leaveRoom?roomId={{room._id}}'>Leave</a></h1>
@@ -7,12 +6,14 @@
     <div class="col-sm-offset-1 col-sm-6">
       <h1 class="text-center standard-text medium animated slideInDown">{{room.roomName}}</h1>
       <div id="djphoto" class='center'>
-        <img src="{{room.imageURL}}" class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
+        <img src="{{room.imageURL}}" class="img-responsive animated rollIn" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
       <h2 class="text-center standard-text small">Host is: Yash Vadhan Nevatia</h2>
     </div>
   </div>
-
+  <h1 class="center floating">
+    🔥
+  </h1>
   <div class="center">
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Played Songs</h1>
   </div>
@@ -33,22 +34,15 @@
         </div>
       </div>
     </div>
-  </div
+  </div>
 
-
-  <div class="row">
-
-    <div class="activeUsersforUser col-sm-offset-2 center">
+    <div class="activeUsersforUser row" style="width: 30%; justify-content; margin-right: auto; margin-left: auto;">
         {{#each room.usersInRoom}}
-          <div id="{{this.spotifyId}}"  style ="width: 20%">
-                <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
+          <div id="{{this.spotifyId}}" class="col-sm-3 col-xs-6">
+                <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 20%;" src="{{this.imageURL}}" alt="">
           </div>
         {{/each}}
     </div >
-
-    <div class="col-sm-offset-3">
-    </div>
-
   </div>
 </div>
 

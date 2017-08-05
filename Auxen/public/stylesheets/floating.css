@@ -1,5 +1,4 @@
 .floating{
-    float: left;
     -webkit-animation-name: Floatingx;
     -webkit-animation-duration: 3s;
     -webkit-animation-iteration-count: infinite;
@@ -8,7 +7,6 @@
     -moz-animation-duration: 3s;
     -moz-animation-iteration-count: infinite;
     -moz-animation-timing-function: ease-in-out;
-    margin-left: 30px;
     margin-top: 5px;
 
 }
