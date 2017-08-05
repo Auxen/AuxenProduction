@@ -20,6 +20,42 @@ module.exports = function(io) {
     return spotifyApi;
   }
 
+  function getDJData(DJAccessToken, roomName) {
+    var DJSpotifyApi = getSpotifyApi();
+    DJSpotifyApi.setAccessToken(DJAccessToken);
+    var startTime = Date.now();
+    DJSpotifyApi.getMyCurrentPlaybackState()
+    .then(data => {
+      var timeDiff = Date.now() - startTime ;
+      var DJData = {
+        songURI: data.body.item.uri,
+        timeProgress: data.body.progress_ms + timeDiff
+      }; //setting dj data
+
+      if(!io.sockets.adapter.rooms[room].songURI){ // it enters here for the first song of the room
+        io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
+        io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
+        socket.to(roomName).emit("DJData", DJData);
+      }
+      else { // not first song of room
+        if(io.sockets.adapter.rooms[room].songURI !== data.body.item.uri){ // song has changed
+          io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
+          io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
+          socket.to(roomName).emit("DJData", DJData);
+        }
+        else { //same song but the time has changed more than 10 seconds.
+          if(data.body.is_playing && Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 10000){
+            io.sockets.adapter.rooms[room].songURI = data.body.item.uri;
+            socket.to(roomName).emit("DJData", DJData);
+          }
+        }
+      }
+    })
+    .catch(error => {
+      console.log("error", error);
+    })
+  }
+
   io.on('connection', function(socket){
 
     /* this is spotify setup sends access and refresh token to client */
@@ -72,8 +108,29 @@ module.exports = function(io) {
     })
 
     /* create room in socket with dj information */
-    socket.on('createRoom', function(djInfo){
-      
+    socket.on('createRoom', function(djObject){
+      console.log("starting to create room");
+      var roomName = djObject.roomName;
+      if(socket.room) socket.leave(socket.room); //if already in room leave
+      socket.room = roomName; // set property
+      socket.join(roomName); // join room
+      io.sockets.rooms[roomName].DJToken = djObject.accessToken;
+      io.sockets.adapter.rooms[room].imageURL = djObject.imageURL;
+      io.sockets.adapter.rooms[room].username = djObject.username;
+      var clearID = setInterval(() => {
+        if(io.sockets.adapter.rooms[roomName]){
+          return getDJData(io.sockets.rooms[roomName].DJToken, roomName);
+        }else {
+          console.log("this room no longer exists");
+          clearInterval(clearID);
+        }
+      }, 5000);
+    })
+
+    socket.on('joinRoom', function(userObject){
+      if(socket.room)socket.leave(socket.room);
+      socket.join(userObject.roomName);
+      socket.to(roomName).emit('userJoined', userObject);
     })
 
   })
