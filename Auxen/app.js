@@ -74,7 +74,7 @@ app.use(passport.session());
 
 app.use('/', auth(passport)); //passed passport here
 app.use('/', routes);
-app.use('/', socketPath(io));
+//app.use('/', socketPath(io));
 
 
 // catch 404 and forward to error handler
