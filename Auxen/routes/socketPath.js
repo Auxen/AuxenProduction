@@ -6,7 +6,11 @@ var Room = models.Room;
 
 module.exports = function(req, res) {
 
+  console.log("RECHED HERE");
+
   io = req.app.get('socketio');
+
+  console.log("IO", io);
 
   function getSpotifyApi() {
 
