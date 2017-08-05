@@ -34,6 +34,10 @@ a:hover {
   font-family: Futura;
 }
 
+.hide {
+  display: none;
+}
+
 .headertext {
   font-size: 55px;
 }
@@ -78,7 +82,7 @@ a:hover {
   border: 1px solid white;
   border-radius: 10px;
   width: inherit;
-  padding: 5px 30px 5px 30px;
+  padding: 8px 30px 8px 30px;
   cursor: pointer;
 }
 
