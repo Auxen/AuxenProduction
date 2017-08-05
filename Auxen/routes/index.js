@@ -179,6 +179,10 @@ module.exports = function(io){
           timeProgress: data.body.progress_ms + timeDiff
         }; //setting dj data
 
+        console.log("DJDATA", DJData);
+
+        console.log("*****", io.sockets.adapter.rooms[room].songURI);
+
         if(!io.sockets.adapter.rooms[room].songURI){ // it enters here for the first song of the room
           console.log("check 1");
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
