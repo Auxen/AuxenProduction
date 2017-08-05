@@ -46,6 +46,7 @@ router.get('/getRooms', function(req, res, next){
 
 /* Create a room and render djroom page. */
 router.post('/createRoom', function(req, res, next){
+  console.log("reaching create Room in backend post");
   var roomName = req.body.roomNameBar;
   existingRoomNames.push(roomName);
   var newRoom = new Room({
