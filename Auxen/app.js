@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 
 var auth = require('./routes/auth');
 var routes = require('./routes/index');
-var socketPath = require('./routes/socketPath');
+
 
 //passport
 
