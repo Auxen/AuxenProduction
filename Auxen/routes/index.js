@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var socketPath = require('./socketPath');
+
 var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
