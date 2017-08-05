@@ -58,6 +58,11 @@ module.exports = function(io) {
 
   io.on('connection', function(socket){
 
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+
+
     /* this is spotify setup sends access and refresh token to client */
     socket.on('spotifySetup', function(spotifyId){
       console.log("spotify setup");
@@ -127,10 +132,38 @@ module.exports = function(io) {
       }, 5000);
     })
 
+    /* user joins room */
     socket.on('joinRoom', function(userObject){
       if(socket.room)socket.leave(socket.room);
       socket.join(userObject.roomName);
       socket.to(roomName).emit('userJoined', userObject);
+    })
+
+    /* auto close room and remove from db if user disconnects*/
+    socket.on('autoClose', function(roomObject){
+      Room.remove({'_id':roomObject.roomId})
+      .then(()=>{
+        console.log("room successfully removed");
+      })
+      .catch((error) => {
+        console.log("error", error);
+      })
+    })
+
+    /* auto leave room and remove from db if disconnect*/
+    socket.on('autoLeave', function(userObject){
+      Room.findById(userObject.roomId)
+      .then(room => {
+        room.usersInRoom = room.usersInRoom.filter(function(user){
+          return user.spotifyId === !userObject.spotifyId;
+        })
+        room.save(function(err, room){
+          res.redirect('/');
+        });
+      })
+      .catch(error => {
+        console.log("error", error);
+      })
     })
 
   })

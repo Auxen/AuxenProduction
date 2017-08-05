@@ -49,6 +49,7 @@
 <script>
     var djRefreshToken = '{{room.djRefreshToken}}';
     var roomName = '{{room.roomName}}';
+    var roomId = '{{room.roomId}}';
     var socket = io();
     var clearId = -1;
 
@@ -87,10 +88,14 @@
     });
 
     /* clearInterval for refresh token once disconnected. */
-    socket.on('disconnect', function() {
+    socket.on('disconnected', function() {
+      console.log("this should happen on refresh");
       if (clearId !== -1) {
         clearInterval(clearId);
         clearId = -1;
+        socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+        var userObject = {roomId: roomId, spotifyId:ocalStorage.getItem("spotifyId")}
+        socket.emit('autoLeave',userObject);
       }
     })
 
