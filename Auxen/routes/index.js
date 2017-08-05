@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var socketPath = require('./socketPath');
 var models = require('../models/models');
 var User = models.User;
 var Room = models.Room;
 var existingRoomNames = [];
 
 
-module.exports = function(){
+module.exports = function(io){
   /* Check login page. */
   router.use('/', function (req, res, next) {
     if (req.user) {
@@ -16,6 +17,8 @@ module.exports = function(){
       res.redirect('/login');
     }
   })
+
+  router.use('/', socketPath(io));
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
