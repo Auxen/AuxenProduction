@@ -1,8 +1,5 @@
 'use strict';
-var express = require('express');
-var router = express.Router();
 var SpotifyWebApi = require('spotify-web-api-node'); //added
-var socket_io = require('socket.io'); //added
 var models = require('../models/models');
 var User = models.User;
 var Room = models.Room;
@@ -167,4 +164,6 @@ module.exports = function(io) {
     })
 
   })
+
+
 }
