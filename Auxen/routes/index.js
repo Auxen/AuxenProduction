@@ -7,8 +7,7 @@ var Room = models.Room;
 var existingRoomNames = [];
 
 
-module.exports = function(io){
-  console.log(io);
+module.exports = function(){
   /* Check login page. */
   router.use('/', function (req, res, next) {
     if (req.user) {

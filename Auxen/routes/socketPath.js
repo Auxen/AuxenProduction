@@ -4,7 +4,9 @@ var models = require('../models/models');
 var User = models.User;
 var Room = models.Room;
 
-module.exports = function(io) {
+module.exports = function(req, res) {
+
+  io = req.app.get('socketio');
 
   function getSpotifyApi() {
 
