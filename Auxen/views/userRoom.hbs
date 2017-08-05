@@ -128,6 +128,7 @@
 
     /* get dj setting info and configure users spotify */
     socket.on('DJSetting', function(DJData){
+      console.log("DJDATA", DJData);
       var timeProgress = DJData.timeProgress;
       var songURI = DJData.songURI;
       $.ajax({
