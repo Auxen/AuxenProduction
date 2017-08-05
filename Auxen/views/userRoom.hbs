@@ -144,7 +144,7 @@
         dataType: "JSON",
         success: function(data){
           $.ajax({
-            url: `https://api.spotify.com/v1/me/player/seek?position_ms=${songProgress}`,
+            url: `https://api.spotify.com/v1/me/player/seek?position_ms=${timeProgress}`,
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
               },
