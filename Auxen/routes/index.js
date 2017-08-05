@@ -161,7 +161,7 @@ module.exports = function(io){
     return spotifyApi;
   }
 
-  function getDJData(DJAccessToken, roomName) {
+  function getDJData(DJAccessToken, room) {
     var DJSpotifyApi = getSpotifyApi();
     DJSpotifyApi.setAccessToken(DJAccessToken);
     var startTime = Date.now();
@@ -174,20 +174,25 @@ module.exports = function(io){
       }; //setting dj data
 
       if(!io.sockets.adapter.rooms[room].songURI){ // it enters here for the first song of the room
+        console.log("check 1");
         io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
         io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
         socket.to(roomName).emit("DJData", DJData);
       }
       else { // not first song of room
+        console.log("check 2");
         if(io.sockets.adapter.rooms[room].songURI !== data.body.item.uri){ // song has changed
+          console.log("check 3");
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
           socket.to(roomName).emit("DJData", DJData);
         }
         else { //same song but the time has changed more than 10 seconds.
+          console.log("check 4");
           if(data.body.is_playing && Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 10000){
+            console.log("check 5");
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri;
-            socket.to(roomName).emit("DJData", DJData);
+            socket.to(room).emit("DJData", DJData);
           }
         }
       }
@@ -264,7 +269,7 @@ module.exports = function(io){
       io.sockets.adapter.rooms[roomName].username = djObject.username;
       var clearID = setInterval(() => {
         if(io.sockets.adapter.rooms[roomName]){
-          return getDJData(io.sockets.rooms[roomName].DJToken, roomName);
+          return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
         }else {
           console.log("this room no longer exists");
           clearInterval(clearID);
