@@ -31,9 +31,6 @@ var io = require('socket.io')(server);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-// for socket
-app.set('socketio',io);
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -77,7 +74,7 @@ app.use(passport.session());
 
 app.use('/', auth(passport)); //passed passport here
 app.use('/', routes(io));
-//app.use('/', socketPath);
+
 
 
 // catch 404 and forward to error handler

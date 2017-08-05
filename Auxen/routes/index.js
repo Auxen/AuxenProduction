@@ -199,9 +199,8 @@ module.exports = function(io){
   io.on('connection', function(socket){
 
     socket.on('disconnect', function(){
-        console.log('user disconnected', io.engine.clientsCount);
+        console.log('user disconnected');
     });
-
 
     /* this is spotify setup sends access and refresh token to client */
     socket.on('spotifySetup', function(spotifyId){

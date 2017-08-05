@@ -60,16 +60,16 @@
       console.log('Connected!');
       socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       /* clearInterval for refresh token once disconnected. */
-      socket.on('disconnected', function() {
-        console.log("this should happen on refresh");
-        if (clearId !== -1) {
-          clearInterval(clearId);
-          clearId = -1;
-          socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
-          socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
-          window.location = '/';
-        }
-      })
+      // socket.on('disconnected', function() {
+      //   console.log("this should happen on refresh");
+      //   if (clearId !== -1) {
+      //     clearInterval(clearId);
+      //     clearId = -1;
+      //     socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+      //     socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
+      //     window.location = '/';
+      //   }
+      // })
 
     })
 
