@@ -8,6 +8,7 @@ var existingRoomNames = [];
 
 
 module.exports = function(io){
+  console.log(io);
   /* Check login page. */
   router.use('/', function (req, res, next) {
     if (req.user) {
@@ -17,8 +18,6 @@ module.exports = function(io){
       res.redirect('/login');
     }
   })
-
-  router.use('/', socketPath(io));
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
