@@ -4,9 +4,9 @@ var connect = process.env.MONGODB_URI;
 
 mongoose.connect(connect);
 
-var Schema=mongoose.Schema;
+var Schema = mongoose.Schema;
 
-var userSchema=new Schema({
+var userSchema = new Schema({
   username:String,
   password:String,
   spotifyId:String,
@@ -14,7 +14,7 @@ var userSchema=new Schema({
   imageURL: String
 })
 
-var roomSchema=new Schema({
+var roomSchema = new Schema({
   roomName:String,
   djRefreshToken:String,
   djSpotifyId:String,
@@ -22,7 +22,7 @@ var roomSchema=new Schema({
   usersInRoom: Array
 })
 
-userSchema.statics.findOrCreate=function(obj1,obj2,cb){
+userSchema.statics.findOrCreate = function(obj1,obj2,cb){
   User.findOne(obj1,function(err,user){
     console.log(err, user);
     if(err)console.log(err);
@@ -43,10 +43,10 @@ userSchema.statics.findOrCreate=function(obj1,obj2,cb){
   })
 }
 
-var User=mongoose.model('User',userSchema);
-var Room=mongoose.model('Room',roomSchema);
+var User = mongoose.model('User',userSchema);
+var Room = mongoose.model('Room',roomSchema);
 
-module.exports={
+module.exports = {
   User: User,
   Room: Room
 }

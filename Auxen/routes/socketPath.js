@@ -150,7 +150,7 @@ module.exports = function(io) {
       })
     })
 
-    /* auto leave room and remove from db if disconnect*/
+    /* auto leave room and remove from db if disconnect */
     socket.on('autoLeave', function(userObject){
       Room.findById(userObject.roomId)
       .then(room => {

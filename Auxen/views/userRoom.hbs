@@ -94,7 +94,7 @@
         clearInterval(clearId);
         clearId = -1;
         socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
-        var userObject = {roomId: roomId, spotifyId:ocalStorage.getItem("spotifyId")}
+        var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")}
         socket.emit('autoLeave',userObject);
       }
     })
