@@ -281,7 +281,7 @@ module.exports = function(io){
     socket.on('joinRoom', function(userObject){
       if(socket.room)socket.leave(socket.room);
       socket.join(userObject.roomName);
-      socket.to(roomName).emit('userJoined', userObject);
+      socket.to(userObject.roomName).emit('userJoined', userObject);
     })
 
     /* auto close room and remove from db if user disconnects*/
