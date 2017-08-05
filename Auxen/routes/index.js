@@ -259,7 +259,7 @@ module.exports = function(io){
       if(socket.room) socket.leave(socket.room); //if already in room leave
       socket.room = roomName; // set property
       socket.join(roomName); // join room
-      io.sockets.rooms[roomName].DJToken = djObject.accessToken;
+      io.sockets.adapter.rooms[roomName].DJToken = djObject.accessToken;
       io.sockets.adapter.rooms[roomName].imageURL = djObject.imageURL;
       io.sockets.adapter.rooms[roomName].username = djObject.username;
       var clearID = setInterval(() => {
