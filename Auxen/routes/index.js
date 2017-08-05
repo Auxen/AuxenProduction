@@ -62,12 +62,12 @@ router.post('/createRoom', function(req, res, next){
       })
     }
     else {
-      res.redirect('/room/' + newRoom._id);
+      res.redirect('/djRoom/' + newRoom._id);
     }
   })
 })
 
-router.get('/room/:roomId', function(req, res, next){
+router.get('/djRoom/:roomId', function(req, res, next){
   var roomId = req.params.roomId;
   Room.findById(roomId)
   .then( room => {
@@ -90,18 +90,30 @@ router.get('/joinRoom', function(req, res, next){
       username : req.user.username
     }
     room.usersInRoom.push(userObject);
-    room.save(function(err, user){
+    room.save(function(err, room){
       if(err){
         res.render('error');
       }else{
-        res.render('userRoom', {
-          room
-        });
+        res.redirect('/userRoom/' + room._id);
       }
     })
 
   })
 })
+
+router.get('/userRoom/:roomId', function(req, res, next){
+  var roomId = req.params.roomId;
+  Room.findById(roomId)
+  .then( room => {
+    room.djRefreshToken = "";
+    res.render('userRoom',{
+      room
+    })
+  })
+  .catch(error => {
+    console.log("error", error);
+  })
+});
 
 /* Closes room redirects dj to home. */
 router.get('/closeRoom/:name', function(req, res, next){
