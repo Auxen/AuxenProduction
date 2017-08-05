@@ -38,7 +38,6 @@ router.get('/getRooms', function(req, res, next){
     roomNameArray = rooms.map(function(room){
       return {roomName: room.roomName, roomId: room._id};
     })
-    existingRoomNames = roomNameArray;
     res.render('getRooms', {
       rooms: roomNameArray
     })
@@ -48,6 +47,7 @@ router.get('/getRooms', function(req, res, next){
 /* Create a room and render djroom page. */
 router.post('/createRoom', function(req, res, next){
   var roomName = req.body.roomNameBar;
+  existingRoomNames.push(roomName);
   var newRoom = new Room({
     roomName:roomName,
     djRefreshToken:req.user.refreshToken,
@@ -93,10 +93,8 @@ router.get('/joinRoom', function(req, res, next){
 
 /* Closes room redirects dj to home. */
 router.get('/closeRoom/:name', function(req, res, next){
-  console.log("reached back end destination");
   var roomId = req.query.roomId;
   var roomName = req.params.name;
-  console.log("reached here", roomId, roomName);
   Room.remove({'_id': roomId})
   .then(() => {
     existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
@@ -110,7 +108,6 @@ router.get('/closeRoom/:name', function(req, res, next){
 /* makes user leave room, deletes him from db as well*/
 router.get('/leaveRoom', function(req, res, next){
   var roomId = req.query.roomId;
-  console.log("*****", roomId);
   Room.findById(roomId)
   .then(room => {
     room.usersInRoom = room.usersInRoom.filter(function(user){
