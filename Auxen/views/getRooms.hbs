@@ -3,7 +3,7 @@
 </head>
 
 <div class="wrapper">
-  {{#if 0}}
+  {{#if rooms.length}}
   <div class="center">
     <h1 class="text-center standard-text">There are <span id="numberOfRooms"> {{rooms.length}} </span>rooms to browse</h1>
   </div>
@@ -16,7 +16,6 @@
     {{/each}}
   </div>
   {{else}}
-
   <div class="center">
     <img class="img-responsive" style="width: 50%; height: 50%;" src="/static/images/finalized_color.jpg" alt="">
   </div>
