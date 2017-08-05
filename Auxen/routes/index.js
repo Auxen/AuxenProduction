@@ -187,7 +187,7 @@ module.exports = function(io){
           console.log("check 1");
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
-          socket.to(roomName).emit("DJData", DJData);
+          socket.to(room).emit("DJData", DJData);
         }
         else { // not first song of room
           console.log("check 2");
@@ -195,7 +195,7 @@ module.exports = function(io){
             console.log("check 3");
             io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
-            socket.to(roomName).emit("DJData", DJData);
+            socket.to(room).emit("DJData", DJData);
           }
           else { //same song but the time has changed more than 10 seconds.
             console.log("check 4");
