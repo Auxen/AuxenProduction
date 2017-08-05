@@ -71,6 +71,18 @@
       console.log('Connected!');
       socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       socket.emit('joinRoom', roomName);
+      /* clearInterval for refresh token once disconnected. */
+      socket.on('disconnected', function() {
+        console.log("this should happen on refresh");
+        if (clearId !== -1) {
+          clearInterval(clearId);
+          clearId = -1;
+          socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+          var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")}
+          socket.emit('autoLeave',userObject);
+        }
+      })
+      
     });
 
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
@@ -92,18 +104,6 @@
       }
       socket.emit('joinRoom', userObject);
     });
-
-    /* clearInterval for refresh token once disconnected. */
-    socket.on('disconnected', function() {
-      console.log("this should happen on refresh");
-      if (clearId !== -1) {
-        clearInterval(clearId);
-        clearId = -1;
-        socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
-        var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")}
-        socket.emit('autoLeave',userObject);
-      }
-    })
 
     /* if dj closes room it will come here and redirect to home after leavingRoom */
     socket.on('roomClosed', function(){

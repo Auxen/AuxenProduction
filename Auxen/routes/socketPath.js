@@ -120,8 +120,8 @@ module.exports = function(io) {
       socket.room = roomName; // set property
       socket.join(roomName); // join room
       io.sockets.rooms[roomName].DJToken = djObject.accessToken;
-      io.sockets.adapter.rooms[room].imageURL = djObject.imageURL;
-      io.sockets.adapter.rooms[room].username = djObject.username;
+      io.sockets.adapter.rooms[roomName].imageURL = djObject.imageURL;
+      io.sockets.adapter.rooms[roomName].username = djObject.username;
       var clearID = setInterval(() => {
         if(io.sockets.adapter.rooms[roomName]){
           return getDJData(io.sockets.rooms[roomName].DJToken, roomName);
