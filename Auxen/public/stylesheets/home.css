@@ -24,14 +24,14 @@ a:hover {
 
 .text {
   color: white;
-  font-family: Futura;
+  font-family: 'Poppins', sans-serif;;
   display: flex;
   justify-content: center;
 }
 
 .standard-text {
   color: white;
-  font-family: Futura;
+  font-family: 'Poppins', sans-serif;;
 }
 
 .headertext {
@@ -96,7 +96,7 @@ a:hover {
   box-sizing: border-box;
   color: white;
   background: #1E1D1D;
-  font-family: Futura;
+  font-family: 'Poppins', sans-serif;;
   padding: 10px 15px;
   margin: 30px 0px;
   -webkit-transition: all 0.1s ease-in-out;
