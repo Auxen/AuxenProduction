@@ -62,10 +62,21 @@ router.post('/createRoom', function(req, res, next){
       })
     }
     else {
-      res.render('djRoom', {
-        newRoom
-      });
+      res.redirect('/room/' + newRoom._id);
     }
+  })
+})
+
+router.get('/room/:roomId', function(req, res, next){
+  var roomId = req.params.roomId;
+  Room.findById(roomId)
+  .then( room => {
+    res.render('djRoom',{
+      room
+    })
+  })
+  .catch( err => {
+    console.log("error", err);
   })
 })
 

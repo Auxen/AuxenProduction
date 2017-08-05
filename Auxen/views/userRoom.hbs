@@ -72,7 +72,7 @@
       socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       socket.emit('joinRoom', roomName);
       /* clearInterval for refresh token once disconnected. */
-      socket.on('disconnect', function() {
+      socket.on('disconnected', function() {
         console.log("this should happen on refresh");
         if (clearId !== -1) {
           clearInterval(clearId);

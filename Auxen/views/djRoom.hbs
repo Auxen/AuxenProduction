@@ -2,13 +2,13 @@
 
   <div class="row">
     <div class="col-sm-2">
-      <h1 data-id="{{newRoom.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom/{{newRoom.roomName}}/?roomId={{newRoom._id}}'>Close</a></h1>
+      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom/{{room.roomName}}/?roomId={{room._id}}'>Close</a></h1>
 
     </div>
     <div class="col-sm-offset-1 col-sm-6">
-      <h1 class="text-center standard-text medium animated slideInDown">{{newRoom.roomName}}</h1>
+      <h1 class="text-center standard-text medium animated slideInDown">{{room.roomName}}</h1>
       <div id="djphoto" class='center'>
-        <img src='{{newRoom.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
+        <img src='{{room.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
       <h2 class="text-center standard-text small">You are the host</h2>
     </div>
@@ -49,9 +49,9 @@
 </div>
 
 <script>
-    var djRefreshToken = '{{newRoom.djRefreshToken}}';
-    var roomId = '{{newRoom._id}}';
-    var roomName = '{{newRoom.roomName}}';
+    var djRefreshToken = '{{room.djRefreshToken}}';
+    var roomId = '{{room._id}}';
+    var roomName = '{{room.roomName}}';
     var socket = io();
     var clearId = -1;
 
@@ -60,7 +60,7 @@
       console.log('Connected!');
       socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       /* clearInterval for refresh token once disconnected. */
-      socket.on('disconnect', function() {
+      socket.on('disconnected', function() {
         console.log("this should happen on refresh");
         if (clearId !== -1) {
           clearInterval(clearId);
