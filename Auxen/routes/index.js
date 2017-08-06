@@ -70,7 +70,10 @@ module.exports = function(io) {
   router.get('/djRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
     Room.findById(roomId).then(room => {
-      res.render('djRoom', {room})
+      if(room){
+        res.render('djRoom', {room})
+      }
+      else res.redirect('/');
     }).catch(err => {
       console.log("error", err);
     })
