@@ -115,7 +115,7 @@
       //socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
     });
 
-    $(window).unload(function(){
+    $(window).on("unload", function(){
       socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
       socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
       clearInterval(clearId);
