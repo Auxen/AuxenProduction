@@ -1,5 +1,4 @@
 <div>
-
   <div class="row">
     <div class="col-sm-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom/{{room.roomName}}/?roomId={{room._id}}'>Close</a></h1>
@@ -38,7 +37,7 @@
 
   <div class="row">
     <div class="activeUsersforDJ col-sm-offset-2 center"></div>
-      <div class="row">
+      <div id="users" class="row">
       {{#each room.usersInRoom}}
         <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%;">
             <div data-id="{{this.spotifyId}}" >
@@ -139,7 +138,7 @@
                  <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
                </div>
            </div>`
-         $('.activeUsersforDJ').append(data);
+         $('#users').append(data);
       }
 
     });
