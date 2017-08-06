@@ -64,9 +64,7 @@
 
     /* if user wants to leave room it comes here */
     $('#userLeave').on('click', function(event){
-      //event.preventDefault();
       socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
-      //window.location = '/';
     })
 
     /* Checking connnection to socket */
@@ -126,14 +124,14 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-      console.log("user joined", userData);
-      var data = `<div id=${userData.spotifyId} class="center" style ="width: 20%">
-                    <div data-id="{{userData.spotifyId}}">
-                      <img class="grow raise" style="border-radius: 50%;width: 45%; height: auto; margin-top: 5%;" src=${userData.imageURL} alt="">
-                    </div>
-                  </div>`
-      $('.activeUsersforUser').append(data);
-    })
+       console.log("user joined", userData);
+        var data = `<div id="${userData.spotifyId}" class="center" style ="width: 20%">
+                      <div data-id="${userData.spotifyId}">
+                        <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src=${userData.imageURL} alt="">
+                      </div>
+                    </div>`
+        $('.activeUsersforUsers').append(data);
+    });
 
     /* some other user has left room */
     socket.on('userLeaving', function(userSpotifyId){

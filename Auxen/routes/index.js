@@ -134,18 +134,22 @@ module.exports = function(io) {
     })
   })
 
-  function getSpotifyApi() {
-
-    var spotifyApi = new SpotifyWebApi({clientId: process.env.SPOTIFY_ID, clientSecret: process.env.SPOTIFY_SECRET, redirectUri: process.env.CALLBACK_URL});
-
-    return spotifyApi;
-  }
-
   io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
       console.log('user disconnected');
     });
+
+    function getSpotifyApi() {
+
+      var spotifyApi = new SpotifyWebApi({
+        clientId: process.env.SPOTIFY_ID,
+        clientSecret: process.env.SPOTIFY_SECRET,
+        redirectUri: process.env.CALLBACK_URL
+      });
+
+      return spotifyApi;
+    }
 
     function getDJData(DJAccessToken, room) {
       console.log("this should happen every 5 sec", room);
@@ -268,7 +272,9 @@ module.exports = function(io) {
 
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
-      if (socket.room) socket.leave(socket.room);
+      if (socket.room) {
+        socket.leave(socket.room);
+      }
       socket.join(userObject.roomName);
       socket.room = userObject.roomName;
       socket.to(userObject.roomName).emit('userJoined', userObject);
