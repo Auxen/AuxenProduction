@@ -36,15 +36,9 @@
   </div> -->
 
   <div class="row">
-    <div class="activeUsersforUser col-xs-offset-2">
+    <div class="activeUsersforDJ col-xs-offset-2">
       <div id="users" class="row">
-      {{#each room.usersInRoom}}
-        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
-            <div data-id="{{this.spotifyId}}" >
-              <img class="grow raise" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
-            </div>
-        </div>
-      {{/each}}
+
       </div>
     </div>
     <div class="col-xs-offset-4"></div>
@@ -151,18 +145,18 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-      console.log("userJoined", userData);
-      if( $('#' + userData.spotifyId).length === 0 ){
-        console.log("not adding if user already exist");
+
+      console.log("user joined", userData);
+      if($('#'+userData.spotifyId).length !== 0){
+        console.log("this guy exits");
         return;
-      }else{
-        console.log("user joined", userData);
-         var data = `<div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
-             <div data-id="{{this.spotifyId}}" >
-               <img class="grow raise" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
-             </div>
-         </div>`
-         $('#users').append(data);
+      }else {
+        var data = `<div id="${userData.spotifyId}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
+            <div data-id="${userData.spotifyId}" >
+              <img class="grow raise" style="border-radius: 50%; width: 25%;" src="${userData.imageURL}" alt="">
+            </div>
+        </div>`
+        $('#users').append(data);
       }
 
     });
