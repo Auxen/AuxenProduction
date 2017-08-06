@@ -13,6 +13,7 @@ $(document).ready(function() {
 
   $('#request').on('click', function() {
     var request = $('#requestval').val();
+    $('#requestval').val('');
     $('#flames').append(`
       <p class="request small text" style="position: absolute">
           ${request}
