@@ -114,6 +114,10 @@
       return "Are you sure you want to leave? This will take you to home page";
     });
 
+    $(window).unload(function(){
+      socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+    })
+
     /* if dj closes room it will come here and redirect to home after leavingRoom */
     socket.on('roomClosed', function(){
       socket.emit('leaveRoom');
@@ -123,13 +127,18 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-       console.log("user joined", userData);
-        var data = `<div id="${userData.spotifyId}" class="center" style ="width: 20%">
-                      <div data-id="${userData.spotifyId}">
-                        <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src=${userData.imageURL} alt="">
-                      </div>
-                    </div>`
-        $('.activeUsersforUser').append(data);
+      if($('#'+userData.spotifyId)){
+        return;
+      }else{
+        console.log("user joined", userData);
+         var data = `<div id="${userData.spotifyId}" class="center" style ="width: 20%">
+                       <div data-id="${userData.spotifyId}">
+                         <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src=${userData.imageURL} alt="">
+                       </div>
+                     </div>`
+         $('.activeUsersforUser').append(data);
+      }
+
     });
 
     /* some other user has left room */
