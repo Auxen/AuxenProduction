@@ -268,8 +268,8 @@ module.exports = function(io) {
       console.log("socket room", socket.room);
       socket.to(userObject.roomName).emit('userJoined', userObject);
       var DJData = {
-        songURI: io.sockets.adapter.rooms[room].songURI,
-        timeProgress: io.sockets.adapter.rooms[room].timeProgress
+        songURI: io.sockets.adapter.rooms[userObject.roomName].songURI,
+        timeProgress: io.sockets.adapter.rooms[userObject.roomName].timeProgress
       };
       socket.emit("DJData", DJData);
     })
