@@ -38,13 +38,15 @@
 
   <div class="row">
     <div class="activeUsersforDJ col-sm-offset-2 center"></div>
-    {{#each room.usersInRoom}}
-      <div id="{{this.spotifyId}}" class="center" style ="width: 20%">
-          <div data-id="{{this.spotifyId}}" >
-            <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
-          </div>
-      </div>
-    {{/each}}
+      <div class="row">
+      {{#each room.usersInRoom}}
+        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%;">
+            <div data-id="{{this.spotifyId}}" >
+              <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
+            </div>
+        </div>
+      {{/each}}
+    </div>
     <div class="col-sm-offset-3"></div>
   </div>
 
@@ -132,11 +134,11 @@
         return;
       }else{
         console.log("user joined", userData);
-         var data = `<div id="${userData.spotifyId}" class="center" style ="width: 20%">
-                       <div data-id="${userData.spotifyId}">
-                         <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src=${userData.imageURL} alt="">
-                       </div>
-                     </div>`
+         var data = `<div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%; margin-bottom: 2%;">
+               <div data-id="{{this.spotifyId}}" >
+                 <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
+               </div>
+           </div>`
          $('.activeUsersforDJ').append(data);
       }
 
