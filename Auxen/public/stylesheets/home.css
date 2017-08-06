@@ -115,7 +115,6 @@ a:hover {
   border-bottom:1px solid #ddd;
 }
 
-
 .raise-room {
   -moz-transition: box-shadow 0.25s;
   -o-transition: box-shadow 0.25s;
@@ -131,4 +130,8 @@ a:hover {
   box-shadow: 0 1px 5px grey;
   cursor: pointer;
 
+}
+
+.modal {
+  background-color: #1E1D1D
 }

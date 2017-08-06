@@ -8,7 +8,7 @@
     <h1 class="text-center standard-text">There are <span id="numberOfRooms"> {{rooms.length}} </span>rooms to browse</h1>
   </div>
   <div class="center" style="width: 40%; margin-right: auto; margin-left: auto;">
-    <input id="myInput" style="font-size: 200%;" placeholder="Search for a room..." class="ghost-input text-center" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
+    <input onfocus="this.placeholder = ''" autocomplete="off" id="myInput" style="font-size: 200%;" placeholder="Search for a room..." class="ghost-input text-center" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
   </div>
   <div id="listofRooms" class="text-center standard-text" style="width: 35%; margin-right: auto; margin-left: auto; overflow: auto;">
     {{#each rooms}}
@@ -48,5 +48,6 @@ function searchFunction() {
       h1[i].style.display = "none";
     }
   }
+
 };
 </script>
