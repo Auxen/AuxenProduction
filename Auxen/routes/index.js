@@ -322,6 +322,7 @@ module.exports = function(io) {
 
     /* user refreshed so adding to db */
     socket.on('userRefreshed', function(userObject){
+      console.log("user refreshed and add to database");
       Room.findById(userObject.roomId)
       .then(room => {
         var userObject = {

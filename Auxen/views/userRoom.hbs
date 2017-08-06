@@ -71,7 +71,25 @@
     /* Checking connnection to socket */
     socket.on('connect', function(){
       console.log('Connected!');
-      socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      if(localStorage.getItem("disconnectTime")){
+        console.log("entering here on connect");
+        var timeNow = new Date().getTime();
+        var timeThen = localStorage.getItem("disconnectTime");
+        if(timeNow - timeThen < 50000){
+          console.log("this was a refresh");
+          var userObject = {
+            roomId: roomId,
+            roomName: roomName,
+            spotifyId: localStorage.getItem('spotifyId'),
+            imageURL: localStorage.getItem('imageURL'),
+            username: localStorage.getItem('username')
+          }
+          socket.emit("userRefreshed", userObject);
+          localStorage.removeItem("disconnectTime");
+        }
+      }else{
+        socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      }
     });
 
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
@@ -110,25 +128,7 @@
       socket.emit('specialLeave', userObject);
       localStorage.setItem("disconnectTime", new Date().getTime());
       clearInterval(clearId);
-    })
-
-    $(window).on("load", function(){
-      if(localStorage.getItem("disconnectTime")){
-        var timeNow = new Date().getTime();
-        var timeThen = localStorage.getItem("disconnectTime");
-        if(timeNow - timeThen < 50000){
-          var userObject = {
-            roomId: roomId,
-            roomName: roomName,
-            spotifyId: localStorage.getItem('spotifyId'),
-            imageURL: localStorage.getItem('imageURL'),
-            username: localStorage.getItem('username')
-          }
-          socket.emit("userRefreshed", userObject);
-          localStorage.removeItem("disconnectTime");
-        }
-      }
-    })
+    });
 
     /* if dj closes room it will come here and redirect to home after leavingRoom */
     socket.on('roomClosed', function(){
