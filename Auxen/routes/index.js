@@ -267,6 +267,11 @@ module.exports = function(io) {
       socket.room = userObject.roomName;
       console.log("socket room", socket.room);
       socket.to(userObject.roomName).emit('userJoined', userObject);
+      var DJData = {
+        songURI: io.sockets.adapter.rooms[room].songURI,
+        timeProgress: io.sockets.adapter.rooms[room].timeProgress
+      };
+      socket.emit("DJData", DJData);
     })
 
     /* auto close room and remove from db if user disconnects*/
@@ -299,7 +304,6 @@ module.exports = function(io) {
     socket.on('changeRoomToken', function(data) {
       io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
     });
-
 
     /* user refreshed so adding to db */
     socket.on('userRefreshed', function(userObject){
