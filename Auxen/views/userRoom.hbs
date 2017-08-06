@@ -84,6 +84,7 @@
             imageURL: localStorage.getItem('imageURL'),
             username: localStorage.getItem('username')
           }
+          console.log("userObject after asfkjtcjs", userObject);
           socket.emit("userRefreshed", userObject);
           localStorage.removeItem("disconnectTime");
         }
