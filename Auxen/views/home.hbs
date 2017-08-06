@@ -1,5 +1,3 @@
-
-
 <div class="container">
   <div class="wrapper">
     <div class="container-fluid" >
@@ -16,8 +14,33 @@
     		</div>
     </div>
   </div>
+
 </div>
 
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header"  style="background-color: #1E1D1D">
+        <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
+      </div>
+      <div class="modal-body" style="background-color: #1E1D1D">
+        <p class="text">
+          Auxen is a real-time music sharing application. It's pretty simple. You can choose to create a room.
+          You're now the DJ for the room you just created. You then start playing music like you normally do.
+          People can join the room and you can see all the users who joined. Whoever joins will automatically
+          have their music set to whatever you, the DJ, are playing. If you join a room, your music will be set to
+          whatever the DJ is currently playing. You can leave the room to take control of your music again.
+       </p>
+       <img src="https://media.giphy.com/media/TsxMkIKHpvFaU/giphy.gif" alt="">
+      </div>
+      <div class="modal-footer" style="background-color: #1E1D1D">
+        <h1 type="button" class="text small boxed raise" data-dismiss="modal">Get started</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="/static/scripts/modal.js"></script>
 <script>
   $(document).ready(function() {
     var spotifyId = '{{spotifyId}}';
