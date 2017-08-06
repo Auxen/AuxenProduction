@@ -66,7 +66,7 @@
       localStorage.setItem('refreshToken', refreshToken);
       clearId = setInterval(function () {
         socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 60000 * 30);
+      }, 40000);
     });
 
     /* Setting access token in localStorage */
@@ -85,6 +85,7 @@
 
     /* sets new access token after refresh */
     socket.on('setNewAccessToken', function(accessToken){
+      console.log("this is the new access token for dj", accessToken);
       localStorage.setItem('accessToken', accessToken);
       socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
     })
