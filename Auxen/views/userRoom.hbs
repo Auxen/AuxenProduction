@@ -127,7 +127,7 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-      if($('#'+userData.spotifyId)){
+      if($('#' + userData.spotifyId)){
         return;
       }else{
         console.log("user joined", userData);

@@ -104,14 +104,19 @@
     // })
 
     $(window).bind('beforeunload', function(){
+      //localStorage.setItem("disconnectTime", new Date().getTime());
       return "Are you sure you want to leave? This will take you to home page";
       // console.log("is this happening");
       // window.location.href = '/';
       // clearInterval(clearId);
       // clearId = -1;
-      // socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
-      // socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
+      //socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+      //socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
     });
+
+    $(window).unload(function(){
+      socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+    })
 
     /* some other user has left room */
     socket.on('userLeaving', function(userSpotifyId){
@@ -128,7 +133,7 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-      if($('#'+userData.spotifyId)){
+      if($('#' + userData.spotifyId)){
         return;
       }else{
         console.log("user joined", userData);

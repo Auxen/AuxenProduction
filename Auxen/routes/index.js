@@ -294,14 +294,16 @@ module.exports = function(io) {
 
     /* auto leave room and remove from db if disconnect */
     socket.on('autoLeave', function(userObject) {
-      Room.findById(userObject.roomId).then(room => {
+      Room.findById(userObject.roomId)
+      .then(room => {
         room.usersInRoom = room.usersInRoom.filter(function(user) {
           return user.spotifyId === !userObject.spotifyId;
         })
         room.save(function(err, room) {
           res.redirect('/');
         });
-      }).catch(error => {
+      })
+      .catch(error => {
         console.log("error", error);
       })
     })
