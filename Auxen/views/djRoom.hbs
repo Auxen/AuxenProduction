@@ -122,6 +122,7 @@
       // socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
       clearInterval(clearId);
+      window.location = '/';
     })
 
     /* some other user has left room */
