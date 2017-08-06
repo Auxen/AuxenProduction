@@ -169,15 +169,7 @@ module.exports = function(io){
 
     function getDJData(DJAccessToken, room) {
       console.log("this should happen every 5 sec", room);
-      //var DJSpotifyApi = getSpotifyApi();
-
-      var DJSpotifyApi = new SpotifyWebApi({
-        clientId: process.env.SPOTIFY_ID,
-        clientSecret: process.env.SPOTIFY_SECRET,
-        redirectUri: process.env.CALLBACK_URL
-      });
-
-
+      var DJSpotifyApi = getSpotifyApi();
       DJSpotifyApi.setAccessToken(DJAccessToken);
       var startTime = Date.now();
       DJSpotifyApi.getMyCurrentPlaybackState()
