@@ -258,6 +258,7 @@ module.exports = function(io) {
 
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
+      console.log("**********************");
       console.log(userObject);
       if (socket.room) {
         socket.leave(socket.room);

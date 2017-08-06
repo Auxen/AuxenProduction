@@ -97,6 +97,7 @@
           localStorage.removeItem("disconnectTime");
 
       }else{
+
         socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       }
     });
@@ -118,6 +119,7 @@
         imageURL: localStorage.getItem('imageURL'),
         username: localStorage.getItem('username')
       }
+      console.log("show this to me");
       socket.emit('joinRoom', userObject);
     });
 
