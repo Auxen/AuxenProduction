@@ -175,6 +175,7 @@ module.exports = function(io){
       DJSpotifyApi.getMyCurrentPlaybackState()
       .then(data => {
         var timeDiff = Date.now() - startTime ;
+        console.log("*****",data.body.progress_ms, data.body.item.uri);
         if(!io.sockets.adapter.rooms[room].songURI){ // it enters here for the first song of the room
           console.log("first time it should enter here");
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
