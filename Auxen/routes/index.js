@@ -368,7 +368,6 @@ module.exports = function(io) {
     });
 
     socket.on('laflame', function() {
-      console.log('reach shit');
       socket.to(socket.room).emit('laflame');
     });
 

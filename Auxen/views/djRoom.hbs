@@ -119,6 +119,7 @@
     });
 
     socket.on('laflame', function() {
+      console.log('whats the wave');
       $('#flames').append(`
           <span class="middle fire" style="position: absolute">
               🔥
@@ -127,7 +128,6 @@
         setTimeout(function() {
           $('#flames').find('span:first').remove();
         }, 5000)
-
     })
 
     socket.on('userSongRequest', function(data){
