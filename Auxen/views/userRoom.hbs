@@ -73,7 +73,7 @@
       setInterval(function () {
         console.log("calling a function on backend to refresh my access token");
         socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 40000 );
+      }, 20000 );
     });
 
     /* Setting access token in localStorage */
