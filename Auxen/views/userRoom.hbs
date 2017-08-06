@@ -58,7 +58,8 @@
 
 <script>
     var roomName = '{{room.roomName}}';
-    var roomId = '{{room.roomId}}';
+    var roomId = '{{room._id}}';
+    console.log("roomId", roomId);
     var socket = io();
     var clearId = -1;
 
