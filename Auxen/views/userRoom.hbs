@@ -1,3 +1,4 @@
+
 <div>
   <div class="row">
     <div class="col-sm-2 col-xs-2">
@@ -15,21 +16,24 @@
     <h1 id="laflame" class="center floating pointer" >
       🔥
     </h1>
+
   </div>
   <div class="center">
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Played Songs</h1>
   </div>
   <div class="row">
     <div class="activeUsersforUser col-sm-offset-2 center">
+      <div id="users" class="row">
       {{#each room.usersInRoom}}
-        <div id="{{this.spotifyId}}" class="center" style ="width: 20%">
+        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%;">
             <div data-id="{{this.spotifyId}}" >
               <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
             </div>
         </div>
       {{/each}}
+
     </div>
-    <div class="col-sm-offset-3"></div>
+    </div>
   </div>
 </div>
 
@@ -131,12 +135,12 @@
         return;
       }else{
         console.log("user joined", userData);
-         var data = `<div id="${userData.spotifyId}" class="center" style ="width: 20%">
-                       <div data-id="${userData.spotifyId}">
-                         <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src=${userData.imageURL} alt="">
-                       </div>
-                     </div>`
-         $('.activeUsersforUser').append(data);
+         var data = `<div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%;">
+             <div data-id="{{this.spotifyId}}" >
+               <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
+             </div>
+         </div>`
+         $('#users').append(data);
       }
 
     });

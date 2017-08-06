@@ -142,8 +142,8 @@ a:hover {
 #fire {
   position: relative;
   animation-name: movement;
-  animation-duration: 5s;
-  animation-timing-function: linear;
+  animation-duration: 3s;
+  animation-timing-function: ease-in;
   animation-iteration-count: infinite;
 }
 
@@ -167,16 +167,16 @@ a:hover {
   }
 
   50%{
-    right: 50px;
+    right: 70px;
   }
   60%{
-    right: 40px;
+    right: 30px;
   }
   70%{
     right: 50px;
   }
   80%{
-    right: 45px;
+    right: 25px;
   }
   90%{
     right: 50px;
