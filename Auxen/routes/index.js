@@ -327,7 +327,7 @@ module.exports = function(io) {
           if(err)console.log(err);
           else {
             console.log("user successfully added");
-            socket.to(userObject.roomName).broadcast('userJoined', userObject)
+            socket.to(userObject.roomName).broadcast('userJoined', userObject);
           }
         })
       })
