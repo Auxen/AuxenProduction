@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <div class="col-sm-2">
+    <div class="col-sm-2 col-xs-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="userLeave"><a href='/leaveRoom?roomId={{room._id}}'>Leave</a></h1>
     </div>
     <div class="col-sm-offset-1 col-sm-6">
@@ -25,7 +25,7 @@
         <div data-id="{{this.spotifyId}}" class="center" style ="width: 20%">
             <div data-id="{{this.spotifyId}}" >
               <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
-          </div>
+            </div>
         </div>
       {{/each}}
     </div >
