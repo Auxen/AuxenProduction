@@ -7,10 +7,9 @@ var User = models.User;
 var Room = models.Room;
 var existingRoomNames = [];
 
-
-module.exports = function(io){
+module.exports = function(io) {
   /* Check login page. */
-  router.use('/', function (req, res, next) {
+  router.use('/', function(req, res, next) {
     if (req.user) {
       next();
     } else {
@@ -29,22 +28,18 @@ module.exports = function(io){
   });
 
   /* Get createRoom page. */
-  router.get('/createRoom', function(req, res, next){
-    res.render('createRoom', {
-      existingRoomNames
-    });
+  router.get('/createRoom', function(req, res, next) {
+    res.render('createRoom', {existingRoomNames});
   })
 
   /* Get list of available rooms. */
-  router.get('/getRooms', function(req, res, next){
-    Room.find(function(err, rooms){
+  router.get('/getRooms', function(req, res, next) {
+    Room.find(function(err, rooms) {
       var roomNameArray = [];
-      roomNameArray = rooms.map(function(room){
+      roomNameArray = rooms.map(function(room) {
         return {roomName: room.roomName, roomId: room._id};
       })
-      res.render('getRooms', {
-        rooms: roomNameArray
-      })
+      res.render('getRooms', {rooms: roomNameArray})
     })
   })
 
@@ -72,34 +67,29 @@ module.exports = function(io){
     })
   })
 
-  /* renders room for user. */
-  router.get('/djRoom/:roomId', function(req, res, next){
+  router.get('/djRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
-    Room.findById(roomId)
-    .then( room => {
-      res.render('djRoom',{
-        room
-      })
-    })
-    .catch( err => {
+    Room.findById(roomId).then(room => {
+      res.render('djRoom', {room})
+    }).catch(err => {
       console.log("error", err);
     })
   })
 
-  /* Join a room, add to db array. */
-  router.get('/joinRoom', function(req, res, next){
+  /* Join a room, add to db array and render room page. */
+  router.get('/joinRoom', function(req, res, next) {
     var roomId = req.query.roomId;
-    Room.findById(roomId, function(err, room){
+    Room.findById(roomId, function(err, room) {
       var userObject = {
-        spotifyId : req.user.spotifyId,
-        imageURL : req.user.imageURL,
-        username : req.user.username
+        spotifyId: req.user.spotifyId,
+        imageURL: req.user.imageURL,
+        username: req.user.username
       }
       room.usersInRoom.push(userObject);
-      room.save(function(err, room){
-        if(err){
+      room.save(function(err, room) {
+        if (err) {
           res.render('error');
-        }else{
+        } else {
           res.redirect('/userRoom/' + room._id);
         }
       })
@@ -107,136 +97,109 @@ module.exports = function(io){
     })
   })
 
-  /* renders room for user. */
-  router.get('/userRoom/:roomId', function(req, res, next){
+  router.get('/userRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
-    Room.findById(roomId)
-    .then( room => {
+    Room.findById(roomId).then(room => {
       room.djRefreshToken = "";
-      res.render('userRoom',{
-        room
-      })
-    })
-    .catch(error => {
+      res.render('userRoom', {room})
+    }).catch(error => {
       console.log("error", error);
     })
   });
 
   /* Closes room redirects dj to home. */
-  router.get('/closeRoom/:name', function(req, res, next){
+  router.get('/closeRoom/:name', function(req, res, next) {
     var roomId = req.query.roomId;
     var roomName = req.params.name;
-    Room.remove({'_id': roomId})
-    .then(() => {
+    Room.remove({'_id': roomId}).then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
       res.redirect('/');
-    })
-    .catch(error => {
+    }).catch(error => {
       console.log("error", error);
     })
   })
 
-  /* makes user leave room, deletes him from db as well. */
-  router.get('/leaveRoom', function(req, res, next){
+  /* makes user leave room, deletes him from db as well*/
+  router.get('/leaveRoom', function(req, res, next) {
     var roomId = req.query.roomId;
-    Room.findById(roomId)
-    .then(room => {
-      room.usersInRoom = room.usersInRoom.filter(function(user){
+    Room.findById(roomId).then(room => {
+      room.usersInRoom = room.usersInRoom.filter(function(user) {
         return user.spotifyId === !req.user.spotifyId;
       })
-      room.save(function(err, room){
+      room.save(function(err, room) {
         res.redirect('/');
       });
-    })
-    .catch(error => {
+    }).catch(error => {
       console.log("error", error);
     })
   })
 
   function getSpotifyApi() {
 
-    var spotifyApi = new SpotifyWebApi({
-      clientId: process.env.SPOTIFY_ID,
-      clientSecret: process.env.SPOTIFY_SECRET,
-      redirectUri: process.env.CALLBACK_URL
-    });
+    var spotifyApi = new SpotifyWebApi({clientId: process.env.SPOTIFY_ID, clientSecret: process.env.SPOTIFY_SECRET, redirectUri: process.env.CALLBACK_URL});
 
     return spotifyApi;
   }
 
-  io.on('connection', function(socket){
+  io.on('connection', function(socket) {
+
+    socket.on('disconnect', function() {
+      console.log('user disconnected');
+    });
 
     function getDJData(DJAccessToken, room) {
-      console.log("this should happen every 5 sec", room);
       var DJSpotifyApi = getSpotifyApi();
       DJSpotifyApi.setAccessToken(DJAccessToken);
       var startTime = Date.now();
-      DJSpotifyApi.getMyCurrentPlaybackState()
-      .then(data => {
-        var timeDiff = Date.now() - startTime ;
-        console.log("*****",data.body.progress_ms, data.body.item.uri);
-        if(!io.sockets.adapter.rooms[room].songURI){ // it enters here for the first song of the room
-          console.log("first time it should enter here");
+      DJSpotifyApi.getMyCurrentPlaybackState().then(data => {
+        var timeDiff = Date.now() - startTime;
+        var DJData = {
+          songURI: data.body.item.uri,
+          timeProgress: data.body.progress_ms + timeDiff
+        }; //setting dj data
+
+        console.log("DJDATA", DJData);
+
+        console.log("*****", io.sockets.adapter.rooms[room].songURI);
+
+        if (!io.sockets.adapter.rooms[room].songURI) { // it enters here for the first song of the room
+          console.log("check 1");
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
-          var DJData = {
-            songURI: data.body.item.uri,
-            timeProgress: data.body.progress_ms + timeDiff
-          };
           socket.to(room).emit("DJData", DJData);
-        }
-        else { // not first song of room
-          console.log("second time it should enter here");
-          if(io.sockets.adapter.rooms[room].songURI !== data.body.item.uri){ // song has changed
-            console.log("song changed");
+        } else { // not first song of room
+          console.log("check 2");
+          if (io.sockets.adapter.rooms[room].songURI !== data.body.item.uri) { // song has changed
+            console.log("check 3");
             io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
-            var DJData = {
-              songURI: data.body.item.uri,
-              timeProgress: data.body.progress_ms + timeDiff
-            };
             socket.to(room).emit("DJData", DJData);
-          }
-          else {
-            console.log("song not changed");
-            if(data.body.is_playing){
-              if(Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 20000){
-                console.log("same song but change in time");
-                var DJData = {
-                  songURI: data.body.item.uri,
-                  timeProgress: data.body.progress_ms + timeDiff
-                };
-                socket.to(room).emit("DJData", DJData);
-              }
-              io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms;
+          } else { //same song but the time has changed more than 10 seconds.
+            console.log("check 4");
+            if (data.body.is_playing && Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 10000) {
+              console.log("check 5");
+              io.sockets.adapter.rooms[room].songURI = data.body.item.uri;
+              socket.to(room).emit("DJData", DJData);
             }
           }
         }
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log("error", error);
       })
     }
 
-    socket.on('disconnect', function(){
-      console.log('user disconnected');
-    });
-
     /* this is spotify setup sends access and refresh token to client */
-    socket.on('spotifySetup', function(spotifyId){
+    socket.on('spotifySetup', function(spotifyId) {
       console.log("spotify setup");
       var spotifyApi = getSpotifyApi();
-      User.findOne({'spotifyId': spotifyId})
-      .then( user => {
+      User.findOne({'spotifyId': spotifyId}).then(user => {
         spotifyApi.setRefreshToken(user.refreshToken);
         socket.emit('setRefreshToken', user.refreshToken);
-        spotifyApi.refreshAccessToken()
-        .then(data => {
+        spotifyApi.refreshAccessToken().then(data => {
           spotifyApi.setAccessToken(data.body['access_token']);
           socket.emit('setAccessToken', spotifyApi.getAccessToken());
         })
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log("error", error);
       })
 
@@ -258,34 +221,34 @@ module.exports = function(io){
     })
 
     /* called by dj. closes room, dj leaves room, and emits events for users to leave room */
-    socket.on('closingRoom', function(roomData){
-      console.log("this is where i want to be");
+    socket.on('closingRoom', function(roomData) {
       socket.to(socket.room).emit('roomClosed');
       socket.leave(socket.room);
     })
 
     /* called by users while leaving room or when room closed altogether */
-    socket.on('leaveRoom', function(userSpotifyId){
-      if(userSpotifyId){
+    socket.on('leaveRoom', function(userSpotifyId) {
+      if (userSpotifyId) {
         socket.to(socket.room).emit('userLeaving', userSpotifyId);
       }
       socket.leave(socket.room);
     })
 
     /* create room in socket with dj information */
-    socket.on('createRoom', function(djObject){
+    socket.on('createRoom', function(djObject) {
       console.log("starting to create room");
       var roomName = djObject.roomName;
-      if(socket.room) socket.leave(socket.room); //if already in room leave
+      if (socket.room)
+        socket.leave(socket.room); //if already in room leave
       socket.room = roomName; // set property
       socket.join(roomName); // join room
       io.sockets.adapter.rooms[roomName].DJToken = djObject.accessToken;
       io.sockets.adapter.rooms[roomName].imageURL = djObject.imageURL;
       io.sockets.adapter.rooms[roomName].username = djObject.username;
       var clearID = setInterval(() => {
-        if(io.sockets.adapter.rooms[roomName]){
+        if (io.sockets.adapter.rooms[roomName]) {
           return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
-        }else {
+        } else {
           console.log("this room no longer exists");
           clearInterval(clearID);
         }
@@ -293,40 +256,37 @@ module.exports = function(io){
     })
 
     /* user joins room */
-    socket.on('joinRoom', function(userObject){
-      if(socket.room)socket.leave(socket.room);
+    socket.on('joinRoom', function(userObject) {
+      if (socket.room)
+        socket.leave(socket.room);
       socket.join(userObject.roomName);
+      socket.room = userObject.roomName;
       socket.to(userObject.roomName).emit('userJoined', userObject);
     })
 
     /* auto close room and remove from db if user disconnects*/
-    socket.on('autoClose', function(roomObject){
-      Room.remove({'_id':roomObject.roomId})
-      .then(()=>{
+    socket.on('autoClose', function(roomObject) {
+      Room.remove({'_id': roomObject.roomId}).then(() => {
         console.log("room successfully removed");
-      })
-      .catch((error) => {
+      }).catch((error) => {
         console.log("error", error);
       })
     })
 
     /* auto leave room and remove from db if disconnect */
-    socket.on('autoLeave', function(userObject){
-      Room.findById(userObject.roomId)
-      .then(room => {
-        room.usersInRoom = room.usersInRoom.filter(function(user){
+    socket.on('autoLeave', function(userObject) {
+      Room.findById(userObject.roomId).then(room => {
+        room.usersInRoom = room.usersInRoom.filter(function(user) {
           return user.spotifyId === !userObject.spotifyId;
         })
-        room.save(function(err, room){
+        room.save(function(err, room) {
           res.redirect('/');
         });
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log("error", error);
       })
     })
 
-    /* change the DJToken of the said room after refreh */
     socket.on('changeRoomToken', function(data){
       io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
     });
