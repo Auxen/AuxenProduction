@@ -238,6 +238,7 @@ module.exports = function(io) {
 
     /* called by dj. closes room, dj leaves room, and emits events for users to leave room */
     socket.on('closingRoom', function(roomData) {
+      console.log("backend closingRoom");
       socket.to(socket.room).emit('roomClosed');
       socket.leave(socket.room);
     })

@@ -106,6 +106,7 @@
 
     $(window).bind('beforeunload', function(){
       //localStorage.setItem("disconnectTime", new Date().getTime());
+      console.log("before unloading");
       return "Are you sure you want to leave? This will take you to home page";
       // console.log("is this happening");
       // window.location.href = '/';
@@ -116,6 +117,7 @@
     });
 
     $(window).on("unload", function(){
+      console.log("unloading");
       socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
       socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
       clearInterval(clearId);
