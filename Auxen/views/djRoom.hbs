@@ -130,7 +130,15 @@
     });
 
     socket.on('userSongRequest', function(data){
-      console.log("data", data);
+      $('#flames').append(`
+        <p class="request small text" style="position: absolute">
+            <span style="width: 30%;">${data}</span>
+        </p>
+      `)
+
+      setTimeout(function() {
+        $('#flames').find('p:first').remove();
+      }, 8000)
     });
 
 
