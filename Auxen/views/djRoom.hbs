@@ -63,17 +63,14 @@
 
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
     socket.on('setRefreshToken', function(refreshToken){
-      console.log("first time setting refresh token");
       localStorage.setItem('refreshToken', refreshToken);
       clearId = setInterval(function () {
-        console.log("calling a function on backend to refresh my access token");
         socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 20000);
+      }, 30*60000);
     });
 
     /* Setting access token in localStorage */
     socket.on('setAccessToken', function(accessToken){
-      console.log("this is the original accessToken", accessToken);
       localStorage.setItem('accessToken', accessToken);
       var djObject = {
         roomName: roomName,
@@ -88,7 +85,6 @@
 
     /* sets new access token after refresh */
     socket.on('setNewAccessToken', function(accessToken){
-      console.log("this is the new access token for dj", accessToken);
       localStorage.setItem('accessToken', accessToken);
       socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
     })

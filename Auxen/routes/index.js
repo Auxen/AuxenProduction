@@ -300,7 +300,6 @@ module.exports = function(io) {
 
     /* after access token is changed for dj, i set that token to room here */
     socket.on('changeRoomToken', function(data){
-      console.log("i get new access token of dj here and set it to room", data.newToken);
       io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
     });
 
