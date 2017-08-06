@@ -168,41 +168,47 @@ module.exports = function(io){
     });
 
     function getDJData(DJAccessToken, room) {
+      console.log("this should happen every 5 sec", room);
       var DJSpotifyApi = getSpotifyApi();
       DJSpotifyApi.setAccessToken(DJAccessToken);
       var startTime = Date.now();
       DJSpotifyApi.getMyCurrentPlaybackState()
       .then(data => {
         var timeDiff = Date.now() - startTime ;
-        var DJData = {
-          songURI: data.body.item.uri,
-          timeProgress: data.body.progress_ms + timeDiff
-        }; //setting dj data
-
-        console.log("DJDATA", DJData);
-
-        console.log("*****", io.sockets.adapter.rooms[room].songURI);
-
         if(!io.sockets.adapter.rooms[room].songURI){ // it enters here for the first song of the room
-          console.log("check 1");
+          console.log("first time it should enter here");
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
+          var DJData = {
+            songURI: data.body.item.uri,
+            timeProgress: data.body.progress_ms + timeDiff
+          };
           socket.to(room).emit("DJData", DJData);
         }
         else { // not first song of room
-          console.log("check 2");
+          console.log("second time it should enter here");
           if(io.sockets.adapter.rooms[room].songURI !== data.body.item.uri){ // song has changed
-            console.log("check 3");
+            console.log("song changed");
             io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
+            var DJData = {
+              songURI: data.body.item.uri,
+              timeProgress: data.body.progress_ms + timeDiff
+            };
             socket.to(room).emit("DJData", DJData);
           }
-          else { //same song but the time has changed more than 10 seconds.
-            console.log("check 4");
-            if(data.body.is_playing && Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 10000){
-              console.log("check 5");
-              io.sockets.adapter.rooms[room].songURI = data.body.item.uri;
-              socket.to(room).emit("DJData", DJData);
+          else {
+            console.log("song not changed");
+            if(data.body.is_playing){
+              if(Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 20000){
+                console.log("same song but change in time");
+                var DJData = {
+                  songURI: data.body.item.uri,
+                  timeProgress: data.body.progress_ms + timeDiff
+                };
+                socket.to(room).emit("DJData", DJData);
+              }
+              io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms;
             }
           }
         }
