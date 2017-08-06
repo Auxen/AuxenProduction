@@ -83,7 +83,6 @@
       console.log('Connected!');
       if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") <5000)){
         console.log("entering here on connect");
-
           console.log("this was a refresh");
           var userObject = {
             roomId: roomId,
@@ -97,7 +96,7 @@
           localStorage.removeItem("disconnectTime");
 
       }else{
-
+        console.log("new room joined without refresh");
         socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       }
     });
