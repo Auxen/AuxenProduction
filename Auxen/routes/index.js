@@ -354,7 +354,29 @@ module.exports = function(io) {
       })
     })
 
+    socket.on('specialLeave', function(userObject){
+      console.log("enetered specialLeave");
+      if (userObject.spotifyId) {
+        socket.to(socket.room).emit('userLeaving', userObject.spotifyId);
+      }
+      socket.leave(socket.room);
+      Room.findById(userObject.roomId)
+      .then(room => {
+        room.usersInRoom = room.usersInRoom.filter(function(user) {
+          return user.spotifyId === !userObject.spotifyId;
+        })
+        room.save(function(err, room) {
+          console.log("user successfully removed");
+        });
+      })
+      .catch(error => {
+        console.log("error", error);
+      })
+    })
+
   })
+
+
 
   return router;
 }

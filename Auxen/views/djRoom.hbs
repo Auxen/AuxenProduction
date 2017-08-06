@@ -61,7 +61,11 @@
     /* Checking connnection to socket */
     socket.on('connect', function(){
       console.log('Connected!');
-      socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      if(localStorage.getItem('closing') === "true"){
+        window.location.href = '/';
+      }else{
+        socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      }
     })
 
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
@@ -92,37 +96,16 @@
       socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
     })
 
-    /* clearInterval for refresh token once disconnected. */
-    // socket.on('disconnect', function() {
-    //   console.log("this should happen on refresh");
-    //   if (clearId !== -1) {
-    //     clearInterval(clearId);
-    //     clearId = -1;
-    //     socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
-    //     socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
-    //     window.location = '/';
-    //   }
-    // })
-
     $(window).bind('beforeunload', function(){
-      //localStorage.setItem("disconnectTime", new Date().getTime());
       console.log("before unloading");
       return "Are you sure you want to leave? This will take you to home page";
-      // console.log("is this happening");
-      // window.location.href = '/';
-      // clearInterval(clearId);
-      // clearId = -1;
-      //socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
-      //socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
     });
 
     $(window).on("unload", function(){
       console.log("unloading");
-      // socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
-      // socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
       clearInterval(clearId);
-      window.location = '/';
+      localStorage.setItem("closing", "true");
     })
 
     /* some other user has left room */
@@ -130,7 +113,6 @@
         console.log(userSpotifyId);
         $('#' + userSpotifyId).remove();
     });
-
 
     /* dj closes room emits event to server which then kicks people out of the room */
     $('#closeRoom').on('click', function(event){
