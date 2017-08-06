@@ -268,8 +268,7 @@ module.exports = function(io) {
 
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
-      if (socket.room)
-        socket.leave(socket.room);
+      if (socket.room) socket.leave(socket.room);
       socket.join(userObject.roomName);
       socket.room = userObject.roomName;
       socket.to(userObject.roomName).emit('userJoined', userObject);
