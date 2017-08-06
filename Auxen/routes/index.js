@@ -326,19 +326,19 @@ module.exports = function(io) {
       Room.findById(userObject.roomId)
       .then(room => {
         console.log("room", room);
-        var userObject = {
+        var user = {
           spotifyId: userObject.spotifyId,
           imageURL: userObject.imageURL,
           username: userObject.username
         }
-        console.log("****", userObject);
-        room.usersInRoom.push(userObject);
+        console.log("****", user);
+        room.usersInRoom.push(user);
         room.save(function(err, room) {
           console.log("entered here");
           if(err)console.log(err);
           else {
             console.log("user successfully added");
-            socket.to(userObject.roomName).broadcast('userJoined', userObject);
+            socket.to(userObject.roomName).broadcast('userJoined', user);
           }
         })
       })
