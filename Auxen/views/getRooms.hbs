@@ -15,6 +15,9 @@
     <a href="/joinRoom?roomId={{roomId}}"><h1 class="raise-room text joinexistingRoom" data-id="{{roomId}}" >{{roomName}}</h1></a>
     {{/each}}
   </div>
+  <div id="party" class="center">
+    <a href="/createRoom"><h1 class="text-center text small boxed raise">...or you can start your own party</h1></a>
+  </div>
   {{else}}
   <div class="center">
     <img class="img-responsive" style="width: 50%; height: 50%;" src="/static/images/finalized_color.jpg" alt="">

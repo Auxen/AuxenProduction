@@ -17,6 +17,7 @@ $('#startRoom').on('click', function (event) {
     event.preventDefault();
     var existingRoomNames = '{{existingRoomNames}}';
     var proposedRoomName = $('#roomName').val();
+    console.log('damn', existingRoomNames);
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
       // here mo will make stuff red.
       console.log(proposedRoomName);
