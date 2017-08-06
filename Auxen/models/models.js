@@ -19,7 +19,8 @@ var roomSchema = new Schema({
   djRefreshToken:String,
   djSpotifyId:String,
   imageURL:String,
-  usersInRoom: Array
+  usersInRoom: Array,
+  djName: String
 })
 
 userSchema.statics.findOrCreate = function(obj1,obj2,cb){

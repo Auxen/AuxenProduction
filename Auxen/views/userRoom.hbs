@@ -8,7 +8,7 @@
       <div id="djphoto" class='center'>
         <img src="{{room.imageURL}}" class="img-responsive animated rollIn" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
-      <h2 class="text-center standard-text small">Host is: Yash Vadhan Nevatia</h2>
+      <h2 class="text-center standard-text small">Host is: {{room.djName}}</h2>
     </div>
   </div>
   <div id="laflame-container">
@@ -78,16 +78,36 @@
       console.log('Connected!');
       socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       socket.emit('joinRoom', roomName);
-
     });
 
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
-    socket.emit('setRefreshToken', function(refreshToken){
+    socket.on('setRefreshToken', function(refreshToken){
+      console.log("first time setting refresh token");
       localStorage.setItem('refreshToken', refreshToken);
-      setInterval(function () {
+      clearId = setInterval(function () {
+        console.log("calling a function on backend to refresh my access token");
         socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 60000 * 30);
+      }, 20000 );
     });
+
+    /* Setting access token in localStorage */
+    socket.on('setAccessToken', function(accessToken){
+      console.log("this is the original accessToken", accessToken);
+      localStorage.setItem('accessToken', accessToken);
+      var userObject = {
+        roomName: roomName,
+        spotifyId: localStorage.getItem('spotifyId'),
+        imageURL: localStorage.getItem('imageURL'),
+        username: localStorage.getItem('username')
+      }
+      socket.emit('joinRoom', userObject);
+    });
+
+    /* sets new access token after refresh */
+    socket.on('setNewAccessToken', function(accessToken){
+      console.log("this is the new access token", accessToken);
+      localStorage.setItem('accessToken', accessToken);
+    })
 
     /* clearInterval for refresh token once disconnected. */
     socket.on('disconnected', function() {
@@ -100,18 +120,6 @@
         socket.emit('autoLeave',userObject);
       }
     })
-
-    /* Setting access token in localStorage */
-    socket.on('setAccessToken', function(accessToken){
-      localStorage.setItem('accessToken', accessToken);
-      var userObject = {
-        roomName: roomName,
-        spotifyId: localStorage.getItem('spotifyId'),
-        imageURL: localStorage.getItem('imageURL'),
-        username: localStorage.getItem('username')
-      }
-      socket.emit('joinRoom', userObject);
-    });
 
     /* if dj closes room it will come here and redirect to home after leavingRoom */
     socket.on('roomClosed', function(){
@@ -137,7 +145,6 @@
 
     /* get dj setting info and configure users spotify */
     socket.on('DJData', function(DJData){
-      console.log("DJDATA", DJData);
       var timeProgress = DJData.timeProgress;
       var songURI = DJData.songURI;
       $.ajax({

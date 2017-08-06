@@ -62,27 +62,18 @@
     })
 
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
-    socket.emit('setRefreshToken', function(refreshToken){
+    socket.on('setRefreshToken', function(refreshToken){
+      console.log("first time setting refresh token");
       localStorage.setItem('refreshToken', refreshToken);
       clearId = setInterval(function () {
+        console.log("calling a function on backend to refresh my access token");
         socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 60000 * 30);
+      }, 20000);
     });
-
-    /* clearInterval for refresh token once disconnected. */
-    socket.on('disconnected', function() {
-      console.log("this should happen on refresh");
-      if (clearId !== -1) {
-        clearInterval(clearId);
-        clearId = -1;
-        socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
-        socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
-        window.location = '/';
-      }
-    })
 
     /* Setting access token in localStorage */
     socket.on('setAccessToken', function(accessToken){
+      console.log("this is the original accessToken", accessToken);
       localStorage.setItem('accessToken', accessToken);
       var djObject = {
         roomName: roomName,
@@ -95,6 +86,33 @@
       socket.emit('createRoom', djObject);
     })
 
+    /* sets new access token after refresh */
+    socket.on('setNewAccessToken', function(accessToken){
+      console.log("this is the new access token for dj", accessToken);
+      localStorage.setItem('accessToken', accessToken);
+      socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
+    })
+
+    /* clearInterval for refresh token once disconnected. */
+    // socket.on('disconnect', function() {
+    //   console.log("this should happen on refresh");
+    //   if (clearId !== -1) {
+    //     clearInterval(clearId);
+    //     clearId = -1;
+    //     socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+    //     socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
+    //     window.location = '/';
+    //   }
+    // })
+
+    // $(window).bind('beforeunload', function(){
+    //   console.log("is this happening");
+    //   window.location.href = '/';
+    //   clearInterval(clearId);
+    //   clearId = -1;
+    //   socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+    //   socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
+    // });
 
     /* some other user has left room */
     socket.on('userLeaving', function(userSpotifyId){
