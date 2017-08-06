@@ -118,14 +118,18 @@
       //socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
     });
 
-    $(window).unload(function(){
-      socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
-    })
+    // $(window).unload(function(){
+    //   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+    // })
 
     /* some other user has left room */
     socket.on('userLeaving', function(userSpotifyId){
         console.log(userSpotifyId);
         $('#' + userSpotifyId).remove();
+    });
+
+    socket.on('userSongRequest', function(data){
+      console.log("data", data);
     });
 
 

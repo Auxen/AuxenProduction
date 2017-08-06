@@ -11,17 +11,7 @@ $(document).ready(function() {
     }, 5000)
   });
 
-  $('#request').on('click', function() {
-    var request = $('#requestval').val();
-    $('#requestval').val('');
-    $('#flames').append(`
-      <p class="request small text" style="position: absolute">
-          ${request}
-      </p>
-    `)
-
-    setTimeout(function() {
-      $('#flames').find('p:first').remove();
-    }, 8000)
-  });
+  setTimeout(function() {
+    $('#flames').find('p:first').remove();
+  }, 8000)
 });

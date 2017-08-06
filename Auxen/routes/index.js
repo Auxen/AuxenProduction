@@ -44,24 +44,15 @@ module.exports = function(io) {
   })
 
   /* Create a room and render djroom page. */
-  router.post('/createRoom', function(req, res, next){
+  router.post('/createRoom', function(req, res, next) {
     console.log("reaching create Room in backend post");
     var roomName = req.body.roomNameBar;
     existingRoomNames.push(roomName);
-    var newRoom = new Room({
-      roomName:roomName,
-      djRefreshToken:req.user.refreshToken,
-      djSpotifyId:req.user.spotifyId,
-      imageURL:req.user.imageURL,
-      djName: req.user.username
-    })
-    newRoom.save(function(err, newRoom){
-      if(err) {
-        res.render('error',{
-          err
-        })
-      }
-      else {
+    var newRoom = new Room({roomName: roomName, djRefreshToken: req.user.refreshToken, djSpotifyId: req.user.spotifyId, imageURL: req.user.imageURL, djName: req.user.username})
+    newRoom.save(function(err, newRoom) {
+      if (err) {
+        res.render('error', {err})
+      } else {
         res.redirect('/djRoom/' + newRoom._id);
       }
     })
@@ -143,11 +134,7 @@ module.exports = function(io) {
 
     function getSpotifyApi() {
 
-      var spotifyApi = new SpotifyWebApi({
-        clientId: process.env.SPOTIFY_ID,
-        clientSecret: process.env.SPOTIFY_SECRET,
-        redirectUri: process.env.CALLBACK_URL
-      });
+      var spotifyApi = new SpotifyWebApi({clientId: process.env.SPOTIFY_ID, clientSecret: process.env.SPOTIFY_SECRET, redirectUri: process.env.CALLBACK_URL});
 
       return spotifyApi;
     }
@@ -157,11 +144,10 @@ module.exports = function(io) {
       var DJSpotifyApi = getSpotifyApi();
       DJSpotifyApi.setAccessToken(DJAccessToken);
       var startTime = Date.now();
-      DJSpotifyApi.getMyCurrentPlaybackState()
-      .then(data => {
-        var timeDiff = Date.now() - startTime ;
-        console.log("*****",data.body.progress_ms, data.body.item.uri);
-        if(!io.sockets.adapter.rooms[room].songURI){ // it enters here for the first song of the room
+      DJSpotifyApi.getMyCurrentPlaybackState().then(data => {
+        var timeDiff = Date.now() - startTime;
+        console.log("*****", data.body.progress_ms, data.body.item.uri);
+        if (!io.sockets.adapter.rooms[room].songURI) { // it enters here for the first song of the room
           console.log("first time it should enter here");
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
@@ -170,10 +156,9 @@ module.exports = function(io) {
             timeProgress: data.body.progress_ms + timeDiff
           };
           socket.to(room).emit("DJData", DJData);
-        }
-        else { // not first song of room
+        } else { // not first song of room
           console.log("second time it should enter here");
-          if(io.sockets.adapter.rooms[room].songURI !== data.body.item.uri){ // song has changed
+          if (io.sockets.adapter.rooms[room].songURI !== data.body.item.uri) { // song has changed
             console.log("song changed");
             io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
@@ -182,11 +167,10 @@ module.exports = function(io) {
               timeProgress: data.body.progress_ms + timeDiff
             };
             socket.to(room).emit("DJData", DJData);
-          }
-          else {
+          } else {
             console.log("song not changed");
-            if(data.body.is_playing){
-              if(Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 20000){
+            if (data.body.is_playing) {
+              if (Math.abs(data.body.progress_ms - io.sockets.adapter.rooms[room].timeProgress) > 20000) {
                 console.log("same song but change in time");
                 var DJData = {
                   songURI: data.body.item.uri,
@@ -198,8 +182,7 @@ module.exports = function(io) {
             }
           }
         }
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log("error", error);
       })
     }
@@ -222,16 +205,14 @@ module.exports = function(io) {
     })
 
     /* called every 30 minutes by user to refresh token */
-    socket.on('toRefresh', function(refreshToken){
+    socket.on('toRefresh', function(refreshToken) {
       console.log("refreshing token");
       var spotifyApi = getSpotifyApi();
       spotifyApi.setRefreshToken(refreshToken);
-      spotifyApi.refreshAccessToken()
-      .then(data => {
+      spotifyApi.refreshAccessToken().then(data => {
         spotifyApi.setAccessToken(data.body['access_token']);
         socket.emit('setNewAccessToken', spotifyApi.getAccessToken());
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log("error", error);
       })
     })
@@ -294,25 +275,28 @@ module.exports = function(io) {
 
     /* auto leave room and remove from db if disconnect */
     socket.on('autoLeave', function(userObject) {
-      Room.findById(userObject.roomId)
-      .then(room => {
+      Room.findById(userObject.roomId).then(room => {
         room.usersInRoom = room.usersInRoom.filter(function(user) {
           return user.spotifyId === !userObject.spotifyId;
         })
         room.save(function(err, room) {
           res.redirect('/');
         });
-      })
-      .catch(error => {
+      }).catch(error => {
         console.log("error", error);
       })
     })
 
     /* after access token is changed for dj, i set that token to room here */
-    socket.on('changeRoomToken', function(data){
+    socket.on('changeRoomToken', function(data) {
       io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
     });
 
+    socket.on('userSongRequest', function(data) {
+      console.log('data', data)
+      console.log("room is", socket.room);
+      socket.to(socket.room).emit('userSongRequest', data);
+    });
   })
 
   return router;

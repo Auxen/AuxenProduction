@@ -62,6 +62,12 @@
     var socket = io();
     var clearId = -1;
 
+
+    $('#request').on('click', function() {
+      var request = $('#requestval').val();
+      socket.emit('userSongRequest', $('#requestval').val());
+    });
+
     /* if user wants to leave room it comes here */
     $('#userLeave').on('click', function(event){
       socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
@@ -146,6 +152,9 @@
       console.log("userLeaving", userSpotifyId);
       $('#' + userSpotifyId).remove();
     });
+
+
+
 
     /* get dj setting info and configure users spotify */
     socket.on('DJData', function(DJData){
