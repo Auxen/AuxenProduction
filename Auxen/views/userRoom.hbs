@@ -108,9 +108,10 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
-      var data = `<div id="{{userData.spotifyId}}" class="center" style ="width: 20%">
+      console.log("user joined",userData);
+      var data = `<div id=${userData.spotifyId} class="center" style ="width: 20%">
                 <img class="grow raise" style="border-radius: 50%;
-                width: 45%; height: auto; margin-top: 5%;" src="{{userData.imageURL}}" alt="">
+                width: 45%; height: auto; margin-top: 5%;" src=${userData.imageURL} alt="">
               </div>`
       $('.activeUsersforUser').append(data);
     })
