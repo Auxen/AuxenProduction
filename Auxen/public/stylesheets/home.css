@@ -139,11 +139,19 @@ a:hover {
 
 /*THIS IS GOING TO BE THE ANIMATION */
 
-#fire {
+.fire {
   position: relative;
   animation-name: movement;
   animation-duration: 3s;
   animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+
+.request {
+  position: relative;
+  animation-name: movement;
+  animation-duration: 15s;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
