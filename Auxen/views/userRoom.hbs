@@ -127,9 +127,9 @@
       localStorage.setItem('accessToken', accessToken);
     })
 
-    $(window).bind('beforeunload', function(){
-      return "Are you sure you want to leave? This will take you to home page";
-    });
+    // $(window).bind('beforeunload', function(){
+    //   //return "Are you sure you want to leave? This will take you to home page";
+    // });
 
     $(window).on("unload", function(){
       console.log("unloading");
