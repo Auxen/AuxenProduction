@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <div class="col-sm-2">
+    <div class="col-xs-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom/{{room.roomName}}/?roomId={{room._id}}'>Close</a></h1>
     </div>
     <div class="col-sm-offset-1 col-sm-6">
@@ -128,6 +128,18 @@
         console.log(userSpotifyId);
         $('#' + userSpotifyId).remove();
     });
+
+    socket.on('laflame', function() {
+      $('#flames').append(`
+          <span class="middle fire" style="position: absolute">
+              🔥
+          </span>
+        `)
+        setTimeout(function() {
+          $('#flames').find('span:first').remove();
+        }, 5000)
+
+    })
 
     socket.on('userSongRequest', function(data){
       $('#flames').append(`

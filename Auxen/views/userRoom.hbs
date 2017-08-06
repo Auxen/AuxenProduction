@@ -16,7 +16,6 @@
     <h1 id="laflame" class="center floating pointer" >
       🔥
     </h1>
-
   </div>
   <div class="center">
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Request Songs</h1>
@@ -67,6 +66,11 @@
       var request = $('#requestval').val();
       socket.emit('userSongRequest', $('#requestval').val());
     });
+
+    $('#laflame').on('click', function() {
+      console.log('shit');
+      socket.emit('laflame');
+    })
 
     /* if user wants to leave room it comes here */
     $('#userLeave').on('click', function(event){

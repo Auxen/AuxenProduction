@@ -297,7 +297,15 @@ module.exports = function(io) {
       console.log("room is", socket.room);
       socket.to(socket.room).emit('userSongRequest', data);
     });
+
+
+    socket.on('laflame', function() {
+      console.log('reach shit');
+      socket.to(socket.room).emit('laflame');
+    });
+
   })
+
 
   return router;
 }
