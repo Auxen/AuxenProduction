@@ -75,7 +75,7 @@
         console.log("entering here on connect");
         var timeNow = new Date().getTime();
         var timeThen = localStorage.getItem("disconnectTime");
-        if(timeNow - timeThen < 50000){
+        if(timeNow - timeThen < 5000){
           console.log("this was a refresh");
           var userObject = {
             roomId: roomId,
