@@ -81,7 +81,7 @@
     /* Checking connnection to socket */
     socket.on('connect', function(){
       console.log('Connected!');
-      if(localStorage.getItem("disconnectTime") && (localStorage.getItem("disconnectTime") - new Date().getTime()<5000)){
+      if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") <5000)){
         console.log("entering here on connect");
 
           console.log("this was a refresh");
