@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <div class="col-sm-2">
+    <div class="col-xs-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom/{{room.roomName}}/?roomId={{room._id}}'>Close</a></h1>
     </div>
     <div class="col-sm-offset-1 col-sm-6">
@@ -36,17 +36,18 @@
   </div> -->
 
   <div class="row">
-    <div class="activeUsersforDJ col-sm-offset-2 center"></div>
+    <div class="activeUsersforUser col-xs-offset-2">
       <div id="users" class="row">
       {{#each room.usersInRoom}}
-        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%;">
+        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
             <div data-id="{{this.spotifyId}}" >
-              <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
+              <img class="grow raise" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
             </div>
         </div>
       {{/each}}
+      </div>
     </div>
-
+    <div class="col-xs-offset-4"></div>
   </div>
 
   <div class="center" id="flames"></div>
@@ -128,8 +129,28 @@
         $('#' + userSpotifyId).remove();
     });
 
+    socket.on('laflame', function() {
+      $('#flames').append(`
+          <span class="middle fire" style="position: absolute">
+              🔥
+          </span>
+        `)
+        setTimeout(function() {
+          $('#flames').find('span:first').remove();
+        }, 5000)
+
+    })
+
     socket.on('userSongRequest', function(data){
-      console.log("data", data);
+      $('#flames').append(`
+        <p class="request small text" style="position: absolute">
+            <span style="width: 30%;">${data}</span>
+        </p>
+      `)
+
+      setTimeout(function() {
+        $('#flames').find('p:first').remove();
+      }, 8000)
     });
 
 
@@ -145,11 +166,11 @@
         return;
       }else{
         console.log("user joined", userData);
-         var data = `<div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%; margin-bottom: 2%;">
-               <div data-id="{{this.spotifyId}}" >
-                 <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
-               </div>
-           </div>`
+         var data = `<div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
+             <div data-id="{{this.spotifyId}}" >
+               <img class="grow raise" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
+             </div>
+         </div>`
          $('#users').append(data);
       }
 

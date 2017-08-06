@@ -5,7 +5,6 @@ $(document).ready(function() {
           🔥
       </span>
     `)
-
     setTimeout(function() {
       $('#flames').find('span:first').remove();
     }, 5000)

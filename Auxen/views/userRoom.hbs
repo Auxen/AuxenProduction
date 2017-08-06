@@ -16,24 +16,23 @@
     <h1 id="laflame" class="center floating pointer" >
       🔥
     </h1>
-
   </div>
   <div class="center">
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Request Songs</h1>
   </div>
   <div class="row">
-    <div class="activeUsersforUser col-sm-offset-2 center">
+    <div class="activeUsersforUser col-xs-offset-2">
       <div id="users" class="row">
       {{#each room.usersInRoom}}
-        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="width: 15%; margin-top: 1%;">
+        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
             <div data-id="{{this.spotifyId}}" >
-              <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
+              <img class="grow raise" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
             </div>
         </div>
       {{/each}}
-
+      </div>
     </div>
-    </div>
+    <div class="col-xs-offset-4"></div>
   </div>
 </div>
 
@@ -45,7 +44,7 @@
         </div>
         <input  maxlength="35" id="requestval" style="border: none; font-size: 20px;" placeholder="Taking song requests..." class="ghost-input"></input>
         <div class="modal-footer"  style="background-color: #1E1D1D">
-          <h1 id="request" class="text-center text small boxed raise" style="width: 20%;" data-dismiss="modal">Submit</h1>
+          <h1 id="request" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
       </div>
     </div>
@@ -65,9 +64,13 @@
 
     $('#request').on('click', function() {
       var request = $('#requestval').val();
-      console.log('mother fucker');
       socket.emit('userSongRequest', $('#requestval').val());
     });
+
+    $('#laflame').on('click', function() {
+      console.log('shit');
+      socket.emit('laflame');
+    })
 
     /* if user wants to leave room it comes here */
     $('#userLeave').on('click', function(event){
@@ -138,9 +141,9 @@
         return;
       }else{
         console.log("user joined", userData);
-         var data = `<div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style ="width: 15%; margin-top: 1%;">
+         var data = `<div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
              <div data-id="{{this.spotifyId}}" >
-               <img class="grow raise" style="border-radius: 50%; width: 45%; height: auto; margin-top: 5%;" src="{{this.imageURL}}" alt="">
+               <img class="grow raise" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
              </div>
          </div>`
          $('#users').append(data);
@@ -153,8 +156,6 @@
       console.log("userLeaving", userSpotifyId);
       $('#' + userSpotifyId).remove();
     });
-
-
 
 
     /* get dj setting info and configure users spotify */
