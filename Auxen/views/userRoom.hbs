@@ -102,13 +102,13 @@
       return "Are you sure you want to leave? This will take you to home page";
     });
 
-    $(window).on("unload", function(){
-      localStorage.setItem("disconnectTime", new Date().getTime());
-      socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
-      var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
-      socket.emit('autoLeave',userObject);
-      clearInterval(clearId);
-    })
+    // $(window).on("unload", function(){
+    //   localStorage.setItem("disconnectTime", new Date().getTime());
+    //   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+    //   var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+    //   socket.emit('autoLeave',userObject);
+    //   clearInterval(clearId);
+    // })
 
     $(window).load(function(){
       if(localStorage.getItem("disconnectTime")){
