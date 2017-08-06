@@ -1,37 +1,53 @@
+<head>
+  <script type="text/javascript" src="/static/scripts/styling.js"></script>
+</head>
+
 <div class="wrapper">
+  {{#if rooms.length}}
   <div class="center">
-    <h1 class="text-center text">There are<span style="opacity: 0">I</span> <span id="numberOfRooms"> {{rooms.length}} </span><span style="opacity: 0">I</span>rooms to browse</h1>
+    <h1 class="text-center standard-text">There are <span id="numberOfRooms"> {{rooms.length}} </span>rooms to browse</h1>
   </div>
   <div class="center" style="width: 40%; margin-right: auto; margin-left: auto;">
-    <input id="myInput" style="font-size: 30px;" placeholder="Search for a room..." class="ghost-input text-center" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
+    <input onfocus="this.placeholder = ''" autocomplete="off" id="myInput" style="font-size: 200%;" placeholder="Search for a room..." class="ghost-input text-center" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
   </div>
   <div id="listofRooms" class="text-center standard-text" style="width: 35%; margin-right: auto; margin-left: auto; overflow: auto;">
     {{#each rooms}}
-      <a href="/joinRoom?roomId={{roomId}}"><h1 class="raise-room text joinexistingRoom" data-id="{{roomId}}" >{{roomName}}</h1></a>
+    <a href="/joinRoom?roomId={{roomId}}"><h1 class="raise-room text joinexistingRoom" data-id="{{roomId}}" >{{roomName}}</h1></a>
     {{/each}}
   </div>
+  {{else}}
   <div class="center">
-    <a href="/createRoom"><h1 class="text-center text middle boxed raise text">Or start your own party</h1></a>
+    <img class="img-responsive" style="width: 50%; height: 50%;" src="/static/images/finalized_color.jpg" alt="">
   </div>
+  <div class="center">
+    <h1 class="text-center small text">There are no rooms to browse...</h1>
+  </div>
+
+  <div id="party" class="center animated hide">
+    <a href="/createRoom"><h1 class="text-center text small boxed raise">...but you can start your own party</h1></a>
+  </div>
+  {{/if}}
 
 </div>
 
+
 <script>
 function searchFunction() {
-	// Declare variables
-	var input, filter, div, h1, i;
-	input = document.getElementById('myInput');
-	filter = input.value.toUpperCase();
-	div = document.getElementById("listofRooms");
-	h1 = div.getElementsByTagName('h1');
-	// Loop through all h1st items, and hide those who don't match the search query
-	for (i = 0; i < h1.length; i++) {
-		console.log(h1.length);
-		if (h1[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-			h1[i].style.display = "";
-		} else {
-			h1[i].style.display = "none";
-		}
-	}
+  // Declare variables
+  var input, filter, div, h1, i;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  div = document.getElementById("listofRooms");
+  h1 = div.getElementsByTagName('h1');
+  // Loop through all h1st items, and hide those who don't match the search query
+  for (i = 0; i < h1.length; i++) {
+    console.log(h1.length);
+    if (h1[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+      h1[i].style.display = "";
+    } else {
+      h1[i].style.display = "none";
+    }
+  }
+
 };
 </script>

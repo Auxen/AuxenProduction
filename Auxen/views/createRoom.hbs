@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <form id="roomSubmit" action='/createRoom' method="POST">
     <div class="center topLevel" style="width: 60%; margin-right: auto; margin-left: auto;">
-        <input name="roomNameBar" id="roomName" placeholder="Enter a room name here" class="ghost-input text-center"></input>
+        <input autocomplete="off" onfocus="this.placeholder = ''" name="roomNameBar" id="roomName" placeholder="Enter a room name here" class="ghost-input text-center"></input>
     </div>
     <div class="center" >
       <h1 class="text-center text label-text boxed raise" name="button" id="startRoom">Go Live</h1>
