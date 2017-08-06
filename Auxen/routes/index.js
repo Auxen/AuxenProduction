@@ -357,7 +357,7 @@ module.exports = function(io) {
       Room.findById(userObject.roomId)
       .then(room => {
         room.usersInRoom = room.usersInRoom.filter(function(user) {
-          return user.spotifyId === !userObject.spotifyId;
+          return user.spotifyId !== userObject.spotifyId;
         })
         room.save(function(err, room) {
           console.log("user successfully removed");
