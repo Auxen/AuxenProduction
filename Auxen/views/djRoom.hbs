@@ -151,7 +151,9 @@
 
     /* new user has joined */
     socket.on('userJoined', function(userData){
+      console.log("userJoined", userData);
       if($('#' + userData.spotifyId)){
+        console.log("not adding if user already exist");
         return;
       }else{
         console.log("user joined", userData);
