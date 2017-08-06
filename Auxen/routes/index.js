@@ -57,7 +57,8 @@ module.exports = function(io){
       roomName:roomName,
       djRefreshToken:req.user.refreshToken,
       djSpotifyId:req.user.spotifyId,
-      imageURL:req.user.imageURL
+      imageURL:req.user.imageURL,
+      djName: req.user.username
     })
     newRoom.save(function(err, newRoom){
       if(err) {
@@ -71,6 +72,7 @@ module.exports = function(io){
     })
   })
 
+  /* renders room for user. */
   router.get('/djRoom/:roomId', function(req, res, next){
     var roomId = req.params.roomId;
     Room.findById(roomId)
@@ -84,7 +86,7 @@ module.exports = function(io){
     })
   })
 
-  /* Join a room, add to db array and render room page. */
+  /* Join a room, add to db array. */
   router.get('/joinRoom', function(req, res, next){
     var roomId = req.query.roomId;
     Room.findById(roomId, function(err, room){
@@ -105,6 +107,7 @@ module.exports = function(io){
     })
   })
 
+  /* renders room for user. */
   router.get('/userRoom/:roomId', function(req, res, next){
     var roomId = req.params.roomId;
     Room.findById(roomId)
@@ -133,7 +136,7 @@ module.exports = function(io){
     })
   })
 
-  /* makes user leave room, deletes him from db as well*/
+  /* makes user leave room, deletes him from db as well. */
   router.get('/leaveRoom', function(req, res, next){
     var roomId = req.query.roomId;
     Room.findById(roomId)
@@ -162,10 +165,6 @@ module.exports = function(io){
   }
 
   io.on('connection', function(socket){
-
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-    });
 
     function getDJData(DJAccessToken, room) {
       console.log("this should happen every 5 sec", room);
@@ -219,6 +218,10 @@ module.exports = function(io){
       })
     }
 
+    socket.on('disconnect', function(){
+      console.log('user disconnected');
+    });
+
     /* this is spotify setup sends access and refresh token to client */
     socket.on('spotifySetup', function(spotifyId){
       console.log("spotify setup");
@@ -247,7 +250,7 @@ module.exports = function(io){
       spotifyApi.refreshAccessToken()
       .then(data => {
         spotifyApi.setAccessToken(data.body['access_token']);
-        socket.emit('getAccessToken', spotifyApi.getAccessToken());
+        socket.emit('setNewAccessToken', spotifyApi.getAccessToken());
       })
       .catch(error => {
         console.log("error", error);
@@ -256,6 +259,7 @@ module.exports = function(io){
 
     /* called by dj. closes room, dj leaves room, and emits events for users to leave room */
     socket.on('closingRoom', function(roomData){
+      console.log("this is where i want to be");
       socket.to(socket.room).emit('roomClosed');
       socket.leave(socket.room);
     })
@@ -321,6 +325,11 @@ module.exports = function(io){
         console.log("error", error);
       })
     })
+
+    /* change the DJToken of the said room after refreh */
+    socket.on('changeRoomToken', function(data){
+      io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
+    });
 
   })
 
