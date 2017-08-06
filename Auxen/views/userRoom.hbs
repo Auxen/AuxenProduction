@@ -65,6 +65,7 @@
 
     $('#request').on('click', function() {
       var request = $('#requestval').val();
+      console.log('mother fucker');
       socket.emit('userSongRequest', $('#requestval').val());
     });
 
