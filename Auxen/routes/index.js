@@ -337,6 +337,20 @@ module.exports = function(io) {
       })
     })
 
+    socket.on('specialClose', function(roomObject){
+      console.log("backend closingRoom");
+      socket.to(socket.room).emit('roomClosed');
+      socket.leave(socket.room);
+      console.log("reaching autoclose at backend");
+      Room.remove({'_id': roomObject.roomId})
+      .then(() => {
+        console.log("room successfully removed");
+      })
+      .catch((error) => {
+        console.log("error", error);
+      })
+    })
+
   })
 
   return router;

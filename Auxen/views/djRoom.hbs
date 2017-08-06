@@ -120,6 +120,7 @@
       console.log("unloading");
       socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
       socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+      socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
       clearInterval(clearId);
     })
 
