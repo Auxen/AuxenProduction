@@ -81,11 +81,9 @@
     /* Checking connnection to socket */
     socket.on('connect', function(){
       console.log('Connected!');
-      if(localStorage.getItem("disconnectTime")){
+      if(localStorage.getItem("disconnectTime") && (localStorage.getItem("disconnectTime") - new Date().getTime()<5000)){
         console.log("entering here on connect");
-        var timeNow = new Date().getTime();
-        var timeThen = localStorage.getItem("disconnectTime");
-        if(timeNow - timeThen < 5000){
+
           console.log("this was a refresh");
           var userObject = {
             roomId: roomId,
@@ -97,7 +95,7 @@
           console.log("userObject after asfkjtcjs", userObject);
           socket.emit("userRefreshed", userObject);
           localStorage.removeItem("disconnectTime");
-        }
+
       }else{
         socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       }
