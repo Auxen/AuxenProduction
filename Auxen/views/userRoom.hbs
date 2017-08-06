@@ -105,6 +105,7 @@
     $(window).on("unload", function(){
       console.log("unloading");
       var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+      console.log("user object", userObject);
       socket.emit('specialLeave', userObject);
       localStorage.setItem("disconnectTime", new Date().getTime());
       clearInterval(clearId);
