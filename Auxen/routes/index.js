@@ -78,6 +78,7 @@ module.exports = function(io) {
 
   /* Join a room, add to db array and render room page. */
   router.get('/joinRoom', function(req, res, next) {
+    console.log("joined room in database.");
     var roomId = req.query.roomId;
     Room.findById(roomId, function(err, room) {
       var userObject = {
@@ -272,11 +273,13 @@ module.exports = function(io) {
 
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
+      console.log(userObject);
       if (socket.room) {
         socket.leave(socket.room);
       }
       socket.join(userObject.roomName);
       socket.room = userObject.roomName;
+      console.log("socket room", socket.room);
       socket.to(userObject.roomName).emit('userJoined', userObject);
     })
 

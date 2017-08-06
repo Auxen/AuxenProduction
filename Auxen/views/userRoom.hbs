@@ -71,7 +71,6 @@
     socket.on('connect', function(){
       console.log('Connected!');
       socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
-      socket.emit('joinRoom', roomName);
     });
 
     /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
@@ -135,6 +134,7 @@
 
     /* some other user has left room */
     socket.on('userLeaving', function(userSpotifyId){
+      console.log("userLeaving", userSpotifyId);
       $('#' + userSpotifyId).remove();
     });
 
