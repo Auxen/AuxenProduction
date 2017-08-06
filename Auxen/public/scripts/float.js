@@ -16,7 +16,7 @@ $(document).ready(function() {
     $('#requestval').val('');
     $('#flames').append(`
       <p class="request small text" style="position: absolute">
-          ${request}
+          <span style="width: 30%;">${request}</span>
       </p>
     `)
 
