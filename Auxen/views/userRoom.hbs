@@ -109,24 +109,24 @@
     //   socket.emit('autoLeave',userObject);
     //   clearInterval(clearId);
     // })
-
-    $(window).load(function(){
-      if(localStorage.getItem("disconnectTime")){
-        var timeNow = new Date().getTime();
-        var timeThen = localStorage.getItem("disconnectTime");
-        if(timeNow - timeThen < 50000){
-          var userObject = {
-            roomId: roomId,
-            roomName: roomName,
-            spotifyId: localStorage.getItem('spotifyId'),
-            imageURL: localStorage.getItem('imageURL'),
-            username: localStorage.getItem('username')
-          }
-          socket.emit("userRefreshed", userObject);
-          localStorage.removeItem("disconnectTime");
-        }
-      }
-    })
+    //
+    // $(window).load(function(){
+    //   if(localStorage.getItem("disconnectTime")){
+    //     var timeNow = new Date().getTime();
+    //     var timeThen = localStorage.getItem("disconnectTime");
+    //     if(timeNow - timeThen < 50000){
+    //       var userObject = {
+    //         roomId: roomId,
+    //         roomName: roomName,
+    //         spotifyId: localStorage.getItem('spotifyId'),
+    //         imageURL: localStorage.getItem('imageURL'),
+    //         username: localStorage.getItem('username')
+    //       }
+    //       socket.emit("userRefreshed", userObject);
+    //       localStorage.removeItem("disconnectTime");
+    //     }
+    //   }
+    // })
 
     /* if dj closes room it will come here and redirect to home after leavingRoom */
     socket.on('roomClosed', function(){

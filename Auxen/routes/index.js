@@ -286,9 +286,12 @@ module.exports = function(io) {
 
     /* auto close room and remove from db if user disconnects*/
     socket.on('autoClose', function(roomObject) {
-      Room.remove({'_id': roomObject.roomId}).then(() => {
+      console.log("reaching autoclose at backend");
+      Room.remove({'_id': roomObject.roomId})
+      .then(() => {
         console.log("room successfully removed");
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.log("error", error);
       })
     })
