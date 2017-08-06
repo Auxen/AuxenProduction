@@ -313,6 +313,26 @@ module.exports = function(io) {
       io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
     });
 
+    /* user refreshed so adding to db */
+    socket.on('userRefreshed', function(userObject){
+      Room.findById(userObject.roomId)
+      .then(room => {
+        var userObject = {
+          spotifyId: userObject.spotifyId,
+          imageURL: userObject.imageURL,
+          username: userObject.username
+        }
+        room.usersInRoom.push(userObject);
+        room.save(function(err, room) {
+          if(err)console.log(err);
+          else {
+            console.log("user successfully added");
+            socket.to(userObject.roomName).broadcast('userJoined', userObject)
+          }
+        })
+      })
+    })
+
   })
 
   return router;

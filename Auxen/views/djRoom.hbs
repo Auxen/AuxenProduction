@@ -116,7 +116,9 @@
     });
 
     $(window).unload(function(){
-      socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+      socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+      socket.emit('autoClose', {"roomName": roomName, "roomId": roomId});
+      clearInterval(clearId);
     })
 
     /* some other user has left room */
