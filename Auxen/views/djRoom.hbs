@@ -79,11 +79,11 @@
       localStorage.setItem('accessToken', accessToken);
       var djObject = {
         roomName: roomName,
-        spotifyId: localStorage.getItem('spotifyId'),
-        imageURL: localStorage.getItem('imageURL'),
-        refreshToken: localStorage.getItem('refreshToken'),
+        //spotifyId: localStorage.getItem('spotifyId'),
+        //imageURL: localStorage.getItem('imageURL'),
+        //refreshToken: localStorage.getItem('refreshToken'),
         accessToken: localStorage.getItem('accessToken'),
-        username: localStorage.getItem('username')
+        //username: localStorage.getItem('username')
       }
       socket.emit('createRoom', djObject);
     })
@@ -147,7 +147,7 @@
     socket.on('userJoined', function(userData){
 
       console.log("user joined", userData);
-      if($('#'+userData.spotifyId).length !== 0){
+      if($('#' + userData.spotifyId).length !== 0){
         console.log("this guy exits");
         return;
       }else {

@@ -20,6 +20,7 @@ module.exports = function(io) {
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
+    console.log('AAAAAAAAAA', req.user.imageURL);
     res.render('home', {
       spotifyId: req.user.spotifyId,
       imageURL: req.user.imageURL,
@@ -244,8 +245,8 @@ module.exports = function(io) {
       socket.room = roomName; // set property
       socket.join(roomName); // join room
       io.sockets.adapter.rooms[roomName].DJToken = djObject.accessToken;
-      io.sockets.adapter.rooms[roomName].imageURL = djObject.imageURL;
-      io.sockets.adapter.rooms[roomName].username = djObject.username;
+      //io.sockets.adapter.rooms[roomName].imageURL = djObject.imageURL;
+      //io.sockets.adapter.rooms[roomName].username = djObject.username;
       var clearID = setInterval(() => {
         if (io.sockets.adapter.rooms[roomName]) {
           return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
@@ -272,32 +273,6 @@ module.exports = function(io) {
         timeProgress: io.sockets.adapter.rooms[userObject.roomName].timeProgress
       };
       socket.emit("DJData", DJData);
-    })
-
-    /* auto close room and remove from db if user disconnects*/
-    socket.on('autoClose', function(roomObject) {
-      console.log("reaching autoclose at backend");
-      Room.remove({'_id': roomObject.roomId})
-      .then(() => {
-        console.log("room successfully removed");
-      })
-      .catch((error) => {
-        console.log("error", error);
-      })
-    })
-
-    /* auto leave room and remove from db if disconnect */
-    socket.on('autoLeave', function(userObject) {
-      Room.findById(userObject.roomId).then(room => {
-        room.usersInRoom = room.usersInRoom.filter(function(user) {
-          return user.spotifyId === !userObject.spotifyId;
-        })
-        room.save(function(err, room) {
-          res.redirect('/');
-        });
-      }).catch(error => {
-        console.log("error", error);
-      })
     })
 
     /* after access token is changed for dj, i set that token to room here */
@@ -378,7 +353,6 @@ module.exports = function(io) {
       console.log('this is also happening');
       socket.to(socket.room).emit('laflame');
     });
-
 
   })
 
