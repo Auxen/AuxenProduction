@@ -7,7 +7,7 @@
     <div class="col-sm-offset-1 col-sm-6">
       <h1 class="text-center standard-text medium animated slideInDown">{{room.roomName}}</h1>
       <div id="djphoto" class='center'>
-        <img src="{{room.imageURL}}" class="img-responsive animated rollIn" style="border-radius: 50%; width: 20%; height: 20%;" >
+        <img src="{{room.imageURL}}" class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
       <h2 class="text-center standard-text small">Host is: {{room.djName}}</h2>
     </div>
@@ -26,7 +26,7 @@
       {{#each room.usersInRoom}}
         <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
             <div data-id="{{this.spotifyId}}" >
-              <img class="grow raise" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
+              <img class="scaling raise animated bounceIn" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
             </div>
         </div>
       {{/each}}
@@ -69,7 +69,6 @@
     });
 
     $('#laflame').on('click', function() {
-      console.log('this is happening');
       socket.emit('laflame');
     })
 
@@ -158,7 +157,7 @@
 
            var data = `<div id="${userData.spotifyId}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
                <div data-id="${userData.spotifyId}" >
-                 <img class="grow raise" style="border-radius: 50%; width: 25%;" src="${userData.imageURL}" alt="">
+                 <img class="scaling raise animated bounceIn" style="border-radius: 50%; width: 25%;" src="${userData.imageURL}" alt="">
                </div>
            </div>`
            $('#users').append(data);

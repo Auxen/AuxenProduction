@@ -113,7 +113,6 @@
     });
 
     socket.on('laflame', function() {
-      console.log('this isnt happening');
       $('#flames').append(`
           <span class="middle fire" style="position: absolute">
               🔥
@@ -140,6 +139,8 @@
     /* dj closes room emits event to server which then kicks people out of the room */
     $('#closeRoom').on('click', function(event){
       console.log("reached front end destination");
+
+
       socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
     })
 
@@ -153,7 +154,7 @@
       }else {
         var data = `<div id="${userData.spotifyId}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
             <div data-id="${userData.spotifyId}" >
-              <img class="grow raise" style="border-radius: 50%; width: 25%;" src="${userData.imageURL}" alt="">
+              <img class="grow raise animated bounceIn" style="border-radius: 50%; width: 25%;" src="${userData.imageURL}" alt="">
             </div>
         </div>`
         $('#users').append(data);
