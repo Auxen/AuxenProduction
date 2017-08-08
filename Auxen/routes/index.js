@@ -103,11 +103,15 @@ module.exports = function(io) {
   });
 
   /* Closes room redirects dj to home. */
+
+  // NEED TO CHANGE THE POST REQUEST AND ATTACH FLFAMES TO THE BODY
+
   router.get('/closeRoom/:name', function(req, res, next) {
     var roomId = req.query.roomId;
     var roomName = req.params.name;
     Room.remove({'_id': roomId}).then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
+      // redirect to the screen here
       res.redirect('/');
     }).catch(error => {
       console.log("error", error);
@@ -246,6 +250,7 @@ module.exports = function(io) {
       io.sockets.adapter.rooms[roomName].DJToken = djObject.accessToken;
       io.sockets.adapter.rooms[roomName].imageURL = djObject.imageURL;
       io.sockets.adapter.rooms[roomName].username = djObject.username;
+      io.sockets.adapter.rooms[roomName].flames = 0;
       var clearID = setInterval(() => {
         if (io.sockets.adapter.rooms[roomName]) {
           return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
@@ -375,7 +380,8 @@ module.exports = function(io) {
     });
 
     socket.on('laflame', function() {
-      console.log('this is also happening');
+      io.sockets.adapter.rooms[socket.room].flames += 1;
+      console.log(socket.room, io.sockets.adapter.rooms[socket.room].flames);
       socket.to(socket.room).emit('laflame');
     });
 
