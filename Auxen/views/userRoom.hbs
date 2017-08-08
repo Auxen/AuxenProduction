@@ -111,6 +111,7 @@
     /* Setting access token in localStorage */
     socket.on('setAccessToken', function(accessToken){
       localStorage.setItem('accessToken', accessToken);
+      console.log(localStorage.getItem('imageURL'));
       var userObject = {
         roomName: roomName,
         spotifyId: localStorage.getItem('spotifyId'),
@@ -149,7 +150,7 @@
     /* new user has joined */
     socket.on('userJoined', function(userData){
       console.log("userJoined", userData);
-        if($('#'+userData.spotifyId).length !== 0){
+        if($('#' + userData.spotifyId).length !== 0){
           console.log("this guy exits", userData);
           return;
         }else {
