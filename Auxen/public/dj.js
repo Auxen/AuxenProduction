@@ -100,9 +100,9 @@ $(document).ready(function(){
       console.log("this guy exits");
       return;
     }else {
-      var data = `<div id="${userData.spotifyId}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
+      var data = `<div id="${userData.spotifyId}" >
           <div data-id="${userData.spotifyId}" >
-            <img class="grow raise animated bounceIn" style="border-radius: 50%; width: 25%;" src="${userData.imageURL}" alt="">
+            <img class="grow raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
           </div>
       </div>`
       $('#users').append(data);
