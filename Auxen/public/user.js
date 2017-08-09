@@ -60,28 +60,6 @@ $(document).ready(function(){
     }
   });
 
-  /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
-  socket.on('setRefreshToken', function(refreshToken){
-    localStorage.setItem('refreshToken', refreshToken);
-    clearId = setInterval(function () {
-      socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-    }, 30*60000 );
-  });
-
-  /* Setting access token in localStorage */
-  socket.on('setAccessToken', function(accessToken){
-    localStorage.setItem('accessToken', accessToken);
-    console.log(localStorage.getItem('imageURL'));
-    var userObject = {
-      roomName: roomName,
-      spotifyId: localStorage.getItem('spotifyId'),
-      imageURL: localStorage.getItem('imageURL'),
-      username: localStorage.getItem('username')
-    }
-    console.log("show this to me");
-    socket.emit('joinRoom', userObject);
-  });
-
   /* sets new access token after refresh */
   socket.on('setNewAccessToken', function(accessToken){
     localStorage.setItem('accessToken', accessToken);
