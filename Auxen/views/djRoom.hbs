@@ -11,9 +11,13 @@
       <h2 class="text-center standard-text small">You are the host</h2>
     </div>
   </div>
-
+  <div id="sendgrace-container">
+    <h1 id="sendgrace" class="center floating pointer" >
+      🙏
+    </h1>
+  </div>
   <div class="center">
-    <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Played Songs</h1>
+    <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Show Love</h1>
   </div>
 
   <!-- <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -45,6 +49,20 @@
   </div>
 
   <div class="center" id="flames"></div>
+
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
+    <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
+      <div>
+        <div class="modal-header" style="background-color: #1E1D1D">
+          <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Show your listeners some love</h2>
+        </div>
+        <input  maxlength="35" id="djtalkval" style="border: none; font-size: 20px;" placeholder="What's the wave..." class="ghost-input"></input>
+        <div class="modal-footer"  style="background-color: #1E1D1D">
+          <h1 id="djtalk" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 </div>
@@ -136,12 +154,26 @@
       }, 8000)
     });
 
+    $('#djtalk').on('click', function() {
+      var djTalk = $('#djtalkval').val();
+      $('#djtalkval').val('');
+
+      $('#flames').append(`
+        <p class="request small text" style="position: absolute; color: #2dc72d;">
+            <span style="width: 30%;">${djTalk}</span>
+        </p>
+      `)
+
+      setTimeout(function() {
+          $('#flames').find('p:first').remove();
+        }, 8000)
+
+      socket.emit('djTalk', djTalk);
+    });
 
     /* dj closes room emits event to server which then kicks people out of the room */
     $('#closeRoom').on('click', function(event){
       console.log("reached front end destination");
-
-
       socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
     })
 
@@ -163,5 +195,17 @@
 
     });
 
+    $('#sendgrace').on('click', function() {
+      console.log('shit');
+      $('#flames').append(`
+        <span class="middle fire" style="position: absolute">
+            🙏
+        </span>
+      `)
+      setTimeout(function() {
+        $('#flames').find('span:first').remove();
+      }, 5000)
+      socket.emit('sendgrace');
+    })
 
 </script>

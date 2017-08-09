@@ -161,6 +161,12 @@ a:hover {
   -ms-user-select: none; /* IE10+ */
 }
 
+#sendgrace {
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+}
+
 @keyframes movement {
   0%{
 
