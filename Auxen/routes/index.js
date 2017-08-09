@@ -50,7 +50,13 @@ module.exports = function(io) {
     console.log("reaching create Room in backend post");
     var roomName = req.body.roomNameBar;
     existingRoomNames.push(roomName);
-    var newRoom = new Room({roomName: roomName, djRefreshToken: req.user.refreshToken, djSpotifyId: req.user.spotifyId, imageURL: req.user.imageURL, djName: req.user.username})
+    var newRoom = new Room({
+      roomName: roomName,
+      djRefreshToken: req.user.refreshToken,
+      djSpotifyId: req.user.spotifyId,
+      imageURL: req.user.imageURL,
+      djName: req.user.username
+    })
     newRoom.save(function(err, newRoom) {
       if (err) {
         res.render('error', {err})
@@ -119,6 +125,7 @@ module.exports = function(io) {
       console.log("error", error);
     })
   })
+
 
   /* makes user leave room, deletes him from db as well*/
   router.get('/leaveRoom', function(req, res, next) {

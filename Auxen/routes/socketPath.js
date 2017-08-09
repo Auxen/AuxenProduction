@@ -121,7 +121,7 @@ module.exports = function(io){
       socket.room = roomName; // set property
       socket.join(roomName); // join room
       io.sockets.adapter.rooms[roomName].DJToken = djObject.accessToken;
-      //io.sockets.adapter.rooms[roomName].imageURL = djObject.imageURL;
+      io.sockets.adapter.rooms[roomName].laflame = 0;
       //io.sockets.adapter.rooms[roomName].username = djObject.username;
       var clearID = setInterval(() => {
         if (io.sockets.adapter.rooms[roomName]) {
@@ -227,6 +227,7 @@ module.exports = function(io){
 
     socket.on('laflame', function() {
       console.log('this is also happening');
+      io.sockets.adapter.rooms[socket.room].laflame++;
       socket.to(socket.room).emit('laflame');
     });
 

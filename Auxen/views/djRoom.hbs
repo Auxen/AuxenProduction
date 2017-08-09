@@ -55,12 +55,13 @@
     var roomName = '{{room.roomName}}';
     var socket = io();
     var clearId = -1;
+    var flames = 0;
 
     /* Checking connnection to socket */
     socket.on('connect', function(){
       console.log('Connected!');
       if(localStorage.getItem('closing') === "true"){
-        window.location.href = '/';
+        window.location.href = '/mo';
       }else{
         socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       }
