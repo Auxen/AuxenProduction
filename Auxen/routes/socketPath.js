@@ -230,5 +230,13 @@ module.exports = function(io){
       socket.to(socket.room).emit('laflame');
     });
 
+    socket.on('djTalk', function(data) {
+      io.to(socket.room).emit('djTalk', data);
+    });
+
+    socket.on('sendgrace', function() {
+      console.log('shit');
+      socket.to(socket.room).emit('sendgrace');
+    })
   })
 }

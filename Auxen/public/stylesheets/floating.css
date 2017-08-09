@@ -24,7 +24,6 @@
 }
 
 .scaling {
-    float: left;
     -webkit-animation-name: scalex;
     -webkit-animation-duration:3s;
     -webkit-animation-iteration-count:infinite;
