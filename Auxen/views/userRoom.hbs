@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <div class="col-sm-2 col-xs-2">
+    <div class="col-sm-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="userLeave"><a href='/leaveRoom?roomId={{room._id}}'>Leave</a></h1>
     </div>
     <div class="col-sm-offset-1 col-sm-6">
@@ -19,20 +19,17 @@
   <div class="center">
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Request Songs</h1>
   </div>
-  <div class="row">
-    <div class="activeUsersforUser col-xs-offset-2">
-      <div id="users" class="row">
+    <div class="activeUsersforUser">
+      <div id="users" class="grid">
       {{#each room.usersInRoom}}
-        <div id="{{this.spotifyId}}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
-            <div data-id="{{this.spotifyId}}" >
-              <img class="raise animated bounceIn" style="border-radius: 50%; width: 25%;" src="{{this.imageURL}}" alt="">
-            </div>
-        </div>
+      <div id="{{this.spotifyId}}" >
+          <div data-id="{{this.spotifyId}}" >
+            <img class="raise grow animated bounceIn grid-item" src="{{this.imageURL}}" alt="">
+          </div>
+      </div>
       {{/each}}
       </div>
     </div>
-    <div class="col-xs-offset-4"></div>
-  </div>
 </div>
 
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
@@ -50,6 +47,7 @@
   </div>
 
 <div class="center" id="flames"></div>
+
 
 
 <script type="text/javascript" src="/static/scripts/float.js"></script>

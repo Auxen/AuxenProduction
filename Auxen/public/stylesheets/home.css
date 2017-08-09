@@ -196,9 +196,79 @@ a:hover {
     right: 50px;
   }
   100%{
-    bottom: 2000px;;
+    bottom: 2000px;
     -webkit-opacity: 0;
     -moz-opacity: 0;
     opacity: 0;
   }
 }
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+}
+
+.grid::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.grid-item {
+  box-sizing:border-box;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  float: left;
+  border-radius: 50%;
+  margin: 20px 10px 10px 10px;
+}
+
+.grid-item-buffer {
+  opacity: 0;
+}
+
+
+.grid-item:nth-child(1),
+.grid-item:nth-child(2),
+.grid-item:nth-child(3),
+.grid-item:nth-child(4),
+.grid-item:nth-child(5),
+.grid-item:nth-child(6) {
+   margin-top: 0px;
+}
+
+
+/*@media (max-width: 1024px) {
+  .container {
+    margin-top: 15%;
+    margin-bottom: 10%;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 500px) {
+  .headertext {
+    font-size: 300px;
+  }
+
+}
+
+@media (min-width: 300px) and (max-width: 600px) {
+  #leftaux {
+    opacity: 0;
+  }
+  #rightaux {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 900px) {
+  .ghost-input {
+    font-size: 18px;
+  }
+  .label-text {
+    font-size: 18px;
+  }
+}*/
