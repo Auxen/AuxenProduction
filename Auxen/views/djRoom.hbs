@@ -79,7 +79,7 @@
     socket.on('connect', function(){
       console.log('Connected!');
       if(localStorage.getItem('closing') === "true"){
-        window.location.href = '/mo';
+        window.location.href = '/';
       }else{
         socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
       }
