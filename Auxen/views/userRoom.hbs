@@ -203,4 +203,27 @@
       })
     })
 
+    socket.on('djTalk', function(data) {
+        $('#flames').append(`
+          <p class="request small text" style="position: absolute; color: #2dc72d;">
+              <span style="width: 30%;">${data}</span>
+          </p>
+        `)
+
+        setTimeout(function() {
+          $('#flames').find('p:first').remove();
+        }, 8000)
+      });
+
+    socket.on('sendgrace', function() {
+      $('#flames').append(`
+        <span class="middle fire" style="position: absolute">
+            🙏
+        </span>
+      `)
+      setTimeout(function() {
+        $('#flames').find('span:first').remove();
+      }, 5000)
+    })
+
 </script>
