@@ -113,7 +113,7 @@ module.exports = function(io) {
     var roomName = req.params.name;
     Room.remove({'_id': roomId}).then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
-      // redirect to the screen here
+      
       res.redirect('/');
     }).catch(error => {
       console.log("error", error);
