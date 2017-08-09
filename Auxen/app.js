@@ -26,6 +26,8 @@ var app = express();
 //io stuff
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var socketPath = require('./routes/socketPath');
+socketPath(io);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
