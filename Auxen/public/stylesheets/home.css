@@ -241,21 +241,21 @@ a:hover {
 }
 
 
-@media (max-width: 1024px) {
+/*@media (max-width: 1024px) {
   .container {
-    margin-top: 25%;
+    margin-top: 15%;
     margin-bottom: 10%;
   }
 }
 
-@media (min-width: 500px) and (max-width: 1024px) {
+@media (min-width: 300px) and (max-width: 500px) {
   .headertext {
-    font-size: 140px;
+    font-size: 300px;
   }
 
 }
 
-@media (min-width: 300px) and (max-width: 1024px) {
+@media (min-width: 300px) and (max-width: 600px) {
   #leftaux {
     opacity: 0;
   }
@@ -266,13 +266,9 @@ a:hover {
 
 @media (min-width: 300px) and (max-width: 900px) {
   .ghost-input {
-    font-size: 20px;
+    font-size: 18px;
   }
   .label-text {
-    font-size: 20px;
+    font-size: 18px;
   }
-  .media {
-    margin-left: 30% !important;
-    margin-right: 10%;
-  }
-}
+}*/
