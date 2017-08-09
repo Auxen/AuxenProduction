@@ -1,4 +1,3 @@
-
 <div>
   <div class="row">
     <div class="col-sm-2 col-xs-2">
@@ -36,7 +35,7 @@
   </div>
 </div>
 
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
     <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
       <div>
         <div class="modal-header" style="background-color: #1E1D1D">
@@ -50,180 +49,9 @@
     </div>
   </div>
 
-  <div class="center" id="flames"></div>
+<div class="center" id="flames"></div>
 
 
 <script type="text/javascript" src="/static/scripts/float.js"></script>
 
-<script>
-    var roomName = '{{room.roomName}}';
-    var roomId = '{{room._id}}';
-    console.log("roomId", roomId);
-    var socket = io();
-    var clearId = -1;
-
-
-    $('#request').on('click', function() {
-      var request = $('#requestval').val();
-      socket.emit('userSongRequest', $('#requestval').val());
-    });
-
-    $('#laflame').on('click', function() {
-      socket.emit('laflame');
-    })
-
-    /* if user wants to leave room it comes here */
-    $('#userLeave').on('click', function(event){
-      socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
-    })
-
-    /* Checking connnection to socket */
-    socket.on('connect', function(){
-      console.log('Connected!');
-      if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") <5000)){
-        console.log("entering here on connect");
-          console.log("this was a refresh");
-          var userObject = {
-            roomId: roomId,
-            roomName: roomName,
-            spotifyId: localStorage.getItem('spotifyId'),
-            imageURL: localStorage.getItem('imageURL'),
-            username: localStorage.getItem('username')
-          }
-          console.log("userObject after asfkjtcjs", userObject);
-          socket.emit("userRefreshed", userObject);
-          localStorage.removeItem("disconnectTime");
-
-      }else{
-        console.log("new room joined without refresh");
-        socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
-      }
-    });
-
-    /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
-    socket.on('setRefreshToken', function(refreshToken){
-      localStorage.setItem('refreshToken', refreshToken);
-      clearId = setInterval(function () {
-        socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 30*60000 );
-    });
-
-    /* Setting access token in localStorage */
-    socket.on('setAccessToken', function(accessToken){
-      localStorage.setItem('accessToken', accessToken);
-      console.log(localStorage.getItem('imageURL'));
-      var userObject = {
-        roomName: roomName,
-        spotifyId: localStorage.getItem('spotifyId'),
-        imageURL: localStorage.getItem('imageURL'),
-        username: localStorage.getItem('username')
-      }
-      console.log("show this to me");
-      socket.emit('joinRoom', userObject);
-    });
-
-    /* sets new access token after refresh */
-    socket.on('setNewAccessToken', function(accessToken){
-      localStorage.setItem('accessToken', accessToken);
-    })
-
-    // $(window).bind('beforeunload', function(){
-    //   //return "Are you sure you want to leave? This will take you to home page";
-    // });
-
-    $(window).on("unload", function(){
-      console.log("unloading");
-      var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
-      console.log("user object", userObject);
-      socket.emit('specialLeave', userObject);
-      localStorage.setItem("disconnectTime", new Date().getTime());
-      clearInterval(clearId);
-    });
-
-    /* if dj closes room it will come here and redirect to home after leavingRoom */
-    socket.on('roomClosed', function(){
-      socket.emit('leaveRoom');
-      alert('Sorry, the dj closed the room');
-      window.location = '/';
-    })
-
-    /* new user has joined */
-    socket.on('userJoined', function(userData){
-      console.log("userJoined", userData);
-        if($('#' + userData.spotifyId).length !== 0){
-          console.log("this guy exits", userData);
-          return;
-        }else {
-
-           var data = `<div id="${userData.spotifyId}" class="col-xs-6 col-sm-4" style="margin-top: 3%;">
-               <div data-id="${userData.spotifyId}" >
-                 <img class="scaling raise animated bounceIn" style="border-radius: 50%; width: 25%;" src="${userData.imageURL}" alt="">
-               </div>
-           </div>`
-           $('#users').append(data);
-
-        }
-
-    });
-
-    /* some other user has left room */
-    socket.on('userLeaving', function(userSpotifyId){
-      console.log("userLeaving", userSpotifyId);
-      $('#' + userSpotifyId).remove();
-    });
-
-    /* get dj setting info and configure users spotify */
-    socket.on('DJData', function(DJData){
-      var timeProgress = DJData.timeProgress;
-      var songURI = DJData.songURI;
-      $.ajax({
-        url: 'https://api.spotify.com/v1/me/player/play',
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
-          'Content-Type': "application/json"
-        },
-        data: JSON.stringify({
-          "uris": [songURI]
-        }),
-        dataType: "JSON",
-        success: function(data){
-          $.ajax({
-            url: `https://api.spotify.com/v1/me/player/seek?position_ms=${timeProgress}`,
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
-              },
-            method: 'PUT',
-            json: true,
-            success: function (something) {
-                console.log("lets go home");
-            }
-          })
-        }
-      })
-    })
-
-    socket.on('djTalk', function(data) {
-        $('#flames').append(`
-          <p class="request small text" style="position: absolute; color: #2dc72d;">
-              <span style="width: 30%;">${data}</span>
-          </p>
-        `)
-
-        setTimeout(function() {
-          $('#flames').find('p:first').remove();
-        }, 8000)
-      });
-
-    socket.on('sendgrace', function() {
-      $('#flames').append(`
-        <span class="middle fire" style="position: absolute">
-            🙏
-        </span>
-      `)
-      setTimeout(function() {
-        $('#flames').find('span:first').remove();
-      }, 5000)
-    })
-
-</script>
+<script src="/static/user.js"></script>

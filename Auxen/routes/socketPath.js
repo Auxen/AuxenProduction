@@ -1,4 +1,3 @@
-
 var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
@@ -14,7 +13,11 @@ module.exports = function(io){
 
     function getSpotifyApi() {
 
-      var spotifyApi = new SpotifyWebApi({clientId: process.env.SPOTIFY_ID, clientSecret: process.env.SPOTIFY_SECRET, redirectUri: process.env.CALLBACK_URL});
+      var spotifyApi = new SpotifyWebApi({
+        clientId: process.env.SPOTIFY_ID,
+        clientSecret: process.env.SPOTIFY_SECRET,
+        redirectUri: process.env.CALLBACK_URL
+      });
 
       return spotifyApi;
     }
@@ -97,45 +100,10 @@ module.exports = function(io){
       })
     })
 
-    /* called by dj. closes room, dj leaves room, and emits events for users to leave room */
-    socket.on('closingRoom', function(roomData) {
-      console.log("backend closingRoom");
-      socket.to(socket.room).emit('roomClosed');
-      socket.leave(socket.room);
-    })
-
-    /* called by users while leaving room or when room closed altogether */
-    socket.on('leaveRoom', function(userSpotifyId) {
-      if (userSpotifyId) {
-        socket.to(socket.room).emit('userLeaving', userSpotifyId);
-      }
-      socket.leave(socket.room);
-    })
-
-    /* create room in socket with dj information */
-    socket.on('createRoom', function(djObject) {
-      console.log("starting to create room");
-      var roomName = djObject.roomName;
-      if (socket.room)
-        socket.leave(socket.room); //if already in room leave
-      socket.room = roomName; // set property
-      socket.join(roomName); // join room
-      io.sockets.adapter.rooms[roomName].DJToken = djObject.accessToken;
-      io.sockets.adapter.rooms[roomName].laflame = 0;
-      //io.sockets.adapter.rooms[roomName].username = djObject.username;
-      var clearID = setInterval(() => {
-        if (io.sockets.adapter.rooms[roomName]) {
-          return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
-        } else {
-          console.log("this room no longer exists");
-          clearInterval(clearID);
-        }
-      }, 5000);
-    })
+    // USER //
 
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
-      console.log("**********************");
       console.log(userObject);
       if (socket.room) {
         socket.leave(socket.room);
@@ -151,10 +119,13 @@ module.exports = function(io){
       socket.emit("DJData", DJData);
     })
 
-    /* after access token is changed for dj, i set that token to room here */
-    socket.on('changeRoomToken', function(data) {
-      io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
-    });
+    /* called by users while leaving room or when room closed altogether */
+    socket.on('leaveRoom', function(userSpotifyId) {
+      if (userSpotifyId) {
+        socket.to(socket.room).emit('userLeaving', userSpotifyId);
+      }
+      socket.leave(socket.room);
+    })
 
     /* user refreshed so adding to db */
     socket.on('userRefreshed', function(userObject){
@@ -185,20 +156,7 @@ module.exports = function(io){
       })
     })
 
-    socket.on('specialClose', function(roomObject){
-      console.log("backend closingRoom");
-      socket.to(socket.room).emit('roomClosed');
-      socket.leave(socket.room);
-      console.log("reaching autoclose at backend");
-      Room.remove({'_id': roomObject.roomId})
-      .then(() => {
-        console.log("room successfully removed");
-      })
-      .catch((error) => {
-        console.log("error", error);
-      })
-    })
-
+    /* user refreshed or closed tab */
     socket.on('specialLeave', function(userObject){
       console.log("enetered specialLeave");
       if (userObject.spotifyId) {
@@ -219,25 +177,83 @@ module.exports = function(io){
       })
     })
 
+    /* user makes song request to dj */
     socket.on('userSongRequest', function(data) {
       console.log('data', data)
       console.log("room is", socket.room);
       socket.to(socket.room).emit('userSongRequest', data);
     });
 
+    /* user sends flame to dj */
     socket.on('laflame', function() {
       console.log('this is also happening');
       io.sockets.adapter.rooms[socket.room].laflame++;
       socket.to(socket.room).emit('laflame');
     });
 
+    // USER ENDS //
+
+    // DJ //
+
+    /* create room in socket with dj information */
+    socket.on('createRoom', function(djObject) {
+      console.log("starting to create room");
+      var roomName = djObject.roomName;
+      if (socket.room)
+        socket.leave(socket.room); //if already in room leave
+      socket.room = roomName; // set property
+      socket.join(roomName); // join room
+      io.sockets.adapter.rooms[roomName].DJToken = djObject.accessToken;
+      io.sockets.adapter.rooms[roomName].laflame = 0;
+      var clearID = setInterval(() => {
+        if (io.sockets.adapter.rooms[roomName]) {
+          return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
+        } else {
+          console.log("this room no longer exists");
+          clearInterval(clearID);
+        }
+      }, 5000);
+    })
+
+    /* called by dj. closes room, dj leaves room, and emits events for users to leave room */
+    socket.on('closingRoom', function(roomData) {
+      console.log("backend closingRoom");
+      socket.to(socket.room).emit('roomClosed');
+      socket.leave(socket.room);
+    })
+
+    /* dj closed tab or refreshed */
+    socket.on('specialClose', function(roomObject){
+      console.log("backend closingRoom");
+      socket.to(socket.room).emit('roomClosed');
+      socket.leave(socket.room);
+      console.log("reaching autoclose at backend");
+      Room.remove({'_id': roomObject.roomId})
+      .then(() => {
+        console.log("room successfully removed");
+      })
+      .catch((error) => {
+        console.log("error", error);
+      })
+    })
+
+    /* after access token is changed for dj, i set that token to room here */
+    socket.on('changeRoomToken', function(data) {
+      io.sockets.adapter.rooms[data.roomName].DJToken = data.newToken;
+    });
+
+    /* dj sends messages */
     socket.on('djTalk', function(data) {
       io.to(socket.room).emit('djTalk', data);
     });
 
+    /* dj sends thanks */
     socket.on('sendgrace', function() {
       console.log('shit');
       socket.to(socket.room).emit('sendgrace');
     })
+
+    // DJ ENDS //
+
   })
 }

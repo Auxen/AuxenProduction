@@ -1,7 +1,5 @@
-// final for beta
 var express = require('express');
 var router = express.Router();
-
 var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
@@ -21,7 +19,6 @@ module.exports = function(io) {
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
-    console.log('AAAAAAAAAA', req.user.imageURL);
     res.render('home', {
       spotifyId: req.user.spotifyId,
       imageURL: req.user.imageURL,
@@ -45,7 +42,7 @@ module.exports = function(io) {
     })
   })
 
-  /* Create a room and render djroom page. */
+  /* Create a room */
   router.post('/createRoom', function(req, res, next) {
     console.log("reaching create Room in backend post");
     var roomName = req.body.roomNameBar;
@@ -66,6 +63,7 @@ module.exports = function(io) {
     })
   })
 
+  /* renders room for dj */
   router.get('/djRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
     Room.findById(roomId).then(room => {
@@ -100,6 +98,7 @@ module.exports = function(io) {
     })
   })
 
+  /* renders room for user */
   router.get('/userRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
     Room.findById(roomId).then(room => {
@@ -110,10 +109,7 @@ module.exports = function(io) {
     })
   });
 
-  /* Closes room redirects dj to home. */
-
-  // NEED TO CHANGE THE POST REQUEST AND ATTACH FLFAMES TO THE BODY
-
+  /* closes room */
   router.get('/closeRoom/:name', function(req, res, next) {
     var roomId = req.query.roomId;
     var roomName = req.params.name;
@@ -125,7 +121,6 @@ module.exports = function(io) {
       console.log("error", error);
     })
   })
-
 
   /* makes user leave room, deletes him from db as well*/
   router.get('/leaveRoom', function(req, res, next) {
