@@ -43,9 +43,10 @@
          <br>
          <br>
          3. Also, the beta does not work on mobile 😞 (we'll get that fixed soon)
+
        </h2>
        <br>
-       <!-- <h1 id="songTest" type="button" style="width: 20%; margin-left: auto; margin-right: auto;" class="text small boxed raise">Test</h1> -->
+        <h1 id="songTest" type="button" style="width: 20%; margin-left: auto; margin-right: auto;" class="text small boxed raise">Test</h1>
 
       </div>
       <div class="modal-footer" style="background-color: #1E1D1D">
@@ -59,11 +60,35 @@
 <script>
   $(document).ready(function() {
     var spotifyId = '{{spotifyId}}';
-    var imageURL = '{{{imageURL}}}'; 
+    var imageURL = '{{{imageURL}}}';
     var username = '{{username}}';
+    var accessToken = '{{{accessToken}}}';
+    var refreshToken = '{{{refreshToken}}}';
     localStorage.setItem("spotifyId", spotifyId);
     localStorage.setItem("imageURL", imageURL);
     localStorage.setItem("username", username);
     localStorage.setItem('closing', "false");
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('closing', "false");
+
+    $('#songTest').on('click', function(){
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/play',
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': "application/json"
+        },
+        data: JSON.stringify({
+          "uris": ['spotify:track:3a1lNhkSLSkpJE4MSHpDu9']
+        }),
+        dataType: "JSON",
+        success: function(data){
+          console.log("its working for you");
+        }
+      })
+    })
+
   })
 </script>

@@ -33,24 +33,30 @@ $(document).ready(function(){
 
   /* Checking connnection to socket */
   socket.on('connect', function(){
+
     console.log('Connected!');
+
+    clearId = setInterval(function () {
+      socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+    }, 30*60000 );
+
+    var userObject = {
+      roomId: roomId,
+      roomName: roomName,
+      spotifyId: localStorage.getItem('spotifyId'),
+      imageURL: localStorage.getItem('imageURL'),
+      username: localStorage.getItem('username')
+    }
+
     if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") <5000)){
-      console.log("entering here on connect");
         console.log("this was a refresh");
-        var userObject = {
-          roomId: roomId,
-          roomName: roomName,
-          spotifyId: localStorage.getItem('spotifyId'),
-          imageURL: localStorage.getItem('imageURL'),
-          username: localStorage.getItem('username')
-        }
-        console.log("userObject after asfkjtcjs", userObject);
+        console.log("userObject", userObject);
         socket.emit("userRefreshed", userObject);
         localStorage.removeItem("disconnectTime");
-
-    }else{
+    }
+    else{
       console.log("new room joined without refresh");
-      socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      socket.emit('joinRoom', userObject);
     }
   });
 
@@ -137,7 +143,7 @@ $(document).ready(function(){
           method: 'PUT',
           json: true,
           success: function (something) {
-              console.log("lets go home");
+              console.log("song successfully changed or modified");
           }
         })
       }

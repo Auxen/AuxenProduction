@@ -22,19 +22,27 @@ $(document).ready(function(){
   /* Checking connnection to socket */
   socket.on('connect', function(){
     console.log('Connected!');
+
+    clearId = setInterval(function () {
+      socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+    }, 30*60000);
+
     if(localStorage.getItem('closing') === "true"){
       window.location.href = '/';
     }else{
-      socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      //socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+      var djObject = {
+        roomName: roomName,
+        accessToken: localStorage.getItem('accessToken')
+      }
+      socket.emit('createRoom', djObject);
     }
   })
 
   /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
   socket.on('setRefreshToken', function(refreshToken){
     localStorage.setItem('refreshToken', refreshToken);
-    clearId = setInterval(function () {
-      socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-    }, 30*60000);
+
   });
 
   /* Setting access token in localStorage */

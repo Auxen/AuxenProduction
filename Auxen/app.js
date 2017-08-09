@@ -65,7 +65,7 @@ passport.use(new SpotifyStrategy({
   function(accessToken, refreshToken, profile, cb) {
     var photo = profile.photos[0] ? profile.photos[0] : "/static/images/anonymous.jpeg";
     var username = profile.displayName ? profile.displayName : "Anonymous";
-    User.findOrCreate({ spotifyId: profile.id }, {refreshToken:refreshToken, imageURL: photo, username: username }, function (err, user) {
+    User.findOrCreate({ spotifyId: profile.id }, {accessToken: accessToken,refreshToken:refreshToken, imageURL: photo, username: username }, function (err, user) {
       return cb(err, user);
     });
   }

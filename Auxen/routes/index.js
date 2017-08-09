@@ -22,7 +22,9 @@ module.exports = function(io) {
     res.render('home', {
       spotifyId: req.user.spotifyId,
       imageURL: req.user.imageURL,
-      username: req.user.username
+      username: req.user.username,
+      accessToken: req.user.accessToken,
+      refreshToken: req.user.refreshToken
     });
   });
 
@@ -115,7 +117,7 @@ module.exports = function(io) {
     var roomName = req.params.name;
     Room.remove({'_id': roomId}).then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
-      
+
       res.redirect('/');
     }).catch(error => {
       console.log("error", error);

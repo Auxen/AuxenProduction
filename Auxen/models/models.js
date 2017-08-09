@@ -11,7 +11,8 @@ var userSchema = new Schema({
   password:String,
   spotifyId:String,
   refreshToken:String,
-  imageURL: String
+  imageURL: String,
+  accessToken:String
 })
 
 var roomSchema = new Schema({
@@ -25,17 +26,20 @@ var roomSchema = new Schema({
 
 userSchema.statics.findOrCreate = function(obj1,obj2,cb){
   User.findOne(obj1,function(err,user){
-    console.log(err, user);
     if(err)console.log(err);
     else if(user){
-      cb(err,user);
+      user.accessToken = obj2.accessToken;
+      user.save(function(err, user){
+        cb(err,user);
+      });
     }
     else{
         var newUser = new User({
         spotifyId: obj1.spotifyId,
         refreshToken: obj2.refreshToken,
         imageURL: obj2.imageURL,
-        username: obj2.username
+        username: obj2.username,
+        accessToken: obj2.accessToken
       })
       newUser.save(function(err, user){
         cb(err,user);
