@@ -105,11 +105,15 @@ module.exports = function(io) {
   });
 
   /* Closes room redirects dj to home. */
+
+  // NEED TO CHANGE THE POST REQUEST AND ATTACH FLFAMES TO THE BODY
+
   router.get('/closeRoom/:name', function(req, res, next) {
     var roomId = req.query.roomId;
     var roomName = req.params.name;
     Room.remove({'_id': roomId}).then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
+      // redirect to the screen here
       res.redirect('/');
     }).catch(error => {
       console.log("error", error);

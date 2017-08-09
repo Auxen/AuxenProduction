@@ -83,7 +83,7 @@ a:hover {
   border: 1px solid white;
   border-radius: 10px;
   width: inherit;
-  padding: 8px 30px 8px 30px;
+  padding: 8px 40px 8px 40px;
   cursor: pointer;
 }
 
@@ -152,7 +152,7 @@ a:hover {
   animation-name: movement;
   animation-duration: 15s;
   animation-timing-function: linear;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
 }
 
 #laflame {
