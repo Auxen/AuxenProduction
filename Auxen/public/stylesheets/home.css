@@ -12,6 +12,8 @@ a:hover {
   color: white;
 }
 
+.container {}
+
 .center {
   display: flex;
   justify-content: center;
@@ -25,7 +27,6 @@ a:hover {
 .text {
   color: white;
   font-family: 'Poppins', sans-serif;
-;
   display: flex;
   justify-content: center;
 }
@@ -44,7 +45,7 @@ a:hover {
 }
 
 .middle {
-  font-size: 25px;
+  font-size: 30px;
   margin-bottom: 25px;
 }
 
@@ -96,7 +97,7 @@ a:hover {
   display: block;
   font-weight:300;
   width: 100%;
-  font-size: 55px;
+  font-size: 255%;
   border:0px;
   outline: none;
   width: 100%;

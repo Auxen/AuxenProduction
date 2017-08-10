@@ -1,8 +1,26 @@
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  #inputWidth {
+    width: 100% !important;
+  }
+  .ghost-input {
+    font-size: 125%;
+  }
+  .container-fluid {
+    margin-top: 25%;
+  }
+}
+</style>
+
+
+
 <div class="main">
   <div class="container-fluid">
     <form id="roomSubmit" action='/createRoom' method="POST">
-    <div class="center topLevel" style="width: 60%; margin-right: auto; margin-left: auto;">
-        <input autocomplete="off" onfocus="this.placeholder = ''" name="roomNameBar" id="roomName" placeholder="Enter a room name here" class="ghost-input text-center"></input>
+    <div id="inputWidth" class="center topLevel" style="width: 60%; margin-right: auto; margin-left: auto;">
+        <input maxlength="30" autocomplete="off" onfocus="this.placeholder = ''" name="roomNameBar" id="roomName" placeholder="Enter a room name here" class="ghost-input text-center"></input>
     </div>
     <div class="center" >
       <h1 class="text-center text label-text boxed raise" name="button" id="startRoom">Go Live</h1>
