@@ -71,7 +71,7 @@ $(document).ready(function(){
   /* listens to flames in room */
   socket.on('laflame', function() {
     $('#flames').append(`
-        <span class="middle fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
+        <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
             🔥
         </span>
       `)
@@ -155,7 +155,7 @@ $(document).ready(function(){
   /* sends thanks by dj to room */
   $('#sendgrace').on('click', function() {
     $('#flames').append(`
-      <span class="middle fire" style="position: absolute;left:${Math.floor(100 * Math.random())}%">
+      <span class="small fire" style="position: absolute;left:${Math.floor(100 * Math.random())}%">
           🙏
       </span>
     `)
@@ -164,4 +164,5 @@ $(document).ready(function(){
     }, 2000)
     socket.emit('sendgrace');
   })
+
 })

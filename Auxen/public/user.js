@@ -144,7 +144,7 @@ $(document).ready(function(){
   /* listens for dj thanks */
   socket.on('sendgrace', function() {
     $('#flames').append(`
-      <span class="middle fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
+      <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
           🙏
       </span>
     `)
@@ -169,7 +169,7 @@ $(document).ready(function(){
   /* listens to flames in room */
   socket.on('laflame', function() {
     $('#flames').append(`
-        <span class="middle fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
+        <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
             🔥
         </span>
       `)

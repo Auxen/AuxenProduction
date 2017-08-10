@@ -96,6 +96,11 @@ and (max-device-width : 480px) {
 
 <script>
   $(document).ready(function() {
+
+    if(!localStorage.getItem('spotifyId')) {
+      $('#exampleModalLong').modal('show');
+    }
+
     var spotifyId = '{{spotifyId}}';
     var imageURL = '{{{imageURL}}}';
     var username = '{{username}}';
@@ -108,12 +113,6 @@ and (max-device-width : 480px) {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('closing', "false");
-
-    if(!spotifyId) {
-      $('#exampleModalLong').modal('show');
-    }
-
-
     $('#songTest').on('click', function(){
 
 
