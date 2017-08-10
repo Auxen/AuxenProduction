@@ -1,12 +1,63 @@
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  /*.grid-item {
+    box-sizing: border-box;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    float: left;
+    border-radius: 50%;
+    margin: 20px 10px 10px 10px;
+    margin-top: 10px;*/
+}
+/*.small {
+  font-size: 50px;
+}*/
+/*
+.middle {
+  font-size: 70px;
+}*/
+/*.phone {
+  border-radius: 50% !important;
+  width: 30% !important;
+  height: 30% !important;
+}*/
+/*
+#laflame {
+  font-size: 150px;
+}
+
+h2 {
+  font-size: 50px;
+}
+
+#request {
+  width: 100% !important;
+}*/
+
+/*.activeUsersforUser {
+  margin-top: 5%;
+}*/
+
+#request {
+  width: 100% !important;
+}
+
+}
+</style>
+
+
 <div>
   <div class="row">
-    <div class="col-sm-2">
+    <div class="col-md-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="userLeave"><a href='/leaveRoom?roomId={{room._id}}'>Leave</a></h1>
     </div>
-    <div class="col-sm-offset-1 col-sm-6">
-      <h1 class="text-center standard-text medium animated slideInDown">{{room.roomName}}</h1>
+    <div class="col-md-offset-1 col-md-6">
+      <h1 class="text-center standard-text middle animated slideInDown">{{room.roomName}}</h1>
       <div id="djphoto" class='center'>
-        <img src="{{room.imageURL}}" class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
+        <img src="{{room.imageURL}}" class="img-responsive animated wobble phone" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
       <h2 class="text-center standard-text small">DJ is: {{room.djName}}</h2>
     </div>
@@ -47,8 +98,6 @@
   </div>
 
 <div class="center" id="flames"></div>
-
-
 
 <script type="text/javascript" src="/static/scripts/float.js"></script>
 
