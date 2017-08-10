@@ -79,7 +79,7 @@ h2 {
       {{#each room.usersInRoom}}
       <div id="{{this.spotifyId}}" >
           <div data-id="{{this.spotifyId}}" >
-            <img class="raise grow animated bounceIn grid-item" src="{{this.imageURL}}" alt="">
+            <img class="raise animated bounceIn grid-item" src="{{this.imageURL}}" alt="">
           </div>
       </div>
       {{/each}}
@@ -95,7 +95,7 @@ h2 {
         </div>
         <input  maxlength="35" id="requestval" style="border: none; font-size: 20px;" placeholder="Taking song requests..." class="ghost-input"></input>
         <div class="modal-footer"  style="background-color: #1E1D1D">
-          <h1 id="request" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
+          <h1 id="songrequest" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
       </div>
     </div>

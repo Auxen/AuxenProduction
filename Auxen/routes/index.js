@@ -123,6 +123,7 @@ module.exports = function(io) {
 
   /* closes room */
   router.get('/closeRoom/:name', function(req, res, next) {
+    console.log('if you see numbers here tell mohammad', io.sockets.adapter.rooms[socket.room].laflame);
     var roomId = req.query.roomId;
     var roomName = req.params.name;
     Room.remove({'_id': roomId}).then(() => {
