@@ -16,9 +16,10 @@ $(document).ready(function(){
   });
 
    /* user sends request */
-  $('#request').on('click', function() {
+  $('#songrequest').on('click', function() {
     var request = $('#requestval').val();
-    socket.emit('userSongRequest', $('#requestval').val());
+    $('#requestval').val('');
+    socket.emit('userSongRequest', request);
   });
 
   /* user sends flames */
