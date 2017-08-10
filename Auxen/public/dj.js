@@ -77,7 +77,7 @@ $(document).ready(function(){
       `)
       setTimeout(function() {
         $('#flames').find('span:first').remove();
-      }, 5000)
+      }, 2000)
   })
 
   /* listens to requests in room */
