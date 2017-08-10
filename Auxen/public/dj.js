@@ -105,6 +105,19 @@ $(document).ready(function(){
             <img class="grow raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
           </div>
       </div>`
+
+      var randomEmojis = ['🕺', '🙏', '👾', '🚀', '🎵', '🎤', '🎧', '🎉', '🔥', '💯', '☀️'];
+      var index = Math.floor(Math.random() * (randomEmojis.length - 1 - 1)) + 0;
+      console.log(index);
+
+      var potentialDJS = `<div id="${userData.spotifyId}" >
+          <div data-id="${userData.spotifyId}" >
+            <h2 class="text small raise-user">${userData.username} ${randomEmojis[index]}</h2>
+          </div>
+      </div>`
+
+      $('#potentialDJS').append(potentialDJS);
+
       $('#users').append(data);
     }
 
