@@ -103,7 +103,7 @@ $(document).ready(function(){
     }else {
       var data = `<div id="${userData.spotifyId}" >
           <div data-id="${userData.spotifyId}" >
-            <img class="grow raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
+            <img class="raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
           </div>
       </div>`
 
