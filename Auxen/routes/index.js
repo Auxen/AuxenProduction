@@ -30,7 +30,6 @@ module.exports = function(io) {
 
   /* Get createRoom page. */
   router.get('/createRoom', function(req, res, next) {
-
     res.render('createRoom', {existingRoomNames});
   })
 
@@ -83,21 +82,31 @@ module.exports = function(io) {
   router.get('/joinRoom', function(req, res, next) {
     console.log("joined room in database.");
     var roomId = req.query.roomId;
-    Room.findById(roomId, function(err, room) {
-      var userObject = {
-        spotifyId: req.user.spotifyId,
-        imageURL: req.user.imageURL,
-        username: req.user.username
-      }
-      room.usersInRoom.push(userObject);
-      room.save(function(err, room) {
-        if (err) {
-          res.render('error');
-        } else {
-          res.redirect('/userRoom/' + room._id);
-        }
+    Room.findById(roomId)
+    .then(room => {
+      var euser = room.usersInRoom.find(function(user){
+        return user.spotifyId === req.user.spotifyId;
       })
-
+      if(euser)return;
+      else{
+        var userObject = {
+          spotifyId: req.user.spotifyId,
+          imageURL: req.user.imageURL,
+          username: req.user.username
+        }
+        room.usersInRoom.push(userObject);
+        room.save(function(err, room) {
+          if (err) {
+            res.render('error');
+          } else {
+            res.redirect('/userRoom/' + room._id);
+          }
+        })
+      }
+    })
+    .catch( error => {
+      console.log("error", error);
+      res.render('error');
     })
   })
 
