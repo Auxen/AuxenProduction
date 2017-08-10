@@ -60,7 +60,7 @@ h2 {
       </div>
       <h2 class="text-center standard-text small">You are the DJ</h2>
       <div class="center">
-        <h1 id="passDJ" style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass DJ</h1>
+        <h1 id="pass" style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass DJ</h1>
       </div>
     </div>
   </div>
@@ -73,25 +73,6 @@ h2 {
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Show Love</h1>
   </div>
 
-
-  <!-- <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 style="color: black;"class="modal-title text-center standard-text" id="exampleModalLongTitle">Played Songs 🎉</h2>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body lastSongs">
-
-        </div>
-        <div class="modal-footer">
-          <h1 style="color: black; width: 20%; margin-right: auto; margin-left: auto;"class="text-center text small boxed raise" data-dismiss="modal">Close</h1>
-        </div>
-      </div>
-    </div>
-  </div> -->
 
     <div class="activeUsersforDJ ">
       <div id="users" class="grid">
@@ -115,13 +96,14 @@ h2 {
     </div>
   </div>
 
-  <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
+  <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="passDJ" aria-hidden="true" style="background-color: #1E1D1D">
     <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
       <div>
-          <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the batton.</h2>
-          <input autocomplete="off" id="myInput" style="font-size: 20px;"  placeholder="Search for users here..." class="text-center ghost-input" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
+        <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the batton.</h2>
+        <input autocomplete="off" id="myInput" style="font-size: 20px;"  placeholder="Search for users here..." class="text-center ghost-input" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
+        </div>
         <div id="potentialDJS"></div>
-      </div>
+    </div>
     </div>
   </div>
 
