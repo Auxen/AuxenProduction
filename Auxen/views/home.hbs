@@ -81,7 +81,6 @@ and (max-device-width : 480px) {
 }
 </style>
 
-<script type="text/javascript" src="/static/scripts/modal.js"></script>
 <script>
   $(document).ready(function() {
     var spotifyId = '{{spotifyId}}';
@@ -96,6 +95,11 @@ and (max-device-width : 480px) {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('closing', "false");
+
+    if(!spotifyId) {
+      $('#exampleModalLong').modal('show');
+    }
+
 
     $('#songTest').on('click', function(){
 

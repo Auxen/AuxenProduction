@@ -177,9 +177,9 @@ a:hover {
   0%{
 
     bottom: 0;
-    right: 50px;
+    /*right: 50px;*/
   }
-  20%{
+  /*20%{
     right: 40px;
   }
   40%{
@@ -200,7 +200,7 @@ a:hover {
   }
   90%{
     right: 50px;
-  }
+  }*/
   100%{
     bottom: 2000px;
     -webkit-opacity: 0;

@@ -29,6 +29,7 @@ $(document).ready(function(){
   /* if user wants to leave room it comes here */
   $('#userLeave').on('click', function(event){
     socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+    window.location = $(this).attr('data-url');
   })
 
   /* Checking connnection to socket */
@@ -131,7 +132,7 @@ $(document).ready(function(){
   /* listens for dj message */
   socket.on('djTalk', function(data) {
       $('#flames').append(`
-        <p class="request small text" style="position: absolute; color: #2dc72d;">
+        <p class="request small text" style="position: absolute; color: #2dc72d; left:${Math.floor(100 * Math.random())}%">
             <span style="width: 30%;">${data}</span>
         </p>
       `)
@@ -143,12 +144,37 @@ $(document).ready(function(){
   /* listens for dj thanks */
   socket.on('sendgrace', function() {
     $('#flames').append(`
-      <span class="middle fire" style="position: absolute">
+      <span class="middle fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
           🙏
       </span>
     `)
     setTimeout(function() {
       $('#flames').find('span:first').remove();
     }, 5000)
+  })
+
+  /* listens to requests in room */
+  socket.on('userSongRequest', function(data){
+    $('#flames').append(`
+      <p class="request small text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
+          <span style="width: 30%;">${data}</span>
+      </p>
+    `)
+
+    setTimeout(function() {
+      $('#flames').find('p:first').remove();
+    }, 8000)
+  });
+
+  /* listens to flames in room */
+  socket.on('laflame', function() {
+    $('#flames').append(`
+        <span class="middle fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
+            🔥
+        </span>
+      `)
+      setTimeout(function() {
+        $('#flames').find('span:first').remove();
+      }, 5000)
   })
 })

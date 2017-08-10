@@ -30,6 +30,7 @@ module.exports = function(io) {
 
   /* Get createRoom page. */
   router.get('/createRoom', function(req, res, next) {
+
     res.render('createRoom', {existingRoomNames});
   })
 

@@ -8,7 +8,8 @@ $(document).ready(function(){
   /* happens before refresh or close tab */
   $(window).bind('beforeunload', function(){
     console.log("before unloading");
-    return "Are you sure you want to leave? This will take you to home page";
+    return null;
+    // return "Are you sure you want to leave? This will take you to home page";
   });
 
   /* after refresh or close tab*/
@@ -17,7 +18,7 @@ $(document).ready(function(){
     socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
     clearInterval(clearId);
     localStorage.setItem("closing", "true");
-  })
+  });
 
   /* Checking connnection to socket */
   socket.on('connect', function(){
@@ -70,7 +71,7 @@ $(document).ready(function(){
   /* listens to flames in room */
   socket.on('laflame', function() {
     $('#flames').append(`
-        <span class="middle fire" style="position: absolute">
+        <span class="middle fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
             🔥
         </span>
       `)
@@ -82,7 +83,7 @@ $(document).ready(function(){
   /* listens to requests in room */
   socket.on('userSongRequest', function(data){
     $('#flames').append(`
-      <p class="request small text" style="position: absolute">
+      <p class="request small text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
           <span style="width: 30%;">${data}</span>
       </p>
     `)
@@ -131,7 +132,7 @@ $(document).ready(function(){
     $('#djtalkval').val('');
 
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; color: #2dc72d;">
+      <p class="request small text" style="position: absolute; color: #2dc72d;left:${Math.floor(100 * Math.random())}%">
           <span style="width: 30%;">${djTalk}</span>
       </p>
     `)
@@ -147,19 +148,21 @@ $(document).ready(function(){
   $('#closeRoom').on('click', function(event){
     console.log("reached front end destination");
     socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+    $(window).unbind('beforeunload');
+    window.location = $(this).attr('data-url');
   })
 
   /* sends thanks by dj to room */
   $('#sendgrace').on('click', function() {
     console.log('shit');
     $('#flames').append(`
-      <span class="middle fire" style="position: absolute">
+      <span class="middle fire" style="position: absolute;left:${Math.floor(100 * Math.random())}%">
           🙏
       </span>
     `)
     setTimeout(function() {
       $('#flames').find('span:first').remove();
-    }, 5000)
+    }, 2000)
     socket.emit('sendgrace');
   })
 })
