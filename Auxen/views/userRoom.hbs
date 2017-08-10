@@ -2,49 +2,10 @@
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-  /*.grid-item {
-    box-sizing: border-box;
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
-    float: left;
-    border-radius: 50%;
-    margin: 20px 10px 10px 10px;
-    margin-top: 10px;*/
-}
-/*.small {
-  font-size: 50px;
-}*/
-/*
-.middle {
-  font-size: 70px;
-}*/
-/*.phone {
-  border-radius: 50% !important;
-  width: 30% !important;
-  height: 30% !important;
-}*/
-/*
-#laflame {
-  font-size: 150px;
-}
 
-h2 {
-  font-size: 50px;
-}
-
-#request {
-  width: 100% !important;
-}*/
-
-/*.activeUsersforUser {
-  margin-top: 5%;
-}*/
-
-#request {
-  width: 100% !important;
-}
-
+  #request {
+    width: 100% !important;
+  }
 }
 
 
@@ -93,9 +54,11 @@ h2 {
         <div class="modal-header" style="background-color: #1E1D1D">
           <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Request a song</h2>
         </div>
-        <input  maxlength="35" id="requestval" style="border: none; font-size: 20px;" placeholder="Taking song requests..." class="ghost-input"></input>
+        <form autocomplete="off" id="requestform">
+          <input maxlength="35" id="requestval" style="border: none; font-size: 20px;" placeholder="Taking song requests..." class="ghost-input"></input>
+        </form>
         <div class="modal-footer"  style="background-color: #1E1D1D">
-          <h1 id="songrequest" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
+          <h1 id="request" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
       </div>
     </div>
@@ -106,3 +69,11 @@ h2 {
 <script type="text/javascript" src="/static/scripts/float.js"></script>
 
 <script src="/static/user.js"></script>
+
+<script>
+$('#requestform').on('submit', function(e) {
+  e.preventDefault();
+  $('#request').click();
+
+})
+</script>

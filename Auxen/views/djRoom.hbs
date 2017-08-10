@@ -12,39 +12,10 @@ and (max-device-width : 480px) {
     margin: 20px 10px 10px 10px;
     margin-top: 10px;
 }
-/*.small {
-  font-size: 50px;
-}
-
-.middle {
-  font-size: 70px;
-}
-.phone {
-  border-radius: 50% !important;
-  width: 30% !important;
-  height: 30% !important;
-}
-
-#sendgrace {
-  font-size: 150px;
-}
-
-#passDJ {
-  font-size: 20px !important;
-}
-
-h2 {
-  font-size: 50px;
-}*/
 
 #djtalk {
   width: 100% !important;
 }
-
-/*.activeUsersforUser {
-  margin-top: 5%;
-}*/
-
 }
 </style>
 
@@ -86,7 +57,9 @@ h2 {
         <div class="modal-header" style="background-color: #1E1D1D">
           <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Show your listeners some love</h2>
         </div>
-        <input  maxlength="35" id="djtalkval" style="border: none; font-size: 20px;" placeholder="What's the wave..." class="ghost-input"></input>
+          <form autocomplete="off" id="djtalkform">
+            <input  maxlength="35" id="djtalkval" style="border: none; font-size: 20px;" placeholder="What's the wave..." class="ghost-input"></input>
+          </form>
         <div class="modal-footer"  style="background-color: #1E1D1D">
           <h1 id="djtalk" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
@@ -111,3 +84,31 @@ h2 {
 </div>
 
 <script src="/static/dj.js"></script>
+
+<script>
+$('#djtalkform').on('submit', function(e) {
+  e.preventDefault();
+  $('#djtalk').click();
+
+})
+</script>
+
+<script>
+ function searchFunction() {
+   // Declare variables
+   var input, filter, div, h1, i;
+   input = document.getElementById('myInput');
+   filter = input.value.toUpperCase();
+   div = document.getElementById("potentialDJS");
+   h1 = div.getElementsByClassName('searchUsers');
+   // Loop through all h1st items, and hide those who don't match the search query
+   for (i = 0; i < h1.length; i++) {
+     console.log(h1.length);
+     if (h1[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+       h1[i].style.display = "";
+     } else {
+       h1[i].style.display = "none";
+     }
+   }
+ };
+ </script>
