@@ -72,8 +72,6 @@ h2 {
   <div class="center">
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Show Love</h1>
   </div>
-
-
     <div class="activeUsersforDJ ">
       <div id="users" class="grid">
 
@@ -109,26 +107,7 @@ h2 {
 
 
 
+
 </div>
 
 <script src="/static/dj.js"></script>
-<script>
-function searchFunction() {
-  // Declare variables
-  var input, filter, div, h1, i;
-  input = document.getElementById('myInput');
-  filter = input.value.toUpperCase();
-  div = document.getElementById("potentialDJS");
-  h1 = div.getElementsByClassName('searchUsers');
-  // Loop through all h1st items, and hide those who don't match the search query
-  for (i = 0; i < h1.length; i++) {
-    console.log(h1.length);
-    if (h1[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-      h1[i].style.display = "";
-    } else {
-      h1[i].style.display = "none";
-    }
-  }
-};
-
-</script>
