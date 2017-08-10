@@ -68,8 +68,7 @@ $(document).ready(function(){
       $('#' + userSpotifyId).remove();
   });
 
-  /* listens to flames in room */
-  socket.on('laflame', function() {
+  /* listens to flames in room */  socket.on('laflame', function() {
     $('#flames').append(`
         <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
             🔥
@@ -103,7 +102,7 @@ $(document).ready(function(){
     }else {
       var data = `<div id="${userData.spotifyId}" >
           <div data-id="${userData.spotifyId}" >
-            <img class="grow raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
+            <img class="raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
           </div>
       </div>`
 
@@ -132,7 +131,7 @@ $(document).ready(function(){
     $('#djtalkval').val('');
 
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; color: #2dc72d;left:${Math.floor(100 * Math.random())}%">
+      <p class="request small text" style="position: absolute; color: #2dc72d; left:${Math.floor(100 * Math.random())}%">
           <span style="width: 30%;">${djTalk}</span>
       </p>
     `)
@@ -155,7 +154,7 @@ $(document).ready(function(){
   /* sends thanks by dj to room */
   $('#sendgrace').on('click', function() {
     $('#flames').append(`
-      <span class="small fire" style="position: absolute;left:${Math.floor(100 * Math.random())}%">
+      <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
           🙏
       </span>
     `)
