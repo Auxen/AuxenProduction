@@ -165,4 +165,10 @@ $(document).ready(function(){
     socket.emit('sendgrace');
   })
 
+  $(window).bind("pageshow", function(event) {
+    if (event.originalEvent.persisted) {
+        window.location.reload()
+    }
+  });
+
 })
