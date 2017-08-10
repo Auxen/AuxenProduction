@@ -112,7 +112,8 @@ $(document).ready(function(){
 
       var potentialDJS = `<div id="${userData.spotifyId}" >
           <div data-id="${userData.spotifyId}" >
-            <h2 class="text grow small raise-user searchUsers">${userData.username} ${randomEmojis[index]}</h2>
+            <h2 class="text grow small raise-user searchUsers">${userData.username}</h2>
+            <h2 class="text small ">${randomEmojis[index]}</h2>
           </div>
       </div>
       `
