@@ -1,113 +1,110 @@
-<style>
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) {
-  .grid-item {
-    box-sizing: border-box;
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
-    float: left;
-    border-radius: 50%;
-    margin: 20px 10px 10px 10px;
-    margin-top: 10px;
-}
-/*.small {
-  font-size: 50px;
-}
-
-.middle {
-  font-size: 70px;
-}
-.phone {
-  border-radius: 50% !important;
-  width: 30% !important;
-  height: 30% !important;
-}
-
-#sendgrace {
-  font-size: 150px;
-}
-
-#passDJ {
-  font-size: 20px !important;
-}
-
-h2 {
-  font-size: 50px;
-}*/
-
-#djtalk {
-  width: 100% !important;
-}
-
-/*.activeUsersforUser {
-  margin-top: 5%;
-}*/
-
-}
-</style>
-
 <div>
+
   <div class="row">
-    <div class="col-md-2">
-      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom" data-url='/closeRoom/{{room.roomName}}/?roomId={{room._id}}'>Close</h1>
+    <div class="col-sm-3">
+      <h1 data-id="{{newRoom.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom?roomId={{newRoom._id}}'>Close Room</a></h1>
     </div>
-    <div class="col-md-offset-1 col-md-6">
-      <h1 class="text-center standard-text middle animated slideInDown">{{room.roomName}}</h1>
+    <div class="col-sm-6">
+      <h1 class="text-center standard-text medium animated slideInDown">{{newRoom.roomName}}</h1>
       <div id="djphoto" class='center'>
-        <img src='{{room.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
+        <img src='{{newRoom.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
-      <h2 class="text-center standard-text small">You are the DJ</h2>
-      <div class="center">
-        <h1 id="pass" style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass DJ</h1>
-      </div>
+      <h2 class="text-center standard-text small">You are the host</h2>
     </div>
   </div>
-  <div id="sendgrace-container">
-    <h1 id="sendgrace" class="center floating pointer" >
-      🙏
-    </h1>
-  </div>
+
   <div class="center">
-    <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Show Love</h1>
+    <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Played Songs</h1>
   </div>
-    <div class="activeUsersforDJ ">
-      <div id="users" class="grid">
 
-      </div>
-    </div>
-
-  <div class="center" id="flames"></div>
-
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
-    <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
-      <div>
-        <div class="modal-header" style="background-color: #1E1D1D">
-          <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Show your listeners some love</h2>
+  <!-- <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"> -->
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 style="color: black;"class="modal-title text-center standard-text" id="exampleModalLongTitle">Played Songs 🎉</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <input  maxlength="35" id="djtalkval" style="border: none; font-size: 20px;" placeholder="What's the wave..." class="ghost-input"></input>
-        <div class="modal-footer"  style="background-color: #1E1D1D">
-          <h1 id="djtalk" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
+        <div class="modal-body lastSongs">
+
+        </div>
+        <div class="modal-footer">
+          <h1 style="color: black; width: 20%; margin-right: auto; margin-left: auto;"class="text-center text small boxed raise" data-dismiss="modal">Close</h1>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="passDJ" aria-hidden="true" style="background-color: #1E1D1D">
-    <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
-      <div>
-        <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the batton.</h2>
-        <input autocomplete="off" id="myInput" style="font-size: 20px;"  placeholder="Search for users here..." class="text-center ghost-input" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
-        </div>
-        <div id="potentialDJS"></div>
+  <div class="row">
+    <div class="activeUsersforDJ col-sm-offset-2 center">
+    </div >
+
+    <div class="col-sm-offset-3">
     </div>
-    </div>
+
   </div>
-
-
-
 
 </div>
 
-<script src="/static/dj.js"></script>
+<script>
+    var djRefreshToken = '{{newRoom.djRefreshToken}}';
+    var roomId = '{{newRoom._id}}';
+    var roomName = '{{newRoom.roomName}}';
+    var socket = io();
+    var clearId = -1;
+
+    /* Checking connnection to socket */
+    socket.on('connect', function(){
+      console.log('Connected!');
+      socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+
+    })
+
+    /* Setting access token in localStorage */
+    socket.on('setAccessToken', function(accessToken){
+      localStorage.setItem('accessToken', accessToken);
+      var djObject = {
+        roomName: roomName,
+        spotifyId: localStorage.getItem('spotifyId'),
+        imageURL: localStorage.getItem('imageURL'),
+        refreshToken: localStorage.getItem('refreshToken'),
+        accessToken: localStorage.getItem('accessToken'),
+        username: localStorage.getItem.('username')
+      }
+      socket.emit('createRoom', djObject);
+    })
+
+    /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
+    socket.emit('setRefreshToken', function(refreshToken){
+      localStorage.setItem('refreshToken', refreshToken);
+      clearId = setInterval(function () {
+        socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+      }, 60000 * 30);
+    });
+
+    /* clearInterval for refresh token once disconnected. */
+    socket.on('disconnect', function() {
+      if (clearId !== -1) {
+        clearInterval(clearId);
+        clearId = -1;
+      }
+    })
+
+    /* dj closes room emits event to server which then kicks people out of the room */
+    $('#closeRoom').on('click', function(event){
+      event.preventDefault();
+      socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+    })
+
+    /* new user has joined */
+    socket.on('userJoined', function(userData){
+
+    })
+
+    /* some other user has left room */
+    socket.on('userLeaving', function(userSpotifyId){
+      $('#' + userSpotifyId).remove();
+    });
+
+</script>
