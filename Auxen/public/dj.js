@@ -131,8 +131,8 @@ $(document).ready(function(){
     $('#djtalkval').val('');
 
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; color: #2dc72d; left:${Math.floor(100 * Math.random())}%">
-          <span style="width: 30%;">${djTalk}</span>
+      <p class="request small text" style="position: absolute; color: green; left:${Math.floor(100 * Math.random())}%">
+          <span style="width: 50%;">${djTalk}</span>
       </p>
     `)
 
@@ -163,7 +163,7 @@ $(document).ready(function(){
     }, 2000)
     socket.emit('sendgrace');
   })
-
+  
 
 
 })

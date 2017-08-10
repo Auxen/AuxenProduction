@@ -1,3 +1,24 @@
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  .grid-item {
+    box-sizing: border-box;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    float: left;
+    border-radius: 50%;
+    margin: 20px 10px 10px 10px;
+    margin-top: 10px;
+}
+
+#djtalk {
+  width: 100% !important;
+}
+}
+</style>
+
 <div>
 
   <div class="row">
@@ -29,8 +50,11 @@
         <div class="modal-body lastSongs">
 
         </div>
-        <div class="modal-footer">
-          <h1 style="color: black; width: 20%; margin-right: auto; margin-left: auto;"class="text-center text small boxed raise" data-dismiss="modal">Close</h1>
+          <form autocomplete="off" id="djtalkform">
+            <input  maxlength="35" id="djtalkval" style="border: none; font-size: 20px;" placeholder="What's the wave..." class="ghost-input"></input>
+          </form>
+        <div class="modal-footer"  style="background-color: #1E1D1D">
+          <h1 id="djtalk" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
       </div>
     </div>
@@ -47,64 +71,32 @@
 
 </div>
 
+<script src="/static/dj.js"></script>
+
 <script>
-    var djRefreshToken = '{{newRoom.djRefreshToken}}';
-    var roomId = '{{newRoom._id}}';
-    var roomName = '{{newRoom.roomName}}';
-    var socket = io();
-    var clearId = -1;
+$('#djtalkform').on('submit', function(e) {
+  e.preventDefault();
+  $('#djtalk').click();
 
-    /* Checking connnection to socket */
-    socket.on('connect', function(){
-      console.log('Connected!');
-      socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
-
-    })
-
-    /* Setting access token in localStorage */
-    socket.on('setAccessToken', function(accessToken){
-      localStorage.setItem('accessToken', accessToken);
-      var djObject = {
-        roomName: roomName,
-        spotifyId: localStorage.getItem('spotifyId'),
-        imageURL: localStorage.getItem('imageURL'),
-        refreshToken: localStorage.getItem('refreshToken'),
-        accessToken: localStorage.getItem('accessToken'),
-        username: localStorage.getItem.('username')
-      }
-      socket.emit('createRoom', djObject);
-    })
-
-    /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
-    socket.emit('setRefreshToken', function(refreshToken){
-      localStorage.setItem('refreshToken', refreshToken);
-      clearId = setInterval(function () {
-        socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-      }, 60000 * 30);
-    });
-
-    /* clearInterval for refresh token once disconnected. */
-    socket.on('disconnect', function() {
-      if (clearId !== -1) {
-        clearInterval(clearId);
-        clearId = -1;
-      }
-    })
-
-    /* dj closes room emits event to server which then kicks people out of the room */
-    $('#closeRoom').on('click', function(event){
-      event.preventDefault();
-      socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
-    })
-
-    /* new user has joined */
-    socket.on('userJoined', function(userData){
-
-    })
-
-    /* some other user has left room */
-    socket.on('userLeaving', function(userSpotifyId){
-      $('#' + userSpotifyId).remove();
-    });
-
+})
 </script>
+
+<script>
+ function searchFunction() {
+   // Declare variables
+   var input, filter, div, h1, i;
+   input = document.getElementById('myInput');
+   filter = input.value.toUpperCase();
+   div = document.getElementById("potentialDJS");
+   h1 = div.getElementsByClassName('searchUsers');
+   // Loop through all h1st items, and hide those who don't match the search query
+   for (i = 0; i < h1.length; i++) {
+     console.log(h1.length);
+     if (h1[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+       h1[i].style.display = "";
+     } else {
+       h1[i].style.display = "none";
+     }
+   }
+ };
+ </script>

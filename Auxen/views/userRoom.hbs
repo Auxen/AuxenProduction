@@ -1,3 +1,19 @@
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+
+  #request {
+    width: 100% !important;
+  }
+}
+
+
+
+
+</style>
+
+
 <div>
 
   <div class="row">
@@ -26,10 +42,11 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body lastSongs">
-        </div>
-        <div class="modal-footer">
-          <h1 style="color: black; width: 20%; margin-right: auto; margin-left: auto;"class="text-center text small boxed raise" data-dismiss="modal">Close</h1>
+        <form autocomplete="off" id="requestform">
+          <input maxlength="35" id="requestval" style="border: none; font-size: 20px;" placeholder="Taking song requests..." class="ghost-input"></input>
+        </form>
+        <div class="modal-footer"  style="background-color: #1E1D1D">
+          <h1 id="request" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
       </div>
     </div>
@@ -110,4 +127,12 @@
       $('#' + userSpotifyId).remove();
     });
 
+<script src="/static/user.js"></script>
+
+<script>
+$('#requestform').on('submit', function(e) {
+  e.preventDefault();
+  $('#request').click();
+
+})
 </script>
