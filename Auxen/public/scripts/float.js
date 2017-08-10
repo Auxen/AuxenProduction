@@ -21,6 +21,6 @@ $(document).ready(function() {
 
     setTimeout(function() {
       $('#flames').find('p:first').remove();
-    }, 2000)
+    }, 10000)
   });
 });

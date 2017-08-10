@@ -133,8 +133,8 @@ $(document).ready(function(){
   /* listens for dj message */
   socket.on('djTalk', function(data) {
       $('#flames').append(`
-        <p class="request small text" style="position: absolute; color: #2dc72d; left:${Math.floor(100 * Math.random())}%">
-            <span style="width: 30%;">${data}</span>
+        <p class="request small text" style="position: absolute; color: green; left:${Math.floor(100 * Math.random())}%">
+            <span style="width: 50%;">${data}</span>
         </p>
       `)
       setTimeout(function() {
