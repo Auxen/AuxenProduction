@@ -179,10 +179,4 @@ $(document).ready(function(){
       }, 2000)
   })
 
-  $(window).bind("pageshow", function(event) {
-    if (event.originalEvent.persisted) {
-        window.location.reload()
-    }
-  });
-
 })
