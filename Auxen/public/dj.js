@@ -154,7 +154,6 @@ $(document).ready(function(){
 
   /* sends thanks by dj to room */
   $('#sendgrace').on('click', function() {
-    console.log('shit');
     $('#flames').append(`
       <span class="middle fire" style="position: absolute;left:${Math.floor(100 * Math.random())}%">
           🙏

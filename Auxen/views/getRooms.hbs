@@ -24,7 +24,7 @@ and (max-device-width : 480px) {
 <div class="wrapper">
   {{#if rooms.length}}
   <div class="center">
-    <h1 class="text-center standard-text">There are <span id="numberOfRooms"> {{rooms.length}} </span>rooms to browse</h1>
+    <h1 id="roomNums" class="text-center standard-text">There are <span id="numberOfRooms"> {{rooms.length}} </span>rooms to browse</h1>
   </div>
   <div id="inputWidth" class="center" style="width: 40%; margin-right: auto; margin-left: auto;">
     <input onfocus="this.placeholder = ''" autocomplete="off" id="myInput" style="font-size: 200%;" placeholder="Search for a room..." class="ghost-input text-center" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
@@ -55,6 +55,13 @@ and (max-device-width : 480px) {
 
 
 <script>
+var numRooms = '{{rooms.length}}';
+if(numRooms === '1') {
+  $('#roomNums').empty();
+  $('#roomNums').text('There is 1 room to browse')
+}
+
+
 function searchFunction() {
   // Declare variables
   var input, filter, div, h1, i;
