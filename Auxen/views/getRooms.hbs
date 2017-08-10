@@ -2,12 +2,31 @@
   <script type="text/javascript" src="/static/scripts/styling.js"></script>
 </head>
 
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  #inputWidth {
+    width: 100% !important;
+  }
+  .ghost-input {
+    font-size: 125%;
+  }
+  .container-fluid {
+    margin-top: 25%;
+  }
+  #listofRooms {
+    width: 80% !important;
+  }
+}
+</style>
+
 <div class="wrapper">
   {{#if rooms.length}}
   <div class="center">
     <h1 class="text-center standard-text">There are <span id="numberOfRooms"> {{rooms.length}} </span>rooms to browse</h1>
   </div>
-  <div class="center" style="width: 40%; margin-right: auto; margin-left: auto;">
+  <div id="inputWidth" class="center" style="width: 40%; margin-right: auto; margin-left: auto;">
     <input onfocus="this.placeholder = ''" autocomplete="off" id="myInput" style="font-size: 200%;" placeholder="Search for a room..." class="ghost-input text-center" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
   </div>
   <div id="listofRooms" class="text-center standard-text" style="width: 35%; margin-right: auto; margin-left: auto; overflow: auto;">

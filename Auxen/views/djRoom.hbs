@@ -1,14 +1,67 @@
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  .grid-item {
+    box-sizing: border-box;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    float: left;
+    border-radius: 50%;
+    margin: 20px 10px 10px 10px;
+    margin-top: 10px;
+}
+/*.small {
+  font-size: 50px;
+}
+
+.middle {
+  font-size: 70px;
+}
+.phone {
+  border-radius: 50% !important;
+  width: 30% !important;
+  height: 30% !important;
+}
+
+#sendgrace {
+  font-size: 150px;
+}
+
+#passDJ {
+  font-size: 20px !important;
+}
+
+h2 {
+  font-size: 50px;
+}*/
+
+#djtalk {
+  width: 100% !important;
+}
+
+/*.activeUsersforUser {
+  margin-top: 5%;
+}*/
+
+}
+</style>
+
 <div>
   <div class="row">
-    <div class="col-xs-2">
+    <div class="col-md-2">
       <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom"><a href='/closeRoom/{{room.roomName}}/?roomId={{room._id}}'>Close</a></h1>
     </div>
-    <div class="col-sm-offset-1 col-sm-6">
-      <h1 class="text-center standard-text medium animated slideInDown">{{room.roomName}}</h1>
+    <div class="col-md-offset-1 col-md-6">
+      <h1 class="text-center standard-text middle animated slideInDown">{{room.roomName}}</h1>
       <div id="djphoto" class='center'>
         <img src='{{room.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
-      <h2 class="text-center standard-text small">You are the host</h2>
+      <h2 class="text-center standard-text small">You are the DJ</h2>
+      <div class="center">
+        <h1 id="passDJ" style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass DJ</h1>
+      </div>
     </div>
   </div>
   <div id="sendgrace-container">

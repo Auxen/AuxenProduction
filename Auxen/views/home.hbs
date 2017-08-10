@@ -1,6 +1,32 @@
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  /*a {
+    width: 500px;
+  }*/
+  /*.headertext {
+    font-size: 1000% !important;
+  }*/
+  /*.boxed {
+    width: 100%;
+  }*/
+
+  .wrapper{
+    margin-top: 30%
+  }
+  #leftaux {
+
+  }
+  #rightaux {
+
+  }
+
+}
+
+</style>
 <div class="container">
   <div class="wrapper">
-    <div class="container-fluid" >
     	<div style="display: flex; justify-content: center; margin-left: 50%; margin-right: auto; margin-top: 5%">
     		<a class="topLevel text" href="/createRoom" id="createRoom" ><span class="text-center raise boxed headertext text">Create</span></a>
     		<img id="leftaux" src="/static/images/leftaux.svg" class="img-responsive animated slideInRight" style="position: sticky; margin-top: 10%;">
@@ -10,9 +36,8 @@
     		<br><br>
     		<div style="display: flex; justify-content: center; margin-right: 50%; margin-left: auto;">
     			<img id="rightaux" style="position: sticky; width: 100%;" class="img-responsive text animated slideInLeft" src="/static/images/rightaux.svg" alt="">
-    			<a class="standard-text" href="/getRooms" id="joinRoom"><span class="text-center raise boxed text headertext"><span class="text headertext" style="opacity: 0">1</span>Join<span class="text headertext" style="opacity: 0">1</span></span></a>
+    			<a class="standard-text" href="/getRooms" id="joinRoom"><span class="text-center raise boxed text headertext"><span class="text" style="opacity: 0">1</span>Join<span class="text" style="opacity: 0">1</span></span></a>
     		</div>
-    </div>
   </div>
 </div>
 
@@ -23,38 +48,38 @@
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
-        <p class="text">
-          Auxen is a real-time music sharing application. It's pretty simple. You can choose to create a room.
-          You're now the DJ for the room you just created. You then start playing music like you normally do.
-          People can join the room and you can see all the users who joined. Whoever joins will automatically
-          have their music set to whatever you, the DJ, are playing. If you join a room, your music will be set to
-          whatever the DJ is currently playing. You can leave the room to take control of your music again.
-       </p>
-
-       <h2 class="text small">
-         We need to sure your Spotify is set up properly
+        <h2 class="text small">We need to sure your Spotify is set up properly</h2>
+       <h2 class="text smaller">
          <br>
          <br>
          1. Open your Spotify
          <br>
          <br>
-
-         2. Soon we'll implement a test to see if you're set up -- but as long as you have Spotify open you should be good
+         2. Play a song. Whatever song you want.
          <br>
          <br>
-         3. Also, the beta does not work on mobile 😞 (we'll get that fixed soon)
-
+         3. Press Test
+         <br>
+         <br>
+         4. If your music changed, you're good to go! If not make sure you're logged into the right Spotify account and then try again!
        </h2>
        <br>
-        <h1 id="songTest" type="button" style="width: 20%; margin-left: auto; margin-right: auto;" class="text small boxed raise">Test</h1>
-
+       <br>
+       <div id="instructions" class="row">
+        <h1 id="songTest" type="button" style="width: 20%; margin-left: 2%; margin-right: 2%;" class="text small boxed raise col-xs-2">Test!</h1>
       </div>
-      <div class="modal-footer" style="background-color: #1E1D1D">
-        <h1 type="button" class="text small boxed raise" data-dismiss="modal">Get started</h1>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+
+}
+</style>
 
 <script type="text/javascript" src="/static/scripts/modal.js"></script>
 <script>
@@ -73,6 +98,8 @@
     localStorage.setItem('closing', "false");
 
     $('#songTest').on('click', function(){
+
+
       $.ajax({
         url: 'https://api.spotify.com/v1/me/player/play',
         method: 'PUT',
@@ -88,7 +115,12 @@
           console.log("its working for you");
         }
       })
-    })
 
+      console.log('this is the new wave', $('#dimiss'));
+      if($('#dismiss').length === 0) {
+        $('#instructions').append(`<h1 type="button" id="dismiss" style="width: 20%; margin-left: 2%; margin-right: 2%;" class="text small boxed raise col-xs-2 animated fadeIn" data-dismiss="modal">Dismiss</h1>`)
+      }
+
+    })
   })
 </script>
