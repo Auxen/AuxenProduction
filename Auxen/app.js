@@ -75,7 +75,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', auth(passport)); //passed passport here
-app.use('/', routes(io));
+app.use('/', routes);
 
 
 
