@@ -6,7 +6,7 @@ var User = models.User;
 var Room = models.Room;
 var existingRoomNames = [];
 
-module.exports = function(io) {
+module.exports = function() {
   /* Check login page. */
   router.use('/', function(req, res, next) {
     if (req.user) {
@@ -123,12 +123,10 @@ module.exports = function(io) {
 
   /* closes room */
   router.get('/closeRoom/:name', function(req, res, next) {
-    console.log('if you see numbers here tell mohammad', io.sockets.adapter.rooms[socket.room].laflame);
     var roomId = req.query.roomId;
     var roomName = req.params.name;
     Room.remove({'_id': roomId}).then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
-
       res.redirect('/');
     }).catch(error => {
       console.log("error", error);
@@ -155,7 +153,7 @@ module.exports = function(io) {
   //for the old dj add emit event to backend add him to db as user
   //then do window.location to userRoom so he goes to userRoom
   //for rest of the users just do jquery and obviously change token in sockets
-  //if someone refreshes lets say, then as data is coming from db and i have 
+  //if someone refreshes lets say, then as data is coming from db and i have
   //saved new changes in db, it should not be a problem.
 
 
