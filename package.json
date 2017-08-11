@@ -1,0 +1,3 @@
+{
+    "start": { "postinstall": "cd Auxen && npm install" }
+}
