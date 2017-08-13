@@ -1,4 +1,4 @@
-$(document).ready(function(){
+// $(document).ready(function(){
   var roomName = '{{room.roomName}}';
   console.log("roomName", roomName);
   var roomId = '{{room._id}}';
@@ -180,4 +180,4 @@ $(document).ready(function(){
       }, 2000)
   })
 
-})
+// })
