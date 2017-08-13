@@ -33,6 +33,7 @@ and (max-device-width : 480px) {
 
 $('#startRoom').on('click', function (event) {
     event.preventDefault();
+    console.log("reached here");
     var existingRoomNames = '{{existingRoomNames}}';
     console.log("existingRoomNames", existingRoomNames);
     var proposedRoomName = $('#roomName').val();
