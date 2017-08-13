@@ -116,14 +116,24 @@ and (max-device-width : 480px) {
       $('#exampleModalLong').modal('show');
     }
     else {
-      .ajax({
-        url: 'https://api.spotify.com/v1/me/player',
+      var flag = false;
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/devices',
         method: 'get',
         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-          if(!data.device.is_active)$('#deviceModal').modal('show');
+          data.devices.forEach(function(device){
+            if(device.is_active){
+              flag =true;
+              // pop up modal saying good to go on this device or show somewhere that this device is active
+              break;
+            }
+          })
+          if(!flag){
+            $('#deviceModal').modal('show');
+          }
         }
       })
     }
