@@ -94,20 +94,20 @@ $(document).ready(function(){
 
   /* new user has joined */
   socket.on('userJoined', function(userData){
-
     console.log("user joined", userData);
     if($('#' + userData.spotifyId).length !== 0){
       console.log("this guy exits");
       return;
-    }else {
+    }
+    else {
       var data = `<div id="${userData.spotifyId}" >
           <div data-id="${userData.spotifyId}" >
             <img class="raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
           </div>
       </div>`
 
-      var randomEmojis = ['🕺', '🙏', '👾', '🚀', '🎵', '🎤', '🎧', '🎉', '🔥', '💯', '☀️'];
-      var index = Math.floor(Math.random() * (randomEmojis.length - 1 - 1)) + 0;
+      var randomEmojis = ['🕺', '🙏', '👾', '🚀', '🎵', '🎤', '🎧', '🎉', '🔥', '💯', '☀️', '🌊'];
+      var index = Math.floor(Math.random() * (randomEmojis.length - 2));
       console.log(index);
 
       var potentialDJS = `<div id="${userData.spotifyId}" >
@@ -115,14 +115,12 @@ $(document).ready(function(){
             <h2 class="text grow small raise-user searchUsers">${userData.username}</h2>
             <h2 class="text small ">${randomEmojis[index]}</h2>
           </div>
-      </div>
-      `
+      </div>`
 
       $('#potentialDJS').append(potentialDJS);
 
       $('#users').append(data);
     }
-
   });
 
    /* sends message of dj to room */
@@ -163,7 +161,6 @@ $(document).ready(function(){
     }, 2000)
     socket.emit('sendgrace');
   })
-  
 
 
 })
