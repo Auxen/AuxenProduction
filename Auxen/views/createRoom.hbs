@@ -38,7 +38,7 @@ $('#startRoom').on('click', function (event) {
     console.log('damn', existingRoomNames);
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
       // here mo will make stuff red.
-      console.log(proposedRoomName);
+      $('#roomName').addClass('animated shake')
     }else{
       $('#roomSubmit').submit();
     }

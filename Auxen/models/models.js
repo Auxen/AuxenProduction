@@ -12,7 +12,7 @@ var userSchema = new Schema({
   spotifyId:String,
   refreshToken:String,
   imageURL: String,
-  accessToken:String
+  accessToken:String,
 })
 
 var roomSchema = new Schema({

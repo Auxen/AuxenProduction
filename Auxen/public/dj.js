@@ -163,7 +163,7 @@ $(document).ready(function(){
     }, 2000)
     socket.emit('sendgrace');
   })
-  
+
 
 
 })
