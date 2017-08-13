@@ -1,0 +1,79 @@
+<style>
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+
+  #request {
+    width: 100% !important;
+  }
+}
+
+
+
+
+</style>
+
+
+<div>
+  <div class="row">
+    <div class="col-md-2">
+      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="leaveRoom text-center text small boxed raise" id="userLeave" data-url="/leaveRoom?roomId={{room._id}}">Leave</h1>
+    </div>
+    <div class="col-md-offset-1 col-md-6">
+      <h1 class="text-center standard-text middle animated slideInDown">{{room.roomName}}</h1>
+      <div id="djphoto" class='center'>
+        <img src="{{room.imageURL}}" class="img-responsive animated wobble phone" style="border-radius: 50%; width: 20%; height: 20%;" >
+      </div>
+      <h2 class="text-center standard-text small">DJ is: {{room.djName}}</h2>
+    </div>
+  </div>
+  <div id="laflame-container">
+    <h1 id="laflame" class="center floating pointer" >
+      🔥
+    </h1>
+  </div>
+  <div class="center">
+    <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Request Songs</h1>
+  </div>
+    <div class="activeUsersforUser">
+      <div id="users" class="grid">
+      {{#each room.usersInRoom}}
+      <div id="{{this.spotifyId}}" >
+          <div data-id="{{this.spotifyId}}" >
+            <img class="raise animated bounceIn grid-item" src="{{this.imageURL}}" alt="">
+          </div>
+      </div>
+      {{/each}}
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
+    <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
+      <div>
+        <div class="modal-header" style="background-color: #1E1D1D">
+          <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Request a song</h2>
+        </div>
+        <form autocomplete="off" id="requestform">
+          <input maxlength="35" id="requestval" style="border: none; font-size: 20px;" placeholder="Taking song requests..." class="ghost-input"></input>
+        </form>
+        <div class="modal-footer"  style="background-color: #1E1D1D">
+          <h1 id="request" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="center" id="flames"></div>
+
+<script type="text/javascript" src="/static/scripts/float.js"></script>
+
+<script src="/static/user.js"></script>
+
+<script>
+$('#requestform').on('submit', function(e) {
+  e.preventDefault();
+  $('#request').click();
+
+})
+</script>
