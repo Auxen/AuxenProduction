@@ -34,8 +34,8 @@ and (max-device-width : 480px) {
 $('#startRoom').on('click', function (event) {
     event.preventDefault();
     var existingRoomNames = '{{existingRoomNames}}';
+    console.log("existingRoomNames", existingRoomNames);
     var proposedRoomName = $('#roomName').val();
-    console.log('damn', existingRoomNames);
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
       $('#roomName').removeClass('animated shake').addClass('animated shake');
       if(!($('#error'))) {
