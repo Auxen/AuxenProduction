@@ -78,6 +78,19 @@ console.log("roomid", roomId);
 var socket = io();
 var clearId = -1;
 
+function pausePlayback(){
+  $.ajax({
+    url: 'https://api.spotify.com/v1/me/player/pause',
+    method: 'put',
+    headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+    },
+    success: function(){
+      console.log("successfully paused.");
+    }
+  })
+}
+
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
   console.log("unloading");
@@ -110,6 +123,7 @@ $('#laflame').on('click', function() {
 /* if user wants to leave room it comes here */
 $('#userLeave').on('click', function(event){
   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
+  pausePlayback();
   window.location = $(this).attr('data-url');
 })
 

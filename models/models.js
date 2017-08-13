@@ -12,7 +12,8 @@ var userSchema = new Schema({
   spotifyId:String,
   refreshToken:String,
   imageURL: String,
-  accessToken:String
+  accessToken:String,
+  premium:String
 })
 
 var roomSchema = new Schema({
@@ -39,7 +40,8 @@ userSchema.statics.findOrCreate = function(obj1,obj2,cb){
         refreshToken: obj2.refreshToken,
         imageURL: obj2.imageURL,
         username: obj2.username,
-        accessToken: obj2.accessToken
+        accessToken: obj2.accessToken,
+        premium: obj2.premium
       })
       newUser.save(function(err, user){
         cb(err,user);

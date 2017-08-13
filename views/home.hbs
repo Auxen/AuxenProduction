@@ -113,6 +113,53 @@ and (max-device-width : 480px) {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('closing', "false");
+
+    function toggleRepeat(){
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/repeat?state=off',
+        method: 'put',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          console.log("successfully switched off repeat");
+        }
+      })
+    }
+
+    function toggleShuffle(){
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
+        method: 'put',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          console.log("successfully switched off shuffle");
+        }
+      })
+    }
+
+    function getPlayback(){
+      console.log("entered getPlayback");
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player',
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          console.log(data);
+          if(data.repeat_state !== 'off')toggleRepeat();
+          if(data.shuffle_state)toggleShuffle();
+          //if(!data.device.is_active)//mo modal should pop up here
+        }
+      })
+    }
+
+    getPlayback();
+
+
     $('#songTest').on('click', function(){
 
 
