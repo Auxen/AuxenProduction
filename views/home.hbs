@@ -86,6 +86,21 @@ and (max-device-width : 480px) {
   </div>
 </div>
 
+<div class="modal fade" id="deviceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header"  style="background-color: #1E1D1D">
+        <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
+      </div>
+      <div class="modal-body" style="background-color: #1E1D1D">
+        <h2 class="text small">Yo, Kindly Open your Spotify</h2>
+       <br>
+       <br>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
 @media only screen
 and (min-device-width : 320px)
@@ -99,6 +114,18 @@ and (max-device-width : 480px) {
 
     if(!localStorage.getItem('spotifyId')) {
       $('#exampleModalLong').modal('show');
+    }
+    else {
+      .ajax({
+        url: 'https://api.spotify.com/v1/me/player',
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          if(!data.device.is_active)$('#deviceModal').modal('show');
+        }
+      })
     }
 
     var spotifyId = '{{spotifyId}}';
