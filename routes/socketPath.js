@@ -119,21 +119,26 @@ module.exports = function(io){
       Room.findById(userObject.roomId)
       .then(room => {
         console.log("room", room);
-        var user = {
-          spotifyId: userObject.spotifyId,
-          imageURL: userObject.imageURL,
-          username: userObject.username
-        }
-        console.log("****", user);
-        room.usersInRoom.push(user);
-        room.save(function(err, room) {
-          console.log("entered here");
-          if(err)console.log(err);
-          else {
-            console.log("user successfully added");
-            io.to(userObject.roomName).emit('userJoined', user);
-          }
+        var euser = room.usersInRoom.find(function(user){
+          return user.spotifyId === userObject.spotifyId;
         })
+        if(euser)return;
+        else {
+          var user = {
+            spotifyId: userObject.spotifyId,
+            imageURL: userObject.imageURL,
+            username: userObject.username
+          }
+          room.usersInRoom.push(user);
+          room.save(function(err, room) {
+            console.log("entered here");
+            if(err)console.log(err);
+            else {
+              console.log("user successfully added");
+              io.to(userObject.roomName).emit('userJoined', user);
+            }
+          })
+        }
       })
       .catch(err => {
         console.log("error", err);
