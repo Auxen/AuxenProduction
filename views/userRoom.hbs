@@ -21,10 +21,14 @@ and (max-device-width : 480px) {
     </div>
     <div class="col-md-offset-1 col-md-6">
       <h1 class="text-center standard-text middle animated slideInDown">{{room.roomName}}</h1>
+
       <div id="djphoto" class='center'>
         <img src="{{room.imageURL}}" class="img-responsive animated wobble phone" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
       <h2 class="text-center standard-text small">DJ is: {{room.djName}}</h2>
+      <div id="currentSong" class="center">
+        <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
+      </div>
     </div>
   </div>
   <div id="laflame-container">
@@ -197,6 +201,9 @@ socket.on('userLeaving', function(userSpotifyId){
 socket.on('DJData', function(DJData){
   var timeProgress = DJData.timeProgress;
   var songURI = DJData.songURI;
+  var songName= DJData.songName;
+  $('#currentSong').empty();
+  $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Current song is : ${songName}</h2>`);
   $.ajax({
     url: 'https://api.spotify.com/v1/me/player/play',
     method: 'PUT',
