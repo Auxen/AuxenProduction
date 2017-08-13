@@ -116,13 +116,14 @@ and (max-device-width : 480px) {
       $('#exampleModalLong').modal('show');
     }
     else {
-      .ajax({
+      $.ajax({
         url: 'https://api.spotify.com/v1/me/player',
         method: 'get',
         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
+          console.log(data);
           if(!data.device.is_active)$('#deviceModal').modal('show');
         }
       })
