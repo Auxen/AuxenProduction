@@ -67,7 +67,7 @@ and (max-device-width : 480px) {
     </div>
   </div>
 
-  <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="passDJ" aria-hidden="true" style="background-color: #1E1D1D">
+  <!-- <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="passDJ" aria-hidden="true" style="background-color: #1E1D1D">
     <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
       <div>
         <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the batton.</h2>
@@ -76,7 +76,7 @@ and (max-device-width : 480px) {
         <div id="potentialDJS"></div>
     </div>
     </div>
-  </div>
+  </div> -->
 
 
 
@@ -185,7 +185,7 @@ and (max-device-width : 480px) {
   /* new user has joined */
   socket.on('userJoined', function(userData){
     console.log("user joined", userData);
-    if($('#' + userData.spotifyId) !== 0){
+    if($('#' + userData.spotifyId).length !== 0){
       console.log("this guy exists");
       return;
     }
