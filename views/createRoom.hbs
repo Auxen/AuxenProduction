@@ -19,7 +19,7 @@ and (max-device-width : 480px) {
 <div class="main">
   <div class="container-fluid">
     <form id="roomSubmit" action='/createRoom' method="POST">
-    <div id="inputWidth" class="center topLevel" style="width: 60%; margin-right: auto; margin-left: auto;">
+      <div id="inputWidth" class="center topLevel" style="width: 60%; margin-right: auto; margin-left: auto;">
         <input maxlength="30" autocomplete="off" onfocus="this.placeholder = ''" name="roomNameBar" id="roomName" placeholder="Enter a room name here" class="ghost-input text-center"></input>
     </div>
     <div class="center" >
@@ -37,8 +37,10 @@ $('#startRoom').on('click', function (event) {
     var proposedRoomName = $('#roomName').val();
     console.log('damn', existingRoomNames);
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
-      // here mo will make stuff red.
-      console.log(proposedRoomName);
+      $('#roomName').removeClass('animated shake').addClass('animated shake');
+      if(!($('#error'))) {
+        $('form').append(`<h1 class="text-center text small animated fadeIn" style="color: #6a0105;" name="button" id="error">That room name is already taken</h1>`)
+      }
     }else{
       $('#roomSubmit').submit();
     }
