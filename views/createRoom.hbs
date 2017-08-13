@@ -32,12 +32,12 @@ and (max-device-width : 480px) {
 <script>
 
 $('#roomSubmit').on('submit', function (event) {
-    event.preventDefault();
     console.log("reached here");
     var existingRoomNames = '{{existingRoomNames}}';
     console.log("existingRoomNames", existingRoomNames);
     var proposedRoomName = $('#roomName').val();
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
+      event.preventDefault();
       $('#roomName').addClass('shake');
       setTimeout(function() {
         $('#roomName').removeClass('shake');
@@ -46,10 +46,7 @@ $('#roomSubmit').on('submit', function (event) {
         $('form').append(`<h1 class="text-center text small animated fadeIn" style="color: #6a0105;" name="button" id="error">That room name is already taken</h1>`)
       }
       console.log($('#error'));
-    } else{
-      $('#roomSubmit').submit();
-    }
-
+    } 
 });
 
 </script>
