@@ -38,11 +38,11 @@ and (max-device-width : 480px) {
     <div class="activeUsersforUser">
       <div id="users" class="grid">
       {{#each room.usersInRoom}}
-      <div id="{{this.spotifyId}}" >
-          <div data-id="{{this.spotifyId}}" >
-            <img class="raise animated bounceIn grid-item" src="{{this.imageURL}}" alt="">
-          </div>
-      </div>
+        <div id="{{this.spotifyId}}" >
+            <div data-id="{{this.spotifyId}}" >
+              <img class="raise animated bounceIn grid-item" src="{{this.imageURL}}" alt="">
+            </div>
+        </div>
       {{/each}}
       </div>
     </div>
