@@ -101,6 +101,7 @@ and (max-device-width : 480px) {
   var clearId = -1;
 
   /* happens before refresh or close tab */
+  /* add logic for safari*/
   $(window).bind('beforeunload', function(){
     console.log("before unloading");
     return null;
