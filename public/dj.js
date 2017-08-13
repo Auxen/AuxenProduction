@@ -1,9 +1,9 @@
 $(document).ready(function(){
-  var djRefreshToken = {{room.djRefreshToken}};
+  var djRefreshToken = '{{room.djRefreshToken}}';
   console.log("djrefresh token", djRefreshToken);
-  var roomId = {{room._id}};
+  var roomId = '{{room._id}}';
   console.log("roomId", roomId);
-  var roomName = {{room.roomName}};
+  var roomName = '{{room.roomName}}';
   console.log("roomName", roomName);
   var socket = io();
   var clearId = -1;
