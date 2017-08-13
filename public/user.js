@@ -1,7 +1,7 @@
 $(document).ready(function(){
-  var roomName = {{{room.roomName}}};
+  var roomName = {{room.roomName}};
   console.log("roomName", roomName);
-  var roomId = {{{room._id}}};
+  var roomId = {{room._id}};
   console.log("roomid", roomId);
   var socket = io();
   var clearId = -1;
