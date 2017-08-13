@@ -181,7 +181,7 @@ socket.on('userLeaving', function(userSpotifyId){
 
 /* get dj setting info and configure users spotify */
 socket.on('DJData', function(DJData){
-  var timeProgress = DJData.timeProgress - 100;
+  var timeProgress = DJData.timeProgress;
   var songURI = DJData.songURI;
   $.ajax({
     url: 'https://api.spotify.com/v1/me/player/play',
