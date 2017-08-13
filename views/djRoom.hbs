@@ -30,6 +30,7 @@ and (max-device-width : 480px) {
         <img src='{{room.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
       <h2 class="text-center standard-text small">You are the DJ</h2>
+        <h2 id="currentSong" class="text-center standard-text small animated slideInDown">current song is : </h2>
       <div class="center">
         <h1 id="pass" style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass DJ</h1>
       </div>
@@ -257,6 +258,11 @@ and (max-device-width : 480px) {
     }, 2000)
     socket.emit('sendgrace');
   })
+
+  socket.on('DJData', function(DJData){
+    var songName= DJData.songName;
+    $('#currentSong').text(`current song is : ${songName}`)
+  });
 
 </script>
 
