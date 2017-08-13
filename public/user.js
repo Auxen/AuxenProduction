@@ -11,18 +11,6 @@ $(document).ready(function(){
     console.log("unloading");
     var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
     console.log("user object", userObject);
-    $.ajax({
-      url: 'https://api.spotify.com/v1/me/player/pause',
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
-        'Content-Type': "application/json"
-      },
-      dataType: "JSON",
-      success: function(data){
-        console.log('Song paused successfully');
-      }
-    })
     socket.emit('specialLeave', userObject);
     localStorage.setItem("disconnectTime", new Date().getTime());
     clearInterval(clearId);
@@ -42,19 +30,6 @@ $(document).ready(function(){
 
   /* if user wants to leave room it comes here */
   $('#userLeave').on('click', function(event){
-    console.log('oh shit bro');
-    $.ajax({
-      url: 'https://api.spotify.com/v1/me/player/pause',
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
-        'Content-Type': "application/json"
-      },
-      dataType: "JSON",
-      success: function(data){
-        console.log('Song paused successfully');
-      }
-    })
     socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
     window.location = $(this).attr('data-url');
   })
@@ -96,18 +71,6 @@ $(document).ready(function(){
   /* if dj closes room it will come here and redirect to home after leavingRoom */
   socket.on('roomClosed', function(){
     socket.emit('leaveRoom');
-    $.ajax({
-      url: 'https://api.spotify.com/v1/me/player/pause',
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
-        'Content-Type': "application/json"
-      },
-      dataType: "JSON",
-      success: function(data){
-        console.log('Song paused successfully');
-      }
-    })
     alert('Sorry, the dj closed the room');
     window.location = '/';
   })
