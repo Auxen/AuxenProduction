@@ -141,6 +141,12 @@ a:hover {
   cursor: pointer;
 }
 
+.no-margin {
+  margin-top: 0% !important;
+}
+
+
+
 /*THIS IS GOING TO BE THE ANIMATION */
 
 .fire {

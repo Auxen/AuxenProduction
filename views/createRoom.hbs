@@ -20,7 +20,7 @@ and (max-device-width : 480px) {
   <div class="container-fluid">
     <form id="roomSubmit" action='/createRoom' method="POST">
       <div id="inputWidth" class="center topLevel" style="width: 60%; margin-right: auto; margin-left: auto;">
-        <input maxlength="30" autocomplete="off" onfocus="this.placeholder = ''" name="roomNameBar" id="roomName" placeholder="Enter a room name here" class="ghost-input text-center"></input>
+        <input maxlength="30" autocomplete="off" onfocus="this.placeholder = ''" name="roomNameBar" id="roomName" placeholder="Enter a room name here" class="ghost-input text-center animated"></input>
     </div>
     <div class="center" >
       <h1 class="text-center text label-text boxed raise" name="button" id="startRoom">Go Live</h1>
@@ -31,21 +31,22 @@ and (max-device-width : 480px) {
 
 <script>
 
-$('#startRoom').on('click', function (event) {
-    event.preventDefault();
+$('#roomSubmit').on('submit', function (event) {
     console.log("reached here");
     var existingRoomNames = '{{existingRoomNames}}';
     console.log("existingRoomNames", existingRoomNames);
     var proposedRoomName = $('#roomName').val();
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
-      $('#roomName').removeClass('animated shake').addClass('animated shake');
-      if(!($('#error'))) {
+      event.preventDefault();
+      $('#roomName').addClass('shake');
+      setTimeout(function() {
+        $('#roomName').removeClass('shake');
+      }, 1000)
+      if(!($('#error').length)) {
         $('form').append(`<h1 class="text-center text small animated fadeIn" style="color: #6a0105;" name="button" id="error">That room name is already taken</h1>`)
       }
-    }else{
-      $('#roomSubmit').submit();
-    }
-
+      console.log($('#error'));
+    } 
 });
 
 </script>
