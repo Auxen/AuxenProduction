@@ -89,11 +89,18 @@ $(window).on("unload", function(){
 });
 
  /* user sends request */
-$('#songrequest').on('click', function() {
+$('#request').on('click', function() {
   var request = $('#requestval').val();
   $('#requestval').val('');
-  socket.emit('userSongRequest', request);
+  console.log("******",request);
+  socket.emit('userTalk', request);
 });
+
+$('#requestform').on('submit', function(e) {
+  e.preventDefault();
+  console.log("entering heree");
+  $('#request').click();
+})
 
 /* user sends flames */
 $('#laflame').on('click', function() {
@@ -228,7 +235,8 @@ socket.on('sendgrace', function() {
 })
 
 /* listens to requests in room */
-socket.on('userSongRequest', function(data){
+socket.on('userTalk', function(data){
+  console.log("reached here ");
   $('#flames').append(`
     <p class="request small text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
         <span style="width: 30%;">${data}</span>
@@ -251,12 +259,4 @@ socket.on('laflame', function() {
       $('#flames').find('span:first').remove();
     }, 2000)
 })
-</script>
-
-<script>
-  $('#requestform').on('submit', function(e) {
-    e.preventDefault();
-    $('#request').click();
-
-  })
 </script>

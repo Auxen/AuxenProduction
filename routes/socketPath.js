@@ -167,10 +167,10 @@ module.exports = function(io){
     })
 
     /* user makes song request to dj */
-    socket.on('userSongRequest', function(data) {
+    socket.on('userTalk', function(data) {
       console.log('data', data)
       console.log("room is", socket.room);
-      socket.to(socket.room).emit('userSongRequest', data);
+      io.to(socket.room).emit('userTalk', data);
     });
 
     /* user sends flame to dj */
