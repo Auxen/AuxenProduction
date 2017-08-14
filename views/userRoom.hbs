@@ -189,7 +189,7 @@ socket.on('DJData', function(DJData){
   var songURI = DJData.songURI;
   var songName= DJData.songName;
   $('#currentSong').empty();
-  $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Current song is : ${songName}</h2>`);
+  $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
   $.ajax({
     url: 'https://api.spotify.com/v1/me/player/play',
     method: 'PUT',

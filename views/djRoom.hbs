@@ -267,7 +267,7 @@ and (max-device-width : 480px) {
   socket.on('DJData', function(DJData){
     var songName= DJData.songName;
     $('#currentSong').empty();
-    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Current song is : ${songName}</h2>`)
+    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`)
   });
 
 </script>
