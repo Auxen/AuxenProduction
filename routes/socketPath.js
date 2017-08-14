@@ -10,7 +10,11 @@ module.exports = function(io) {
 
     function getSpotifyApi() {
 
-      var spotifyApi = new SpotifyWebApi({clientId: process.env.SPOTIFY_ID, clientSecret: process.env.SPOTIFY_SECRET, redirectUri: process.env.CALLBACK_URL});
+      var spotifyApi = new SpotifyWebApi({
+        clientId: process.env.SPOTIFY_ID,
+        clientSecret: process.env.SPOTIFY_SECRET,
+        redirectUri: process.env.CALLBACK_URL
+      });
 
       return spotifyApi;
     }
@@ -70,15 +74,37 @@ module.exports = function(io) {
       })
     }
 
+    socket.on('passDJ',function(passDjObject){
+      console.log("passDjObject", passDjObject);
+      User.findOne({spotifyId: passDjObject.nextDJSpotifyId})
+      .then(user => {
+        io.sockets.adapter.rooms[passDjObject.roomName].DJToken = user.accessToken;
+        io.to(passDjObject.roomName).emit('changedDJ', passDjObject.nextDJSpotifyId);
+      })
+      .catch(error => {
+        console.log("error", error);
+      })
+    })
+
     /* called every 30 minutes by user to refresh token */
     socket.on('toRefresh', function(refreshToken) {
       console.log("refreshing token");
       var spotifyApi = getSpotifyApi();
       spotifyApi.setRefreshToken(refreshToken);
-      spotifyApi.refreshAccessToken().then(data => {
+      spotifyApi.refreshAccessToken()
+      .then(data => {
         spotifyApi.setAccessToken(data.body['access_token']);
         socket.emit('setNewAccessToken', spotifyApi.getAccessToken());
-      }).catch(error => {
+        User.findOne({refreshToken: refreshToken})
+        .then(user => {
+          user.accessToken = spotifyApi.getAccessToken();
+          user.save();
+        })
+        .catch(error => {
+          console.log("error", error);
+        })
+      })
+      .catch(error => {
         console.log("error", error);
       })
     })

@@ -117,6 +117,12 @@ $('#userLeave').on('click', function(event){
   window.location = $(this).attr('data-url');
 })
 
+socket.on('changedDJ', function(spotifyId){
+  console.log(spotifyId);
+  //do the aux thing here
+  //search for children under the particular div and then append
+})
+
 /* Checking connnection to socket */
 socket.on('connect', function(){
 
