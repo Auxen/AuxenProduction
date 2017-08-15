@@ -99,6 +99,7 @@ and (max-device-width : 480px) {
   var dj = true;
 
   /* happens before refresh or close tab */
+  /* add logic for safari*/
   $(window).bind('beforeunload', function(){
     console.log("before unloading");
     return null;
@@ -287,6 +288,12 @@ and (max-device-width : 480px) {
     }, 2000)
     socket.emit('sendgrace');
   })
+
+  socket.on('DJData', function(DJData){
+    var songName= DJData.songName;
+    $('#currentSong').empty();
+    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`)
+  });
 
 
 </script>
