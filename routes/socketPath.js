@@ -82,11 +82,12 @@ module.exports = function(io) {
       console.log("passDjObject", passDjObject);
       User.findOne({spotifyId: passDjObject.nextDJSpotifyId})
       .then(user => {
+        console.log("reached here for pass dj", user);
         io.sockets.adapter.rooms[socket.room].DJToken = user.accessToken;
-        io.to(passDjObject.roomName).emit('changedDJ', {
+        io.to(socket.room).emit('changedDJ', {
             spotifyId:passDjObject.nextDJSpotifyId,
-            username: user.username}
-          );
+            username: user.username
+          });
       })
       .catch(error => {
         console.log("error", error);

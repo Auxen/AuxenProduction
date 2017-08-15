@@ -217,7 +217,7 @@ and (max-device-width : 480px) {
   ////////////////////
 
   socket.on('changedDJ', function(djObject){
-    console.log(spotifyId);
+    console.log("changedDJ", djObject.spotifyId);
     $('#djstatus').text(`Aux passed to ${djObject.username}`);
     $('#pass').empty();
     // here yash will add a click handler to pass DJ back to initial host
