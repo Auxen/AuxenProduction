@@ -81,7 +81,7 @@ var roomId = '{{room._id}}';
 console.log("roomid", roomId);
 var socket = io();
 var clearId = -1;
-var isDj = false;
+var isDJ = false;
 var djName = '{{room.djName}}'
 
 /* happens on refresh and close tab */
@@ -229,36 +229,38 @@ socket.on('userLeaving', function(userSpotifyId){
 
 /* get dj setting info and configure users spotify */
 socket.on('DJData', function(DJData){
-  var timeProgress = DJData.timeProgress;
-  var songURI = DJData.songURI;
-  var songName= DJData.songName;
-  $('#currentSong').empty();
-  $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
-  $.ajax({
-    url: 'https://api.spotify.com/v1/me/player/play',
-    method: 'PUT',
-    headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
-      'Content-Type': "application/json"
-    },
-    data: JSON.stringify({
-      "uris": [songURI]
-    }),
-    dataType: "JSON",
-    success: function(data){
-      $.ajax({
-        url: `https://api.spotify.com/v1/me/player/seek?position_ms=${timeProgress}`,
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
-          },
-        method: 'PUT',
-        json: true,
-        success: function (something) {
-            console.log("song successfully changed or modified");
-        }
-      })
-    }
-  })
+  if(!isDJ){
+    var timeProgress = DJData.timeProgress;
+    var songURI = DJData.songURI;
+    var songName= DJData.songName;
+    $('#currentSong').empty();
+    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player/play',
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
+        'Content-Type': "application/json"
+      },
+      data: JSON.stringify({
+        "uris": [songURI]
+      }),
+      dataType: "JSON",
+      success: function(data){
+        $.ajax({
+          url: `https://api.spotify.com/v1/me/player/seek?position_ms=${timeProgress}`,
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+            },
+          method: 'PUT',
+          json: true,
+          success: function (something) {
+              console.log("song successfully changed or modified");
+          }
+        })
+      }
+    })
+  }
 })
 
 /* listens for dj message */
