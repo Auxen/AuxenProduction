@@ -125,7 +125,7 @@ $('#userLeave').on('click', function(event){
 })
 
 socket.on('changedDJ', function(djObject){
-  console.log(spotifyId);
+  console.log(djObject.spotifyId);
   if(djObject.spotifyId === localStorage.getItem('spotifyId')) {
     $('#djstatus').text('You were passed the aux!')
     isDJ = true;
