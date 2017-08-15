@@ -30,12 +30,12 @@ and (max-device-width : 480px) {
       <div id="djphoto" class='center'>
         <img src='{{room.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
-      <h2 class="text-center standard-text small">You are the DJ</h2>
+      <h2 id="djstatus" class="text-center standard-text small">You are the DJ</h2>
       <div id="currentSong" class="center">
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
       </div>
-      <div class="center">
-        <h1 id="pass" style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass DJ</h1>
+      <div id="pass" class="center">
+        <h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>
       </div>
     </div>
   </div>
@@ -75,7 +75,7 @@ and (max-device-width : 480px) {
   <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="passDJ" aria-hidden="true" style="background-color: #1E1D1D">
     <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
       <div>
-        <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the batton.</h2>
+        <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the aux.</h2>
         <input autocomplete="off" id="myInput" style="font-size: 20px;"  placeholder="Search for users here..." class="text-center ghost-input" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
         </div>
         <div id="potentialDJS"></div>
@@ -197,7 +197,7 @@ and (max-device-width : 480px) {
       console.log(index);
 
     var potentialDJS = `<div>
-                            <h2 class="text grow small raise-user searchUsers nextDJ" data-id="${userData.spotifyId}">${userData.username}</h2>
+                            <h2 data-dismiss="modal" class="text grow small raise-user searchUsers nextDJ" data-id="${userData.spotifyId}">${userData.username}</h2>
                             <h2 class="text small ">${randomEmojis[index]}</h2>
                         </div>`
 
@@ -214,8 +214,10 @@ and (max-device-width : 480px) {
 
   socket.on('changedDJ', function(spotifyId){
     console.log(spotifyId);
-    //do the aux thing here
-    //search for children under the particular div and then append
+    $('#djstatus').text(`Aux passed to ${spotifyId}`);
+    $('#pass').empty();
+    // here yash will add a click handler to pass DJ back to initial host
+    $('#pass').append(`<h1 style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small">Take aux back</h1>`)
   })
 
   $(document).on('click', '.nextDJ', function(){
