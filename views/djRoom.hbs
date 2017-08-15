@@ -226,8 +226,9 @@ and (max-device-width : 480px) {
 
   //event propagation
   $(document).on('click', '#takeback', function(){
+    console.log("taken back");
     isDJ = true;
-    socket.emit('takeBack', TokenlocalStorage.getItem('accessToken'))
+    socket.emit('takeBack', localStorage.getItem('accessToken'));
   })
 
   socket.on('takenBack', function(){
