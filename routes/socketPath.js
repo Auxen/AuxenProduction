@@ -176,13 +176,13 @@ module.exports = function(io) {
       socket.room = userObject.roomName;
       socket.join(userObject.roomName);
       console.log("user refreshed and add to database", userObject);
-      Room.findById(userObject.roomId).then(room => {
+      Room.findById(userObject.roomId)
+      .then(room => {
         console.log("room", room);
         var euser = room.usersInRoom.find(function(user) {
           return user.spotifyId === userObject.spotifyId;
         })
-        if (euser)
-          return;
+        if (euser)return;
         else {
           var user = {
             spotifyId: userObject.spotifyId,
@@ -192,15 +192,15 @@ module.exports = function(io) {
           room.usersInRoom.push(user);
           room.save(function(err, room) {
             console.log("entered here");
-            if (err)
-              console.log(err);
+            if (err)console.log(err);
             else {
               console.log("user successfully added");
               io.to(userObject.roomName).emit('userJoined', user);
             }
           })
         }
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log("error", err);
       })
     })
@@ -210,6 +210,9 @@ module.exports = function(io) {
       console.log("enetered specialLeave");
       if (userObject.spotifyId) {
         socket.to(socket.room).emit('userLeaving', userObject.spotifyId);
+      }
+      if(userObject.isDJ){
+        socket.to(socket.room).emit('DJTakeBack');
       }
       socket.leave(socket.room);
       Room.findById(userObject.roomId).then(room => {

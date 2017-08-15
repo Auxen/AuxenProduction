@@ -87,7 +87,7 @@ var djName = '{{room.djName}}'
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
   console.log("unloading");
-  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
   console.log("***********user object*************", userObject);
   socket.emit('specialLeave', userObject); // do stuff here as well
   localStorage.setItem("disconnectTime", new Date().getTime());
@@ -180,7 +180,7 @@ socket.on('connect', function(){
     username: localStorage.getItem('username')
   }
 
-  if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") <5000)){
+  if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 5000)){
       console.log("this was a refresh");
       console.log("userObject", userObject);
       socket.emit("userRefreshed", userObject);
@@ -234,7 +234,7 @@ socket.on('DJData', function(DJData){
   if(!isDJ){
     var timeProgress = DJData.timeProgress;
     var songURI = DJData.songURI;
-    var songName= DJData.songName;
+
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/play',
       method: 'PUT',
@@ -261,6 +261,7 @@ socket.on('DJData', function(DJData){
       }
     })
   }
+  var songName= DJData.songName;
   $('#currentSong').empty();
   $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
 })

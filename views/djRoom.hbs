@@ -148,7 +148,7 @@ and (max-device-width : 480px) {
   socket.on('userLeaving', function(userSpotifyId){
       console.log(userSpotifyId);
       $('#' + userSpotifyId).remove();
-      $(`div.nextDJ[data-id=${userSpotifyId}]`).remove();
+      $(`.djparent[data-id=${userSpotifyId}]`).remove();
   });
 
   /* listens to flames in room */
@@ -191,28 +191,29 @@ and (max-device-width : 480px) {
                     </div>
                 </div>`
 
+      $('#users').append(data);
 
       //pass dj functionality
 
      var randomEmojis = ['🕺', '🙏', '👾', '🚀', '🎵', '🎤', '🎧', '🎉', '🔥', '💯', '☀️', '🌊'];
      var index = Math.floor(Math.random() * (randomEmojis.length - 2));
-      console.log(index);
+     console.log(index);
 
-    var potentialDJS = `<div>
+    var potentialDJS = `<div data-id="${userData.spotifyId}" class="djparent">
                             <h2 data-dismiss="modal" class="text grow small raise-user searchUsers nextDJ" data-id="${userData.spotifyId}">${userData.username}</h2>
                             <h2 class="text small ">${randomEmojis[index]}</h2>
                         </div>`
 
-       $('#potentialDJS').append(potentialDJS);
-      $('#users').append(data);
+    $('#potentialDJS').append(potentialDJS);
+
     }
   });
 
-  socket.on('DJData', function(DJData){
-    var songName= DJData.songName;
-    $('#currentSong').empty();
-    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Current song is : ${songName}</h2>`)
-  });
+
+
+
+
+
 
   ////////////////////
 
@@ -245,7 +246,18 @@ and (max-device-width : 480px) {
     isDJ = false;
   })
 
+  socket.on('DJTakeBack', function(){
+    console.log("taken back");
+    isDJ = true;
+    socket.emit('takeBack', localStorage.getItem('accessToken'));
+  })
+
   /////////////////////
+
+
+
+
+
 
    /* sends message of dj to room */
   $('#djtalk').on('click', function() {
@@ -291,11 +303,6 @@ and (max-device-width : 480px) {
     socket.emit('sendgrace');
   })
 
-  socket.on('DJData', function(DJData){
-    var songName= DJData.songName;
-    $('#currentSong').empty();
-    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`)
-  });
 
   socket.on('DJData', function(DJData){
     if(!isDJ){
