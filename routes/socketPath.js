@@ -74,17 +74,43 @@ module.exports = function(io) {
       })
     }
 
+
+
+    /////////////////////////////
+
     socket.on('passDJ',function(passDjObject){
       console.log("passDjObject", passDjObject);
       User.findOne({spotifyId: passDjObject.nextDJSpotifyId})
       .then(user => {
-        io.sockets.adapter.rooms[passDjObject.roomName].DJToken = user.accessToken;
-        io.to(passDjObject.roomName).emit('changedDJ', passDjObject.nextDJSpotifyId);
+        io.sockets.adapter.rooms[socket.room].DJToken = user.accessToken;
+        io.to(passDjObject.roomName).emit('changedDJ', {
+            spotifyId:passDjObject.nextDJSpotifyId,
+            username: user.username}
+          );
       })
       .catch(error => {
         console.log("error", error);
       })
     })
+
+    socket.on('takeBack', function(accessToken){
+      io.sockets.adapter.rooms[socket.room].DJToken = accessToken;
+      io.to(socket.room).emit('takenBack');
+    })
+
+    socket.on('userDJLeaving', function(roomName){
+      Room.findOne({roomName:roomName})
+      .then(room => {
+        User.findOne({spotifyId: room.djSpotifyId})
+        .then(user => {
+          io.sockets.adapter.rooms[roomName].DJToken = user.accessToken;
+          io.to(socket.room).emit('takenBack');
+        })
+      })
+    })
+
+
+  /////////////////////////////s
 
     /* called every 30 minutes by user to refresh token */
     socket.on('toRefresh', function(refreshToken) {

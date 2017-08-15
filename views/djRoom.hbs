@@ -138,7 +138,7 @@ and (max-device-width : 480px) {
     localStorage.setItem('accessToken', accessToken);
     if(dj === true)socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
     else{
-      //look who dj is get his ptofiy id, get his accesstoken from database and set it to room;
+      //look who dj is get his sptofiy id, get his accesstoken from database and set it to room;
       //figure out time difference
     }
   })
@@ -147,6 +147,7 @@ and (max-device-width : 480px) {
   socket.on('userLeaving', function(userSpotifyId){
       console.log(userSpotifyId);
       $('#' + userSpotifyId).remove();
+      $(`div.nextDJ[data-id=${userSpotifyId}]`).remove();
   });
 
   /* listens to flames in room */
@@ -212,20 +213,36 @@ and (max-device-width : 480px) {
     $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Current song is : ${songName}</h2>`)
   });
 
-  socket.on('changedDJ', function(spotifyId){
+  ////////////////////
+
+  socket.on('changedDJ', function(djObject){
     console.log(spotifyId);
-    $('#djstatus').text(`Aux passed to ${spotifyId}`);
+    $('#djstatus').text(`Aux passed to ${djObject.username}`);
     $('#pass').empty();
     // here yash will add a click handler to pass DJ back to initial host
-    $('#pass').append(`<h1 style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small">Take aux back</h1>`)
+    $('#pass').append(`<h1 style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" id="takeback">Take aux back</h1>`)
+  })
+
+  //event propagation
+  $(document).on('click', '#takeback', function(){
+    isDJ = true;
+    socket.emit('takeBack', TokenlocalStorage.getItem('accessToken'))
+  })
+
+  socket.on('takenBack', function(){
+    $('#djstatus').text(`You are the DJ`);
+    $('#pass').empty();
+    $('#pass').append(`<h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>`)
   })
 
   $(document).on('click', '.nextDJ', function(){
     var nextDJSpotifyId = $(this).attr('data-id');
     console.log("nextDJSpotifyId", nextDJSpotifyId);
-    socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId, roomName: roomName});
-    dj = false;
+    socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId});
+    isDj = false;
   })
+
+  /////////////////////
 
    /* sends message of dj to room */
   $('#djtalk').on('click', function() {
