@@ -61,11 +61,11 @@ and (max-device-width : 480px) {
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
-        <h2 class="text small">We need to sure your Spotify is set up properly</h2>
+        <h2 class="text small" id="setup">We need to sure your Spotify is set up properly</h2>
        <h2 class="text smaller">
          <br>
          <br>
-         1. Open your Spotify
+         1. Open your Spotify! This is very important
          <br>
          <br>
          2. Play a song. Whatever song you want.
@@ -86,20 +86,7 @@ and (max-device-width : 480px) {
   </div>
 </div>
 
-<div class="modal fade" id="deviceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header"  style="background-color: #1E1D1D">
-        <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
-      </div>
-      <div class="modal-body" style="background-color: #1E1D1D">
-        <h2 class="text small">Yo, Kindly Open your Spotify</h2>
-       <br>
-       <br>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <style>
 @media only screen
@@ -124,15 +111,17 @@ and (max-device-width : 480px) {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-          data.devices.forEach(function(device){
-            if(device.is_active){
+          for (var i = 0; i < data.devices.length; i++) {
+            if(data.devices[i].is_active){
               flag =true;
               // pop up modal saying good to go on this device or show somewhere that this device is active
+              console.log(data.devices[i].name);
               break;
             }
-          })
-          if(!flag){
-            $('#deviceModal').modal('show');
+          }
+        if(!flag){
+            $('#exampleModalLong').modal('show');
+            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
           }
         }
       })
@@ -189,7 +178,6 @@ and (max-device-width : 480px) {
           console.log(data);
           if(data.repeat_state !== 'off')toggleRepeat();
           if(data.shuffle_state)toggleShuffle();
-          //if(!data.device.is_active)//mo modal should pop up here
         }
       })
     }
@@ -197,7 +185,7 @@ and (max-device-width : 480px) {
     getPlayback();
 
 
-    $('#songTest').on('click', function(){
+    $('#songTest').on('click', function() {
 
 
       $.ajax({
