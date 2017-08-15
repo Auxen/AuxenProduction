@@ -180,7 +180,7 @@ socket.on('connect', function(){
     username: localStorage.getItem('username')
   }
 
-  if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 5000)){
+  if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 3000)){
       console.log("this was a refresh");
       console.log("userObject", userObject);
       socket.emit("userRefreshed", userObject);
@@ -234,7 +234,6 @@ socket.on('DJData', function(DJData){
   if(!isDJ){
     var timeProgress = DJData.timeProgress;
     var songURI = DJData.songURI;
-
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/play',
       method: 'PUT',
