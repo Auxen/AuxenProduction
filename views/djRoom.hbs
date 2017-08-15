@@ -96,7 +96,7 @@ and (max-device-width : 480px) {
   console.log("roomName", roomName);
   var socket = io();
   var clearId = -1;
-  var dj = true;
+  var isDJ = true;
 
   /* happens before refresh or close tab */
   /* add logic for safari*/
@@ -240,7 +240,7 @@ and (max-device-width : 480px) {
     var nextDJSpotifyId = $(this).attr('data-id');
     console.log("nextDJSpotifyId", nextDJSpotifyId);
     socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId});
-    isDj = false;
+    isDJ = false;
   })
 
   /////////////////////
@@ -294,6 +294,44 @@ and (max-device-width : 480px) {
     $('#currentSong').empty();
     $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`)
   });
+
+  socket.on('DJData', function(DJData){
+    if(!isDJ){
+
+      var timeProgress = DJData.timeProgress;
+      var songURI = DJData.songURI;
+      var songName= DJData.songName;
+      $('#currentSong').empty();
+      $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/play',
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
+          'Content-Type': "application/json"
+        },
+        data: JSON.stringify({
+          "uris": [songURI]
+        }),
+        dataType: "JSON",
+        success: function(data){
+          $.ajax({
+            url: `https://api.spotify.com/v1/me/player/seek?position_ms=${timeProgress}`,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+              },
+            method: 'PUT',
+            json: true,
+            success: function (something) {
+                console.log("song successfully changed or modified");
+            }
+          })
+        }
+      })
+
+    }
+
+  })
 
 
 </script>
