@@ -30,12 +30,12 @@ and (max-device-width : 480px) {
       <div id="djphoto" class='center'>
         <img src='{{room.imageURL}}' class="img-responsive animated wobble" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
-      <h2 class="text-center standard-text small">You are the DJ</h2>
+      <h2 id="djstatus" class="text-center standard-text small">You are the DJ</h2>
       <div id="currentSong" class="center">
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
       </div>
-      <div class="center">
-        <h1 id="pass" style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass DJ</h1>
+      <div id="pass" class="center">
+        <h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>
       </div>
     </div>
   </div>
@@ -72,19 +72,16 @@ and (max-device-width : 480px) {
     </div>
   </div>
 
-  <!-- <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="passDJ" aria-hidden="true" style="background-color: #1E1D1D">
+  <div class="modal fade" id="passDJ" tabindex="-1" role="dialog" aria-labelledby="passDJ" aria-hidden="true" style="background-color: #1E1D1D">
     <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
       <div>
-        <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the batton.</h2>
+        <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the aux.</h2>
         <input autocomplete="off" id="myInput" style="font-size: 20px;"  placeholder="Search for users here..." class="text-center ghost-input" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
         </div>
         <div id="potentialDJS"></div>
     </div>
     </div>
-  </div> -->
-
-
-
+  </div>
 
 </div>
 
@@ -99,6 +96,7 @@ and (max-device-width : 480px) {
   console.log("roomName", roomName);
   var socket = io();
   var clearId = -1;
+  var dj = true;
 
   /* happens before refresh or close tab */
   /* add logic for safari*/
@@ -126,8 +124,8 @@ and (max-device-width : 480px) {
 
     if(localStorage.getItem('closing') === "true"){
       window.location.href = '/';
-    }else{
-      //socket.emit('spotifySetup', localStorage.getItem("spotifyId"));
+    }
+    else{
       var djObject = {
         roomName: roomName,
         accessToken: localStorage.getItem('accessToken')
@@ -136,35 +134,25 @@ and (max-device-width : 480px) {
     }
   })
 
-  /* Setting refresh token in localStorage and calling setInterval every 30 mins to refresh */
-  socket.on('setRefreshToken', function(refreshToken){
-    localStorage.setItem('refreshToken', refreshToken);
-
-  });
-
-  /* Setting access token in localStorage */
-  socket.on('setAccessToken', function(accessToken){
-    localStorage.setItem('accessToken', accessToken);
-    var djObject = {
-      roomName: roomName,
-      accessToken: localStorage.getItem('accessToken')
-    }
-    socket.emit('createRoom', djObject);
-  })
-
   /* sets new access token after refresh */
   socket.on('setNewAccessToken', function(accessToken){
     localStorage.setItem('accessToken', accessToken);
-    socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
+    if(dj === true)socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
+    else{
+      //look who dj is get his sptofiy id, get his accesstoken from database and set it to room;
+      //figure out time difference
+    }
   })
 
   /* some other user has left room */
   socket.on('userLeaving', function(userSpotifyId){
       console.log(userSpotifyId);
       $('#' + userSpotifyId).remove();
+      $(`div.nextDJ[data-id=${userSpotifyId}]`).remove();
   });
 
-  /* listens to flames in room */  socket.on('laflame', function() {
+  /* listens to flames in room */
+  socket.on('laflame', function() {
     $('#flames').append(`
         <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
             🔥
@@ -198,27 +186,64 @@ and (max-device-width : 480px) {
     }
     else {
       var data = `<div id="${userData.spotifyId}" >
-          <div data-id="${userData.spotifyId}" >
-            <img class="raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
-          </div>
-      </div>`
+                    <div data-id="${userData.spotifyId}" >
+                      <img class="raise animated bounceIn grid-item" src="${userData.imageURL}" alt="">
+                    </div>
+                </div>`
 
-      // var randomEmojis = ['🕺', '🙏', '👾', '🚀', '🎵', '🎤', '🎧', '🎉', '🔥', '💯', '☀️', '🌊'];
-      // var index = Math.floor(Math.random() * (randomEmojis.length - 2));
-      // console.log(index);
-      //
-      // var potentialDJS = `<div id="${userData.spotifyId}" >
-      //     <div data-id="${userData.spotifyId}" >
-      //       <h2 class="text grow small raise-user searchUsers">${userData.username}</h2>
-      //       <h2 class="text small ">${randomEmojis[index]}</h2>
-      //     </div>
-      // </div>`
-      //
-      // $('#potentialDJS').append(potentialDJS);
-      // random
+
+      //pass dj functionality
+
+     var randomEmojis = ['🕺', '🙏', '👾', '🚀', '🎵', '🎤', '🎧', '🎉', '🔥', '💯', '☀️', '🌊'];
+     var index = Math.floor(Math.random() * (randomEmojis.length - 2));
+      console.log(index);
+
+    var potentialDJS = `<div>
+                            <h2 data-dismiss="modal" class="text grow small raise-user searchUsers nextDJ" data-id="${userData.spotifyId}">${userData.username}</h2>
+                            <h2 class="text small ">${randomEmojis[index]}</h2>
+                        </div>`
+
+       $('#potentialDJS').append(potentialDJS);
       $('#users').append(data);
     }
   });
+
+  socket.on('DJData', function(DJData){
+    var songName= DJData.songName;
+    $('#currentSong').empty();
+    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Current song is : ${songName}</h2>`)
+  });
+
+  ////////////////////
+
+  socket.on('changedDJ', function(djObject){
+    console.log(spotifyId);
+    $('#djstatus').text(`Aux passed to ${djObject.username}`);
+    $('#pass').empty();
+    // here yash will add a click handler to pass DJ back to initial host
+    $('#pass').append(`<h1 style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" id="takeback">Take aux back</h1>`)
+  })
+
+  //event propagation
+  $(document).on('click', '#takeback', function(){
+    isDJ = true;
+    socket.emit('takeBack', TokenlocalStorage.getItem('accessToken'))
+  })
+
+  socket.on('takenBack', function(){
+    $('#djstatus').text(`You are the DJ`);
+    $('#pass').empty();
+    $('#pass').append(`<h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>`)
+  })
+
+  $(document).on('click', '.nextDJ', function(){
+    var nextDJSpotifyId = $(this).attr('data-id');
+    console.log("nextDJSpotifyId", nextDJSpotifyId);
+    socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId});
+    isDj = false;
+  })
+
+  /////////////////////
 
    /* sends message of dj to room */
   $('#djtalk').on('click', function() {
@@ -269,6 +294,7 @@ and (max-device-width : 480px) {
     $('#currentSong').empty();
     $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`)
   });
+
 
 </script>
 

@@ -25,7 +25,7 @@ and (max-device-width : 480px) {
       <div id="djphoto" class='center'>
         <img src="{{room.imageURL}}" class="img-responsive animated wobble phone" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
-      <h2 class="text-center standard-text small">DJ is: {{room.djName}}</h2>
+      <h2 id="djstatus" class="text-center standard-text small">DJ is: {{room.djName}}</h2>
       <div id="currentSong" class="center">
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
       </div>
@@ -81,13 +81,15 @@ var roomId = '{{room._id}}';
 console.log("roomid", roomId);
 var socket = io();
 var clearId = -1;
+var isDj = false;
+var djName = '{{room.djName}}'
 
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
   console.log("unloading");
   var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
   console.log("***********user object*************", userObject);
-  socket.emit('specialLeave', userObject);
+  socket.emit('specialLeave', userObject); // do stuff here as well
   localStorage.setItem("disconnectTime", new Date().getTime());
   clearInterval(clearId);
 });
@@ -111,11 +113,34 @@ $('#laflame').on('click', function() {
   socket.emit('laflame');
 })
 
+/////////////////////////////
+
 /* if user wants to leave room it comes here */
 $('#userLeave').on('click', function(event){
+  if(isDJ === true){
+    socket.emit('userDJLeaving', roomName);
+  }
   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
   window.location = $(this).attr('data-url');
 })
+
+socket.on('changedDJ', function(djObject){
+  console.log(spotifyId);
+  if(djObject.spotifyId === localStorage.getItem('spotifyId')) {
+    $('#djstatus').text('You were passed the aux!')
+    isDJ = true;
+  } else {
+    $('#djstatus').text(`${djObject.username} was passed the aux`);
+    isDJ = false;
+  }
+})
+
+socket.on('takenBack', function(){
+  if(isDJ)isDJ = false;
+  $('#djstatus').text(`DJ is: ${djName}`);
+})
+
+////////////////////////////
 
 /* Checking connnection to socket */
 socket.on('connect', function(){
