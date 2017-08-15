@@ -126,7 +126,9 @@ $('#laflame').on('click', function() {
 
 /* if user wants to leave room it comes here */
 $('#userLeave').on('click', function(event){
+  console.log("********",isDJ, roomName);
   if(isDJ === true){
+    console.log("entered here");
     socket.emit('userDJLeaving', roomName);
   }
   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
@@ -233,8 +235,6 @@ socket.on('DJData', function(DJData){
     var timeProgress = DJData.timeProgress;
     var songURI = DJData.songURI;
     var songName= DJData.songName;
-    $('#currentSong').empty();
-    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
     $.ajax({
       url: 'https://api.spotify.com/v1/me/player/play',
       method: 'PUT',
@@ -261,6 +261,8 @@ socket.on('DJData', function(DJData){
       }
     })
   }
+  $('#currentSong').empty();
+  $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
 })
 
 /* listens for dj message */

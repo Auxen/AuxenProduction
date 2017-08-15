@@ -100,12 +100,14 @@ module.exports = function(io) {
     })
 
     socket.on('userDJLeaving', function(roomName){
+      console.log("userDJLeaving backend");
       Room.findOne({roomName:roomName})
       .then(room => {
+        console.log("room", room);
         User.findOne({spotifyId: room.djSpotifyId})
         .then(user => {
           io.sockets.adapter.rooms[roomName].DJToken = user.accessToken;
-          io.to(socket.room).emit('takenBack');
+          io.to(roomName).emit('takenBack');
         })
       })
     })

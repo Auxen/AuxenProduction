@@ -232,6 +232,7 @@ and (max-device-width : 480px) {
   })
 
   socket.on('takenBack', function(){
+    console.log("entered taken back");
     $('#djstatus').text(`You are the DJ`);
     $('#pass').empty();
     $('#pass').append(`<h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>`)
@@ -301,9 +302,7 @@ and (max-device-width : 480px) {
 
       var timeProgress = DJData.timeProgress;
       var songURI = DJData.songURI;
-      var songName= DJData.songName;
-      $('#currentSong').empty();
-      $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
+
       $.ajax({
         url: 'https://api.spotify.com/v1/me/player/play',
         method: 'PUT',
@@ -331,7 +330,9 @@ and (max-device-width : 480px) {
       })
 
     }
-
+    var songName= DJData.songName;
+    $('#currentSong').empty();
+    $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
   })
 
 
