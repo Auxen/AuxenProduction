@@ -25,7 +25,7 @@ and (max-device-width : 480px) {
       <div id="djphoto" class='center'>
         <img src="{{room.imageURL}}" class="img-responsive animated wobble phone" style="border-radius: 50%; width: 20%; height: 20%;" >
       </div>
-      <h2 class="text-center standard-text small">DJ is: {{room.djName}}</h2>
+      <h2 id="djstatus" class="text-center standard-text small">DJ is: {{room.djName}}</h2>
       <div id="currentSong" class="center">
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
       </div>
@@ -81,6 +81,8 @@ var roomId = '{{room._id}}';
 console.log("roomid", roomId);
 var socket = io();
 var clearId = -1;
+var isDJ = false;
+var djName = '{{room.djName}}'
 
 function pausePlayback(){
   $.ajax({
@@ -98,9 +100,9 @@ function pausePlayback(){
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
   console.log("unloading");
-  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
   console.log("***********user object*************", userObject);
-  socket.emit('specialLeave', userObject);
+  socket.emit('specialLeave', userObject); // do stuff here as well
   localStorage.setItem("disconnectTime", new Date().getTime());
   clearInterval(clearId);
 });
@@ -124,12 +126,56 @@ $('#laflame').on('click', function() {
   socket.emit('laflame');
 })
 
+
+
+
+
+
+
+
+
+
+/////////////////////////////
+
 /* if user wants to leave room it comes here */
 $('#userLeave').on('click', function(event){
+  console.log("********",isDJ, roomName);
+  if(isDJ === true){
+    console.log("entered here");
+    socket.emit('userDJLeaving', roomName);
+  }
   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
   pausePlayback();
   window.location = $(this).attr('data-url');
 })
+
+socket.on('changedDJ', function(djObject){
+  console.log(djObject.spotifyId);
+  if(djObject.spotifyId === localStorage.getItem('spotifyId')) {
+    $('#djstatus').text('You were passed the aux!')
+    isDJ = true;
+  } else {
+    $('#djstatus').text(`${djObject.username} was passed the aux`);
+    isDJ = false;
+  }
+})
+
+socket.on('takenBack', function(){
+  if(isDJ)isDJ = false;
+  $('#djstatus').text(`DJ is: ${djName}`);
+})
+
+////////////////////////////
+
+
+
+
+
+
+
+
+
+
 
 /* Checking connnection to socket */
 socket.on('connect', function(){
@@ -148,7 +194,7 @@ socket.on('connect', function(){
     username: localStorage.getItem('username')
   }
 
-  if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") <5000)){
+  if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 3000)){
       console.log("this was a refresh");
       console.log("userObject", userObject);
       socket.emit("userRefreshed", userObject);
@@ -199,36 +245,38 @@ socket.on('userLeaving', function(userSpotifyId){
 
 /* get dj setting info and configure users spotify */
 socket.on('DJData', function(DJData){
-  var timeProgress = DJData.timeProgress;
-  var songURI = DJData.songURI;
+  if(!isDJ){
+    var timeProgress = DJData.timeProgress;
+    var songURI = DJData.songURI;
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/player/play',
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
+        'Content-Type': "application/json"
+      },
+      data: JSON.stringify({
+        "uris": [songURI]
+      }),
+      dataType: "JSON",
+      success: function(data){
+        $.ajax({
+          url: `https://api.spotify.com/v1/me/player/seek?position_ms=${timeProgress}`,
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+            },
+          method: 'PUT',
+          json: true,
+          success: function (something) {
+              console.log("song successfully changed or modified");
+          }
+        })
+      }
+    })
+  }
   var songName= DJData.songName;
   $('#currentSong').empty();
-  $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Current song is : ${songName}</h2>`);
-  $.ajax({
-    url: 'https://api.spotify.com/v1/me/player/play',
-    method: 'PUT',
-    headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
-      'Content-Type': "application/json"
-    },
-    data: JSON.stringify({
-      "uris": [songURI]
-    }),
-    dataType: "JSON",
-    success: function(data){
-      $.ajax({
-        url: `https://api.spotify.com/v1/me/player/seek?position_ms=${timeProgress}`,
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
-          },
-        method: 'PUT',
-        json: true,
-        success: function (something) {
-            console.log("song successfully changed or modified");
-        }
-      })
-    }
-  })
+  $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
 })
 
 /* listens for dj message */
