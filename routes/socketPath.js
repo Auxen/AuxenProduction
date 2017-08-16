@@ -301,6 +301,16 @@ module.exports = function(io) {
       socket.to(socket.room).emit('sendgrace');
     })
 
+    socket.on('changeRoomTokenDJUser', function(userDJObject){
+      User.findOne({spotifyId:userDJObject.spotifyId})
+      .then(user => {
+        io.sockets.adapter.rooms[userDJObject.roomName].DJToken = user.accessToken;
+      })
+      .catch(error => {
+        console.log("error");
+      })
+    })
+
     // DJ ENDS //
   })
 }

@@ -97,6 +97,7 @@ and (max-device-width : 480px) {
   var socket = io();
   var clearId = -1;
   var isDJ = true;
+  var userDJSpotifyId = '';
 
   /* happens before refresh or close tab */
   /* add logic for safari*/
@@ -137,10 +138,11 @@ and (max-device-width : 480px) {
   /* sets new access token after refresh */
   socket.on('setNewAccessToken', function(accessToken){
     localStorage.setItem('accessToken', accessToken);
-    if(dj === true)socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
+    if(isDJ === true)socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
     else{
       //look who dj is get his sptofiy id, get his accesstoken from database and set it to room;
       //figure out time difference
+      socket.emit('changeRoomTokenDJUser', {spotifyId:userDJSpotifyId, roomName:roomName});
     }
   })
 
@@ -210,15 +212,11 @@ and (max-device-width : 480px) {
   });
 
 
-
-
-
-
-
   ////////////////////
 
   socket.on('changedDJ', function(djObject){
     console.log("changedDJ", djObject.spotifyId);
+    userDJSpotifyId = djObject.spotifyId;
     $('#djstatus').text(`Aux passed to ${djObject.username}`);
     $('#pass').empty();
     // here yash will add a click handler to pass DJ back to initial host
