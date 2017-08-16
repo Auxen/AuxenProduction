@@ -31,11 +31,13 @@ and (max-device-width : 480px) {
 
 <script>
 
+
 $('#startRoom').on('click', function() {
   $('#roomSubmit').submit();
 })
 
 $('#roomSubmit').on('submit', function (event) {
+
     console.log("reached here");
     var existingRoomNames = '{{existingRoomNames}}';
     console.log("existingRoomNames", existingRoomNames);
