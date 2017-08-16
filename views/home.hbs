@@ -62,9 +62,13 @@ and (max-device-width : 480px) {
         <h2 class="text small">We need to sure your Spotify is set up properly</h2>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
-       <h2 class="text small">
-         
-         1. Open your Spotify
+
+        <h2 class="text small" id="setup">We need to sure your Spotify is set up properly</h2>
+       <h2 class="text smaller">
+         <br>
+         <br>
+         1. Open your Spotify! This is very important
+
          <br>
          <br>
          2. Play a song. Whatever song you want.
@@ -85,6 +89,8 @@ and (max-device-width : 480px) {
   </div>
 </div>
 
+
+
 <style>
 @media only screen
 and (min-device-width : 320px)
@@ -99,6 +105,30 @@ and (max-device-width : 480px) {
     if(!localStorage.getItem('spotifyId')) {
       $('#exampleModalLong').modal('show');
     }
+    else {
+      var flag = false;
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/devices',
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          for (var i = 0; i < data.devices.length; i++) {
+            if(data.devices[i].is_active){
+              flag =true;
+              // pop up modal saying good to go on this device or show somewhere that this device is active
+              console.log(data.devices[i].name);
+              break;
+            }
+          }
+        if(!flag){
+            $('#exampleModalLong').modal('show');
+            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+          }
+        }
+      })
+    }
 
     var spotifyId = '{{spotifyId}}';
     var imageURL = '{{{imageURL}}}';
@@ -112,7 +142,53 @@ and (max-device-width : 480px) {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('closing', "false");
-    $('#songTest').on('click', function(){
+
+    function toggleRepeat(){
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/repeat?state=off',
+        method: 'put',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          console.log("successfully switched off repeat");
+        }
+      })
+    }
+
+    function toggleShuffle(){
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
+        method: 'put',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          console.log("successfully switched off shuffle");
+        }
+      })
+    }
+
+    function getPlayback(){
+      console.log("entered getPlayback");
+      $.ajax({
+        url: 'https://api.spotify.com/v1/me/player',
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+        },
+        success: function(data){
+          console.log(data);
+          if(data.repeat_state !== 'off')toggleRepeat();
+          if(data.shuffle_state)toggleShuffle();
+        }
+      })
+    }
+
+    getPlayback();
+
+
+    $('#songTest').on('click', function() {
 
 
       $.ajax({

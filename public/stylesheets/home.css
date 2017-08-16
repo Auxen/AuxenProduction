@@ -165,6 +165,10 @@ a:hover {
   animation-iteration-count: 1;
 }
 
+.red {
+  color: red;
+}
+
 
 #laflame {
   -webkit-user-select: none; /* Chrome/Safari */
