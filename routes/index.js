@@ -15,7 +15,7 @@ module.exports = function() {
       console.log("here");
       res.redirect('/login');
     }
-  })
+  })//ben
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
