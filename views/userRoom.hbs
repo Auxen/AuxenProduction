@@ -270,7 +270,7 @@ socket.on('userLeaving', function(userSpotifyId){
 
 /* get dj setting info and configure users spotify */
 socket.on('DJData', function(DJData){
-  if(!isDJ){
+  if(!isDJ && DJData.timeProgress){
     var timeProgress = DJData.timeProgress;
     var songURI = DJData.songURI;
     $.ajax({
