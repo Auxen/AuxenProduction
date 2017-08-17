@@ -147,7 +147,7 @@ if(isSafari){
   });
 
 
-/*
+
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
   console.log("unloading");
@@ -157,7 +157,7 @@ $(window).on("unload", function(){
   localStorage.setItem("disconnectTime", new Date().getTime());
   clearInterval(clearId);
 });
-*/
+
 
  /* user sends request */
 $('#request').on('click', function() {
