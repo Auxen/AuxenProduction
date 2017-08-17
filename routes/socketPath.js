@@ -10,7 +10,11 @@ module.exports = function(io) {
 
     function getSpotifyApi() {
 
-      var spotifyApi = new SpotifyWebApi({clientId: process.env.SPOTIFY_ID, clientSecret: process.env.SPOTIFY_SECRET, redirectUri: process.env.CALLBACK_URL});
+      var spotifyApi = new SpotifyWebApi({
+        clientId: process.env.SPOTIFY_ID,
+        clientSecret: process.env.SPOTIFY_SECRET,
+        redirectUri: process.env.CALLBACK_URL
+      });
 
       return spotifyApi;
     }
@@ -70,15 +74,66 @@ module.exports = function(io) {
       })
     }
 
+
+
+    /////////////////////////////
+
+    socket.on('passDJ',function(passDjObject){
+      console.log("passDjObject", passDjObject);
+      User.findOne({spotifyId: passDjObject.nextDJSpotifyId})
+      .then(user => {
+        console.log("reached here for pass dj", user);
+        io.sockets.adapter.rooms[socket.room].DJToken = user.accessToken;
+        io.to(socket.room).emit('changedDJ', {
+            spotifyId:passDjObject.nextDJSpotifyId,
+            username: user.username
+          });
+      })
+      .catch(error => {
+        console.log("error", error);
+      })
+    })
+
+    socket.on('takeBack', function(accessToken){
+      io.sockets.adapter.rooms[socket.room].DJToken = accessToken;
+      io.to(socket.room).emit('takenBack');
+    })
+
+    socket.on('userDJLeaving', function(roomName){
+      console.log("userDJLeaving backend");
+      Room.findOne({roomName:roomName})
+      .then(room => {
+        console.log("room", room);
+        User.findOne({spotifyId: room.djSpotifyId})
+        .then(user => {
+          io.sockets.adapter.rooms[roomName].DJToken = user.accessToken;
+          io.to(roomName).emit('takenBack');
+        })
+      })
+    })
+
+
+  /////////////////////////////s
+
     /* called every 30 minutes by user to refresh token */
     socket.on('toRefresh', function(refreshToken) {
       console.log("refreshing token");
       var spotifyApi = getSpotifyApi();
       spotifyApi.setRefreshToken(refreshToken);
-      spotifyApi.refreshAccessToken().then(data => {
+      spotifyApi.refreshAccessToken()
+      .then(data => {
         spotifyApi.setAccessToken(data.body['access_token']);
         socket.emit('setNewAccessToken', spotifyApi.getAccessToken());
-      }).catch(error => {
+        User.findOne({refreshToken: refreshToken})
+        .then(user => {
+          user.accessToken = spotifyApi.getAccessToken();
+          user.save();
+        })
+        .catch(error => {
+          console.log("error", error);
+        })
+      })
+      .catch(error => {
         console.log("error", error);
       })
     })
@@ -121,13 +176,13 @@ module.exports = function(io) {
       socket.room = userObject.roomName;
       socket.join(userObject.roomName);
       console.log("user refreshed and add to database", userObject);
-      Room.findById(userObject.roomId).then(room => {
+      Room.findById(userObject.roomId)
+      .then(room => {
         console.log("room", room);
         var euser = room.usersInRoom.find(function(user) {
           return user.spotifyId === userObject.spotifyId;
         })
-        if (euser)
-          return;
+        if (euser)return;
         else {
           var user = {
             spotifyId: userObject.spotifyId,
@@ -137,15 +192,15 @@ module.exports = function(io) {
           room.usersInRoom.push(user);
           room.save(function(err, room) {
             console.log("entered here");
-            if (err)
-              console.log(err);
+            if (err)console.log(err);
             else {
               console.log("user successfully added");
               io.to(userObject.roomName).emit('userJoined', user);
             }
           })
         }
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log("error", err);
       })
     })
@@ -155,6 +210,9 @@ module.exports = function(io) {
       console.log("enetered specialLeave");
       if (userObject.spotifyId) {
         socket.to(socket.room).emit('userLeaving', userObject.spotifyId);
+      }
+      if(userObject.isDJ){
+        socket.to(socket.room).emit('DJTakeBack');
       }
       socket.leave(socket.room);
       Room.findById(userObject.roomId).then(room => {
@@ -241,6 +299,16 @@ module.exports = function(io) {
     socket.on('sendgrace', function() {
       console.log('shit');
       socket.to(socket.room).emit('sendgrace');
+    })
+
+    socket.on('changeRoomTokenDJUser', function(userDJObject){
+      User.findOne({spotifyId:userDJObject.spotifyId})
+      .then(user => {
+        io.sockets.adapter.rooms[userDJObject.roomName].DJToken = user.accessToken;
+      })
+      .catch(error => {
+        console.log("error");
+      })
     })
 
     // DJ ENDS //

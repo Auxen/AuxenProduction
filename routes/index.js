@@ -10,14 +10,20 @@ module.exports = function() {
   /* Check login page. */
   router.use('/', function(req, res, next) {
     if (req.user) {
-      next();
-    } else {
+      if(req.user.premium === 'premium') next();
+      else res.redirect('/notPremium');
+    }
+    else {
       console.log("here");
       res.redirect('/login');
     }
   })//ben
 
 
+
+  router.get('/notPremium', function(req, res, next){
+    res.send('shit');
+  })
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
