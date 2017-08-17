@@ -188,7 +188,19 @@ $('#userLeave').on('click', function(event){
 socket.on('changedDJ', function(djObject){
   console.log(djObject.spotifyId);
   if(djObject.spotifyId === localStorage.getItem('spotifyId')) {
-    $('#djstatus').text('You were passed the aux!')
+    $('#djstatus').text('You were passed the aux!');
+    if (Notification.permission !== "granted" && Notification) {
+        Notification.requestPermission(function(permission) {
+          var notification = new Notification('Auxen!', {
+            icon: path('/static/images/logo.svg'),
+            body: "You were passed the aux!",
+          });
+        });
+    } else {
+      var notification = new Notification('Notification title', {
+        body: "You were passed the aux!",
+      });
+    }
     isDJ = true;
   } else {
     $('#djstatus').text(`${djObject.username} was passed the aux`);
