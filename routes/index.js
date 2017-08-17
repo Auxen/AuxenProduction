@@ -14,7 +14,7 @@ module.exports = function() {
       else res.redirect('/notPremium');
     }
     else {
-      console.log("here");
+      //console.log("here");
       res.redirect('/login');
     }
   })//ben
@@ -57,7 +57,7 @@ module.exports = function() {
 
   /* Create a room */
   router.post('/createRoom', function(req, res, next) {
-    console.log("reaching create Room in backend post");
+    //console.log("reaching create Room in backend post");
     var roomName = req.body.roomNameBar;
     existingRoomNames.push(roomName);
     var newRoom = new Room({
@@ -85,14 +85,14 @@ module.exports = function() {
       }
       else res.redirect('/');
     }).catch(err => {
-      console.log("error", err);
+      //console.log("error", err);
     })
   })
 
   /* Join a room, add to db array and render room page. */
   /*ask yash if needed*/
   router.get('/joinRoom', function(req, res, next) {
-    console.log("joined room in database.");
+    ///console.log("joined room in database.");
     var roomId = req.query.roomId;
     Room.findById(roomId)
     .then(room => {
@@ -117,7 +117,7 @@ module.exports = function() {
       }
     })
     .catch( error => {
-      console.log("error", error);
+      //console.log("error", error);
       res.render('error');
     })
   })
@@ -133,7 +133,7 @@ module.exports = function() {
         room.djRefreshToken = "";
         res.render('userRoom', {room})
       }).catch(error => {
-        console.log("error", error);
+        //console.log("error", error);
       })
 
 
@@ -151,7 +151,7 @@ module.exports = function() {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
       res.redirect('/');
     }).catch(error => {
-      console.log("error", error);
+      //console.log("error", error);
     })
   })
 
@@ -166,7 +166,7 @@ module.exports = function() {
         res.redirect('/');
       });
     }).catch(error => {
-      console.log("error", error);
+      //console.log("error", error);
     })
   })
 

@@ -81,9 +81,9 @@ and (max-device-width : 480px) {
 
 <script type="text/javascript">
 var roomName = '{{room.roomName}}';
-console.log("roomName", roomName);
+//console.log("roomName", roomName);
 var roomId = '{{room._id}}';
-console.log("roomid", roomId);
+//console.log("roomid", roomId);
 var socket = io();
 var clearId = -1;
 var isDJ = false;
@@ -97,7 +97,7 @@ function pausePlayback(){
         'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
     },
     success: function(){
-      console.log("successfully paused.");
+      //console.log("successfully paused.");
     }
   })
 }
@@ -109,22 +109,22 @@ var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
 if(isSafari){
 
   $(window).ready(function(){
-      console.log("test");
+      //console.log("test");
       if (window.history && window.history.pushState) {
         $(window).on('popstate', function() {
           var hashLocation = location.hash;
           var hashSplit = hashLocation.split("#!/");
           var hashName = hashSplit[1];
-          console.log(hashName);
+          //console.log(hashName);
           if(location.pathname === `/userRoom/${roomId}`){
-            console.log("location here");
+          //  console.log("location here");
             window.location.href = '/';
           }
           if (hashName !== '') {
             var hash = window.location.hash;
-                  console.log(hash)
+                //  console.log(hash)
             if (hash === '') {
-              console.log("unloading safari");
+              //console.log("unloading safari");
                   var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
                 socket.emit('specialLeave', userObject);
               localStorage.setItem("disconnectTime", new Date().getTime());
@@ -132,7 +132,7 @@ if(isSafari){
               socket.emit('leaveRoom', userObject.spotifyId);
               //window.location.href = '/';
             }
-            console.log('hashname',hashName)
+            //console.log('hashname',hashName)
           }
         });
     window.history.pushState('forward', null, `./${roomId}#`);
@@ -143,10 +143,10 @@ if(isSafari){
   /* happens on refresh and close tab */
   $(window).on("unload", function(){
     localStorage.setItem('active', 0)
-    console.log("unloading");
+    //console.log("unloading");
      window.location = '/';
     var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
-    console.log("***********user object*************", userObject);
+    //console.log("***********user object*************", userObject);
     socket.emit('specialLeave', userObject);
     localStorage.setItem("disconnectTime", new Date().getTime());
     clearInterval(clearId);
@@ -156,7 +156,7 @@ if(isSafari){
 $('#request').on('click', function() {
   var request = $('#requestval').val();
   $('#requestval').val('');
-  console.log("******",request);
+  //console.log("******",request);
   socket.emit('userTalk', request);
 });
 
@@ -175,9 +175,9 @@ $('#laflame').on('click', function() {
 
 /* if user wants to leave room it comes here */
 $('#userLeave').on('click', function(event){
-  console.log("********",isDJ, roomName);
+  //console.log("********",isDJ, roomName);
   if(isDJ === true){
-    console.log("entered here");
+    //console.log("entered here");
     socket.emit('userDJLeaving', roomName);
   }
   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
@@ -186,7 +186,7 @@ $('#userLeave').on('click', function(event){
 })
 
 socket.on('changedDJ', function(djObject){
-  console.log(djObject.spotifyId);
+  //console.log(djObject.spotifyId);
   if(djObject.spotifyId === localStorage.getItem('spotifyId')) {
     $('#djstatus').text('You were passed the aux!');
     if (Notification.permission !== "granted" && Notification) {
@@ -220,7 +220,7 @@ socket.on('takenBack', function(){
 socket.on('connect', function() {
 
 
-  console.log('Connected!');
+  //console.log('Connected!');
   if(localStorage.getItem('active') === "1"){
     window.location.href = '/error';
   }
@@ -238,13 +238,13 @@ socket.on('connect', function() {
   }
 
   if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 3000)){
-      console.log("this was a refresh");
-      console.log("userObject", userObject);
+      //console.log("this was a refresh");
+      //console.log("userObject", userObject);
       socket.emit("userRefreshed", userObject);
       localStorage.removeItem("disconnectTime");
   }
   else{
-    console.log("new room joined without refresh");
+    //console.log("new room joined without refresh");
     socket.emit('joinRoom', userObject);
   }
 });
@@ -265,9 +265,9 @@ socket.on('roomClosed', function(){
 
 /* new user has joined */
 socket.on('userJoined', function(userData){
-  console.log("userJoined", userData);
+  //console.log("userJoined", userData);
     if($('#' + userData.spotifyId).length !== 0){
-      console.log("this guy exits", userData);
+      //console.log("this guy exits", userData);
       return;
     }else {
 
@@ -284,7 +284,7 @@ socket.on('userJoined', function(userData){
 
 /* some other user has left room */
 socket.on('userLeaving', function(userSpotifyId){
-  console.log("userLeaving", userSpotifyId);
+  //console.log("userLeaving", userSpotifyId);
   $('#' + userSpotifyId).remove();
 });
 
@@ -313,7 +313,7 @@ socket.on('DJData', function(DJData){
           method: 'PUT',
           json: true,
           success: function (something) {
-              console.log("song successfully changed or modified");
+            //  console.log("song successfully changed or modified");
           }
         })
       }
@@ -350,7 +350,7 @@ socket.on('sendgrace', function() {
 
 /* listens to requests in room */
 socket.on('userTalk', function(data){
-  console.log("reached here ");
+  //console.log("reached here ");
   $('#flames').append(`
     <p class="request small text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
         <span style="width: 30%;">${data}</span>

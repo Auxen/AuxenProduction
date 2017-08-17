@@ -41,9 +41,9 @@ $('#startRoom').on('click', function() {
 
 $('#roomSubmit').on('submit', function (event) {
 
-    console.log("reached here");
+  //  console.log("reached here");
     var existingRoomNames = '{{existingRoomNames}}';
-    console.log("existingRoomNames", existingRoomNames);
+    //console.log("existingRoomNames", existingRoomNames);
     var proposedRoomName = $('#roomName').val();
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
       event.preventDefault();
