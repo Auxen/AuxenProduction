@@ -264,7 +264,7 @@ if(isSafari){
   })
 
   //event propagation
-  $(document).on('click', '#takeback', function(){
+  $(document).on('click touchstart', '#takeback', function(){
     //console.log("taken back");
     isDJ = true;
     socket.emit('takeBack', localStorage.getItem('accessToken'));
@@ -277,7 +277,7 @@ if(isSafari){
     $('#pass').append(`<h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>`)
   })
 
-  $(document).on('click', '.nextDJ', function(){
+  $(document).on('click touchstart', '.nextDJ', function(){
     var nextDJSpotifyId = $(this).attr('data-id');
     console.log("nextDJSpotifyId", nextDJSpotifyId);
     socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId});
@@ -298,7 +298,7 @@ if(isSafari){
 
 
    /* sends message of dj to room */
-  $('#djtalk').on('click', function() {
+  $('#djtalk').on('click touchstart', function() {
     var djTalk = $('#djtalkval').val();
     $('#djtalkval').val('');
 
@@ -321,7 +321,7 @@ if(isSafari){
   })
 
   /* dj closes room emits event to server which then kicks people out of the room */
-  $('#closeRoom').on('click', function(event){
+  $('#closeRoom').on('click touchstart', function(event){
     //console.log("reached front end destination");
     socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
     $(window).unbind('beforeunload');
@@ -329,7 +329,7 @@ if(isSafari){
   })
 
   /* sends thanks by dj to room */
-  $('#sendgrace').on('click', function() {
+  $('#sendgrace').on('click touchstart', function() {
     $('#flames').append(`
       <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
           🙏
