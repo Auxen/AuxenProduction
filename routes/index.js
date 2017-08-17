@@ -17,6 +17,8 @@ module.exports = function() {
     }
   })
 
+
+
   /* Get home page. */
   router.get('/', function(req, res, next) {
     res.render('home', {
@@ -79,6 +81,7 @@ module.exports = function() {
   })
 
   /* Join a room, add to db array and render room page. */
+  /*ask yash if needed*/
   router.get('/joinRoom', function(req, res, next) {
     console.log("joined room in database.");
     var roomId = req.query.roomId;
@@ -109,16 +112,22 @@ module.exports = function() {
       res.render('error');
     })
   })
+  // router.get('/userRoom/',function(req,res,next){
+  //   console.log('hello world')
+  //   console.log(req.user);
+  // });
 
   /* renders room for user */
   router.get('/userRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
-    Room.findById(roomId).then(room => {
-      room.djRefreshToken = "";
-      res.render('userRoom', {room})
-    }).catch(error => {
-      console.log("error", error);
-    })
+      Room.findById(roomId).then(room => {
+        room.djRefreshToken = "";
+        res.render('userRoom', {room})
+      }).catch(error => {
+        console.log("error", error);
+      })
+
+
   });
 
   /* closes room */
