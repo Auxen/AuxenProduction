@@ -134,9 +134,10 @@ if(isSafari){
       }
     });
 
-}
+  }
   /* happens on refresh and close tab */
   $(window).on("unload", function(){
+    localStorage.setItem('active', 0)
     console.log("unloading");
      window.location = '/';
     var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
@@ -145,7 +146,6 @@ if(isSafari){
     localStorage.setItem("disconnectTime", new Date().getTime());
     clearInterval(clearId);
   });
-
 
  /* user sends request */
 $('#request').on('click', function() {
@@ -165,15 +165,6 @@ $('#requestform').on('submit', function(e) {
 $('#laflame').on('click', function() {
   socket.emit('laflame');
 })
-
-
-
-
-
-
-
-
-
 
 /////////////////////////////
 
@@ -208,20 +199,14 @@ socket.on('takenBack', function(){
 ////////////////////////////
 
 
-
-
-
-
-
-
-
-
-
 /* Checking connnection to socket */
 socket.on('connect', function(){
 
   console.log('Connected!');
-
+  if(localStorage.getItem('active') === "1"){
+    window.location.href = '/error';
+  }
+  localStorage.setItem('active', 1);
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   }, 30*60000 );
