@@ -96,8 +96,38 @@ and (max-device-width : 480px) {
   console.log("roomName", roomName);
   var socket = io();
   var clearId = -1;
+
+  var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                    navigator.userAgent && !navigator.userAgent.match('CriOS');
+
+
+if(isSafari){
+  $(window).ready(function(){
+      console.log("test");
+      if (window.history && window.history.pushState) {
+        $(window).on('popstate', function() {
+          var hashLocation = location.hash;
+          var hashSplit = hashLocation.split("#!/");
+          var hashName = hashSplit[1];
+          if (hashName !== '') {
+            var hash = window.location.hash;
+            if (hash === '') {
+              console.log("unloading safari");
+              socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
+              clearInterval(clearId);
+              localStorage.setItem("closing", "true");
+              window.location.href = '/';
+            }
+          }
+        });
+      window.history.pushState('forward', null, './#forward');
+      }
+    });
+}else{
+
   var isDJ = true;
   var userDJSpotifyId = '';
+
 
   /* happens before refresh or close tab */
   /* add logic for safari*/
@@ -106,7 +136,7 @@ and (max-device-width : 480px) {
     return null;
     // return "Are you sure you want to leave? This will take you to home page";
   });
-
+  
   /* after refresh or close tab*/
   $(window).on("unload", function(){
     console.log("unloading");
@@ -114,6 +144,8 @@ and (max-device-width : 480px) {
     clearInterval(clearId);
     localStorage.setItem("closing", "true");
   });
+}
+
 
   /* Checking connnection to socket */
   socket.on('connect', function(){
