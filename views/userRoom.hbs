@@ -97,6 +97,57 @@ function pausePlayback(){
   })
 }
 
+
+var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                  navigator.userAgent && !navigator.userAgent.match('CriOS');
+
+if(isSafari){
+
+  $(window).ready(function(){
+      console.log("test");
+      if (window.history && window.history.pushState) {
+        $(window).on('popstate', function() {
+          var hashLocation = location.hash;
+          var hashSplit = hashLocation.split("#!/");
+          var hashName = hashSplit[1];
+          console.log(hashName);
+          if(location.pathname === `/userRoom/${roomId}`){
+            console.log("location here");
+            window.location.href = '/';
+          }
+          if (hashName !== '') {
+            var hash = window.location.hash;
+                  console.log(hash)
+            if (hash === '') {
+              console.log("unloading safari");
+                  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+                socket.emit('specialLeave', userObject);
+              localStorage.setItem("disconnectTime", new Date().getTime());
+              clearInterval(clearId);
+              socket.emit('leaveRoom', userObject.spotifyId);
+              //window.location.href = '/';
+            }
+            console.log('hashname',hashName)
+          }
+        });
+    window.history.pushState('forward', null, `./${roomId}#`);
+      }
+    });
+
+}
+  /* happens on refresh and close tab */
+  $(window).on("unload", function(){
+    console.log("unloading");
+     window.location = '/';
+    var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+    console.log("***********user object*************", userObject);
+    socket.emit('specialLeave', userObject);
+    localStorage.setItem("disconnectTime", new Date().getTime());
+    clearInterval(clearId);
+  });
+
+
+/*
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
   console.log("unloading");
@@ -106,6 +157,7 @@ $(window).on("unload", function(){
   localStorage.setItem("disconnectTime", new Date().getTime());
   clearInterval(clearId);
 });
+*/
 
  /* user sends request */
 $('#request').on('click', function() {
