@@ -31,11 +31,16 @@ and (max-device-width : 480px) {
       </div>
     </div>
   </div>
+  <h1 class="center text smaller">
+    Flame count:&nbsp;<p id="laflamecount" >0</p>
+  </h1>
   <div id="laflame-container">
     <h1 id="laflame" class="center floating pointer" >
       🔥
     </h1>
   </div>
+
+
   <div class="center">
     <h1 style=""class="text-center text small boxed raise" data-toggle="modal" data-target="#exampleModalLong">Request Songs</h1>
   </div>
@@ -178,7 +183,8 @@ socket.on('takenBack', function(){
 
 
 /* Checking connnection to socket */
-socket.on('connect', function(){
+socket.on('connect', function() {
+
 
   console.log('Connected!');
 
@@ -205,6 +211,8 @@ socket.on('connect', function(){
     socket.emit('joinRoom', userObject);
   }
 });
+
+socket.emit('getflames');
 
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){
@@ -318,7 +326,8 @@ socket.on('userTalk', function(data){
 });
 
 /* listens to flames in room */
-socket.on('laflame', function() {
+socket.on('laflame', function(count) {
+  $('#laflamecount').text(count)
   $('#flames').append(`
       <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
           🔥
@@ -327,5 +336,9 @@ socket.on('laflame', function() {
     setTimeout(function() {
       $('#flames').find('span:first').remove();
     }, 2000)
+})
+
+socket.on('getflames', function(count) {
+  $('#laflamecount').text(count);
 })
 </script>
