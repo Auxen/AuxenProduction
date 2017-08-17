@@ -153,7 +153,7 @@ if(isSafari){
   });
 
  /* user sends request */
-$('#request').on('click touchstart', function() {
+$('#request').on('click', function() {
   var request = $('#requestval').val();
   $('#requestval').val('');
   //console.log("******",request);
@@ -167,14 +167,14 @@ $('#requestform').on('submit', function(e) {
 })
 
 /* user sends flames */
-$('#laflame').on('click touchstart', function() {
+$('#laflame').on('click', function() {
   socket.emit('laflame');
 })
 
 /////////////////////////////
 
 /* if user wants to leave room it comes here */
-$('#userLeave').on('click touchstart', function(event){
+$('#userLeave').on('click', function(event){
   //console.log("********",isDJ, roomName);
   if(isDJ === true){
     //console.log("entered here");
