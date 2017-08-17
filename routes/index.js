@@ -17,7 +17,9 @@ module.exports = function() {
       console.log("here");
       res.redirect('/login');
     }
-  })
+  })//ben
+
+
 
   router.get('/notPremium', function(req, res, next){
     res.send('shit');
@@ -25,14 +27,17 @@ module.exports = function() {
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
-    res.render('home', {
-      spotifyId: req.user.spotifyId,
-      imageURL: req.user.imageURL,
-      username: req.user.username,
-      accessToken: req.user.accessToken,
-      refreshToken: req.user.refreshToken
+
+      res.render('home', {
+          spotifyId: req.user.spotifyId,
+          imageURL: req.user.imageURL,
+          username: req.user.username,
+          accessToken: req.user.accessToken,
+          refreshToken: req.user.refreshToken
     });
+
   });
+
 
   /* Get createRoom page. */
   router.get('/createRoom', function(req, res, next) {
@@ -85,6 +90,7 @@ module.exports = function() {
   })
 
   /* Join a room, add to db array and render room page. */
+  /*ask yash if needed*/
   router.get('/joinRoom', function(req, res, next) {
     console.log("joined room in database.");
     var roomId = req.query.roomId;
@@ -115,17 +121,27 @@ module.exports = function() {
       res.render('error');
     })
   })
+  // router.get('/userRoom/',function(req,res,next){
+  //   console.log('hello world')
+  //   console.log(req.user);
+  // });
 
   /* renders room for user */
   router.get('/userRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
-    Room.findById(roomId).then(room => {
-      room.djRefreshToken = "";
-      res.render('userRoom', {room})
-    }).catch(error => {
-      console.log("error", error);
-    })
+      Room.findById(roomId).then(room => {
+        room.djRefreshToken = "";
+        res.render('userRoom', {room})
+      }).catch(error => {
+        console.log("error", error);
+      })
+
+
   });
+
+  router.get('/error', function(req, res){
+    res.render('error')
+  })
 
   /* closes room */
   router.get('/closeRoom/:name', function(req, res, next) {

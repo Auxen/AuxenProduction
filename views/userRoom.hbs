@@ -102,15 +102,55 @@ function pausePlayback(){
   })
 }
 
-/* happens on refresh and close tab */
-$(window).on("unload", function(){
-  console.log("unloading");
-  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
-  console.log("***********user object*************", userObject);
-  socket.emit('specialLeave', userObject); // do stuff here as well
-  localStorage.setItem("disconnectTime", new Date().getTime());
-  clearInterval(clearId);
-});
+
+var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                  navigator.userAgent && !navigator.userAgent.match('CriOS');
+
+if(isSafari){
+
+  $(window).ready(function(){
+      console.log("test");
+      if (window.history && window.history.pushState) {
+        $(window).on('popstate', function() {
+          var hashLocation = location.hash;
+          var hashSplit = hashLocation.split("#!/");
+          var hashName = hashSplit[1];
+          console.log(hashName);
+          if(location.pathname === `/userRoom/${roomId}`){
+            console.log("location here");
+            window.location.href = '/';
+          }
+          if (hashName !== '') {
+            var hash = window.location.hash;
+                  console.log(hash)
+            if (hash === '') {
+              console.log("unloading safari");
+                  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+                socket.emit('specialLeave', userObject);
+              localStorage.setItem("disconnectTime", new Date().getTime());
+              clearInterval(clearId);
+              socket.emit('leaveRoom', userObject.spotifyId);
+              //window.location.href = '/';
+            }
+            console.log('hashname',hashName)
+          }
+        });
+    window.history.pushState('forward', null, `./${roomId}#`);
+      }
+    });
+
+  }
+  /* happens on refresh and close tab */
+  $(window).on("unload", function(){
+    localStorage.setItem('active', 0)
+    console.log("unloading");
+     window.location = '/';
+    var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+    console.log("***********user object*************", userObject);
+    socket.emit('specialLeave', userObject);
+    localStorage.setItem("disconnectTime", new Date().getTime());
+    clearInterval(clearId);
+  });
 
  /* user sends request */
 $('#request').on('click', function() {
@@ -130,15 +170,6 @@ $('#requestform').on('submit', function(e) {
 $('#laflame').on('click', function() {
   socket.emit('laflame');
 })
-
-
-
-
-
-
-
-
-
 
 /////////////////////////////
 
@@ -173,21 +204,15 @@ socket.on('takenBack', function(){
 ////////////////////////////
 
 
-
-
-
-
-
-
-
-
-
 /* Checking connnection to socket */
 socket.on('connect', function() {
 
 
   console.log('Connected!');
-
+  if(localStorage.getItem('active') === "1"){
+    window.location.href = '/error';
+  }
+  localStorage.setItem('active', 1);
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   }, 30*60000 );
@@ -253,7 +278,7 @@ socket.on('userLeaving', function(userSpotifyId){
 
 /* get dj setting info and configure users spotify */
 socket.on('DJData', function(DJData){
-  if(!isDJ){
+  if(!isDJ && DJData.timeProgress){
     var timeProgress = DJData.timeProgress;
     var songURI = DJData.songURI;
     $.ajax({

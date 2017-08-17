@@ -61,6 +61,10 @@ if(numRooms === '1') {
   $('#roomNums').text('There is 1 room to browse')
 }
 
+if(localStorage.getItem('active') === "1"){
+  window.location.href = '/error'
+}
+
 
 function searchFunction() {
   // Declare variables

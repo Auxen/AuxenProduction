@@ -99,8 +99,38 @@ and (max-device-width : 480px) {
   console.log("roomName", roomName);
   var socket = io();
   var clearId = -1;
+
+  var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                    navigator.userAgent && !navigator.userAgent.match('CriOS');
+
+
+if(isSafari){
+  $(window).ready(function(){
+      console.log("test");
+      if (window.history && window.history.pushState) {
+        $(window).on('popstate', function() {
+          var hashLocation = location.hash;
+          var hashSplit = hashLocation.split("#!/");
+          var hashName = hashSplit[1];
+          if (hashName !== '') {
+            var hash = window.location.hash;
+            if (hash === '') {
+              console.log("unloading safari");
+              socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
+              clearInterval(clearId);
+              localStorage.setItem("closing", "true");
+              window.location.href = '/';
+            }
+          }
+        });
+      window.history.pushState('forward', null, './#forward');
+      }
+    });
+}else{
+
   var isDJ = true;
   var userDJSpotifyId = '';
+
 
   /* happens before refresh or close tab */
   /* add logic for safari*/
@@ -112,23 +142,30 @@ and (max-device-width : 480px) {
 
   /* after refresh or close tab*/
   $(window).on("unload", function(){
+    localStorage.setItem('active', 0);
     console.log("unloading");
     socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
     clearInterval(clearId);
     localStorage.setItem("closing", "true");
   });
+}
+
 
   /* Checking connnection to socket */
   socket.on('connect', function(){
+
+    console.log('Connected!');
 
     clearId = setInterval(function () {
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
     }, 30*60000);
 
-    if(localStorage.getItem('closing') === "true"){
+    if(localStorage.getItem('closing') === "true" || localStorage.getItem('active') === "1"){
       window.location.href = '/';
     }
+
     else{
+      localStorage.setItem('active', 1);
       var djObject = {
         roomName: roomName,
         accessToken: localStorage.getItem('accessToken')
