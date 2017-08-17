@@ -136,9 +136,10 @@ if(isSafari){
     return null;
     // return "Are you sure you want to leave? This will take you to home page";
   });
-  
+
   /* after refresh or close tab*/
   $(window).on("unload", function(){
+    localStorage.setItem('active', 0);
     console.log("unloading");
     socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
     clearInterval(clearId);
@@ -150,15 +151,16 @@ if(isSafari){
   /* Checking connnection to socket */
   socket.on('connect', function(){
     console.log('Connected!');
-
     clearId = setInterval(function () {
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
     }, 30*60000);
 
-    if(localStorage.getItem('closing') === "true"){
+    if(localStorage.getItem('closing') === "true" || localStorage.getItem('active') === "1"){
       window.location.href = '/';
     }
+
     else{
+      localStorage.setItem('active', 1);
       var djObject = {
         roomName: roomName,
         accessToken: localStorage.getItem('accessToken')

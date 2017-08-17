@@ -139,6 +139,10 @@ module.exports = function() {
 
   });
 
+  router.get('/error', function(req, res){
+    res.render('error')
+  })
+
   /* closes room */
   router.get('/closeRoom/:name', function(req, res, next) {
     var roomId = req.query.roomId;
