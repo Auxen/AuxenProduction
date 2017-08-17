@@ -239,7 +239,7 @@ module.exports = function(io) {
     socket.on('laflame', function() {
       console.log('this is also happening');
       io.sockets.adapter.rooms[socket.room].laflame++;
-      socket.to(socket.room).emit('laflame');
+      io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
     });
 
     // USER ENDS //
@@ -310,6 +310,10 @@ module.exports = function(io) {
       .catch(error => {
         console.log("error");
       })
+    })
+
+    socket.on('getflames', function() {
+      socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
     })
 
     // DJ ENDS //

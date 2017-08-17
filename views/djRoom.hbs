@@ -39,6 +39,9 @@ and (max-device-width : 480px) {
       </div>
     </div>
   </div>
+  <h1 class="center text smaller">
+    Flame count:&nbsp;<p id ="laflamecount" >0</p>
+  </h1>
   <div id="sendgrace-container">
     <h1 id="sendgrace" class="center floating pointer" >
       🙏
@@ -150,7 +153,9 @@ if(isSafari){
 
   /* Checking connnection to socket */
   socket.on('connect', function(){
+
     console.log('Connected!');
+
     clearId = setInterval(function () {
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
     }, 30*60000);
@@ -188,7 +193,8 @@ if(isSafari){
   });
 
   /* listens to flames in room */
-  socket.on('laflame', function() {
+  socket.on('laflame', function(count) {
+    $('#laflamecount').text(parseInt(count));
     $('#flames').append(`
         <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
             🔥
