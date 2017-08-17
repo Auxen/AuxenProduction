@@ -25,14 +25,17 @@ module.exports = function() {
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
-    res.render('home', {
-      spotifyId: req.user.spotifyId,
-      imageURL: req.user.imageURL,
-      username: req.user.username,
-      accessToken: req.user.accessToken,
-      refreshToken: req.user.refreshToken
+
+      res.render('home', {
+          spotifyId: req.user.spotifyId,
+          imageURL: req.user.imageURL,
+          username: req.user.username,
+          accessToken: req.user.accessToken,
+          refreshToken: req.user.refreshToken
     });
+
   });
+
 
   /* Get createRoom page. */
   router.get('/createRoom', function(req, res, next) {
