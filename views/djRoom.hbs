@@ -2,16 +2,6 @@
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-  .grid-item {
-    box-sizing: border-box;
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
-    float: left;
-    border-radius: 50%;
-    margin: 20px 10px 10px 10px;
-    margin-top: 10px;
-}
 
 #djtalk {
   width: 100% !important;
@@ -79,7 +69,7 @@ and (max-device-width : 480px) {
     <div class="modal-dialog" role="document"  style="background-color: #1E1D1D">
       <div>
         <h2 class="modal-title text-center standard-text" id="exampleModalLongTitle">Pass the aux.</h2>
-        <input autocomplete="off" id="myInput" style="font-size: 20px;"  placeholder="Search for users here..." class="text-center ghost-input" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
+        <input onfocus="this.placeholder = ''" autocomplete="off" id="myInput" style="font-size: 20px;"  placeholder="Search for users here..." class="text-center ghost-input" id="myInput" onkeyup="searchFunction()" autocomplete="off"></input>
         </div>
         <div id="potentialDJS"></div>
     </div>
@@ -158,7 +148,7 @@ if(isSafari){
 
     clearId = setInterval(function () {
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-    }, 30*60000);
+    }, 20*60000);
 
     if(localStorage.getItem('closing') === "true" /*|| localStorage.getItem('active') === "1"*/){
       window.location.href = '/';
