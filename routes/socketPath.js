@@ -32,6 +32,7 @@ module.exports = function(io) {
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
           io.sockets.adapter.rooms[room].songName = data.body.item.name; //setting song name property to room
+
           console.log(data.body.item.name);
           var DJData = {
             songURI: data.body.item.uri,
@@ -46,7 +47,6 @@ module.exports = function(io) {
             io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
             io.sockets.adapter.rooms[room].songName = data.body.item.name; //setting song name property to room
-
             var DJData = {
               songURI: data.body.item.uri,
               timeProgress: data.body.progress_ms + timeDiff,
@@ -196,6 +196,7 @@ module.exports = function(io) {
             else {
               console.log("user successfully added");
               io.to(userObject.roomName).emit('userJoined', user);
+              io.to(userObject.roomName).emit("DJData", {songName: io.sockets.adapter.rooms[userObject.roomName].songName});
             }
           })
         }
@@ -238,7 +239,7 @@ module.exports = function(io) {
     socket.on('laflame', function() {
       console.log('this is also happening');
       io.sockets.adapter.rooms[socket.room].laflame++;
-      socket.to(socket.room).emit('laflame');
+      io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
     });
 
     // USER ENDS //
@@ -309,6 +310,10 @@ module.exports = function(io) {
       .catch(error => {
         console.log("error");
       })
+    })
+
+    socket.on('getflames', function() {
+      socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
     })
 
     // DJ ENDS //

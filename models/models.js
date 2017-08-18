@@ -13,7 +13,7 @@ var userSchema = new Schema({
   refreshToken:String,
   imageURL: String,
   accessToken:String,
-  premium:String
+  premium:String,
 })
 
 var roomSchema = new Schema({
@@ -41,7 +41,8 @@ userSchema.statics.findOrCreate = function(obj1,obj2,cb){
         imageURL: obj2.imageURL,
         username: obj2.username,
         accessToken: obj2.accessToken,
-        premium: obj2.premium
+        premium: obj2.premium,
+
       })
       newUser.save(function(err, user){
         cb(err,user);

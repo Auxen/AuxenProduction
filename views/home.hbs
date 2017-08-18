@@ -118,7 +118,7 @@ and (max-device-width : 480px) {
             if(data.devices[i].is_active){
               flag =true;
               // pop up modal saying good to go on this device or show somewhere that this device is active
-              console.log(data.devices[i].name);
+              //console.log(data.devices[i].name);
               break;
             }
           }
@@ -129,6 +129,8 @@ and (max-device-width : 480px) {
         }
       })
     }
+
+    //console.log("this branch is working");
 
     var spotifyId = '{{spotifyId}}';
     var imageURL = '{{{imageURL}}}';
@@ -151,7 +153,7 @@ and (max-device-width : 480px) {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-          console.log("successfully switched off repeat");
+          //console.log("successfully switched off repeat");
         }
       })
     }
@@ -164,13 +166,13 @@ and (max-device-width : 480px) {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-          console.log("successfully switched off shuffle");
+        //  console.log("successfully switched off shuffle");
         }
       })
     }
 
     function getPlayback(){
-      console.log("entered getPlayback");
+      //console.log("entered getPlayback");
       $.ajax({
         url: 'https://api.spotify.com/v1/me/player',
         method: 'get',
@@ -178,7 +180,7 @@ and (max-device-width : 480px) {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-          console.log(data);
+        //  console.log(data);
           if(data.repeat_state !== 'off')toggleRepeat();
           if(data.shuffle_state)toggleShuffle();
         }
@@ -187,8 +189,7 @@ and (max-device-width : 480px) {
 
     getPlayback();
 
-
-    $('#songTest').on('click', function() {
+    $('#songTest').on('click touchstart', function() {
 
 
       $.ajax({
@@ -203,11 +204,11 @@ and (max-device-width : 480px) {
         }),
         dataType: "JSON",
         success: function(data){
-          console.log("its working for you");
+          //console.log("its working for you");
         }
       })
 
-      console.log('this is the new wave', $('#dimiss'));
+      //console.log('this is the new wave', $('#dimiss'));
       if($('#dismiss').length === 0) {
         $('#instructions').append(`<h1 type="button" id="dismiss" style="width: 20%; margin-left: 2%; margin-right: 2%;" class="text small boxed raise col-xs-2 animated fadeIn" data-dismiss="modal">Dismiss</h1>`)
       }
