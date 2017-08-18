@@ -261,6 +261,7 @@ socket.on('setNewAccessToken', function(accessToken){
 /* if dj closes room it will come here and redirect to home after leavingRoom */
 socket.on('roomClosed', function(){
   socket.emit('leaveRoom');
+  pausePlayback();
   alert('Sorry, the dj closed the room');
   window.location = '/';
 })
