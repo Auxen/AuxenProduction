@@ -2,6 +2,9 @@
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
+  #instructions {
+    cursor: pointer !important;
+  }
   /*a {
     width: 500px;
   }*/
@@ -94,6 +97,7 @@ and (max-device-width : 480px) {
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
 
+
 }
 </style>
 
@@ -183,7 +187,7 @@ and (max-device-width : 480px) {
 
     getPlayback();
 
-    $('#songTest').off('hover');
+
     $('#songTest').on('click touchstart', function() {
 
       $.ajax({
