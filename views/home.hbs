@@ -106,7 +106,7 @@ and (max-device-width : 480px) {
 
 
     if(!localStorage.getItem('spotifyId')) {
-      $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+    //  $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
       $('#exampleModalLong').modal('show');
     }
     else {
@@ -188,31 +188,33 @@ and (max-device-width : 480px) {
 
     getPlayback();
 
+    $(document).ready(function(){
+      $(document).on('click touchstart','#songTest' ,function() {
 
-    $(document).on('click touchstart','#songTest' ,function() {
+        $.ajax({
+          url: 'https://api.spotify.com/v1/me/player/play',
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': "application/json"
+          },
+          data: JSON.stringify({
+            "uris": ['spotify:track:3a1lNhkSLSkpJE4MSHpDu9']
+          }),
+          dataType: "JSON",
+          success: function(data){
+            //console.log("its working for you");
+          }
+        })
 
-      $.ajax({
-        url: 'https://api.spotify.com/v1/me/player/play',
-        method: 'PUT',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-          'Content-Type': "application/json"
-        },
-        data: JSON.stringify({
-          "uris": ['spotify:track:3a1lNhkSLSkpJE4MSHpDu9']
-        }),
-        dataType: "JSON",
-        success: function(data){
-          //console.log("its working for you");
+        //console.log('this is the new wave', $('#dimiss'));
+        if($('#dismiss').length === 0) {
+          $('#instructions').append(`<h1 type="button" id="dismiss" style="width: 20%; margin-left: 2%; margin-right: 2%;" class="text small boxed raise col-xs-2 animated fadeIn" data-dismiss="modal">Dismiss</h1>`)
         }
+
       })
-
-      //console.log('this is the new wave', $('#dimiss'));
-      if($('#dismiss').length === 0) {
-        $('#instructions').append(`<h1 type="button" id="dismiss" style="width: 20%; margin-left: 2%; margin-right: 2%;" class="text small boxed raise col-xs-2 animated fadeIn" data-dismiss="modal">Dismiss</h1>`)
-      }
-
     })
+
 
 
 </script>
