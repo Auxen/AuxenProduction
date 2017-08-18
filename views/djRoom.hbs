@@ -160,7 +160,7 @@ if(isSafari){
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
     }, 30*60000);
 
-    if(localStorage.getItem('closing') === "true" || localStorage.getItem('active') === "1"){
+    if(localStorage.getItem('closing') === "true" /*|| localStorage.getItem('active') === "1"*/){
       window.location.href = '/';
     }
 

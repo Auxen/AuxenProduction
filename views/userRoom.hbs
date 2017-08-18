@@ -222,9 +222,9 @@ socket.on('connect', function() {
 
 
   //console.log('Connected!');
-  if(localStorage.getItem('active') === "1"){
-    window.location.href = '/error';
-  }
+  // if(localStorage.getItem('active') === "1"){
+  //   window.location.href = '/error';
+  // }
   localStorage.setItem('active', 1);
   //socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   clearId = setInterval(function () {
