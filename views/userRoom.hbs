@@ -153,6 +153,7 @@ if(isSafari){
   });
 
  /* user sends request */
+
 $('#request').on('click', function() {
   var request = $('#requestval').val();
   $('#requestval').val('');
@@ -225,6 +226,7 @@ socket.on('connect', function() {
     window.location.href = '/error';
   }
   localStorage.setItem('active', 1);
+  //socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   }, 30*60000 );
