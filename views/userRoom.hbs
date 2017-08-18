@@ -227,7 +227,7 @@ socket.on('connect', function() {
   localStorage.setItem('active', 1);
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-  }, 30*60000 );
+  }, 20*60000 );
 
   var userObject = {
     roomId: roomId,
