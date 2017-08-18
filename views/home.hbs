@@ -105,11 +105,12 @@ and (max-device-width : 480px) {
 
 
 
-    if(!localStorage.getItem('spotifyId')) {
-    //  $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
-      $('#exampleModalLong').modal('show');
-    }
-    else {
+    // if(!localStorage.getItem('spotifyId')) {
+    // //  $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+    //   $('#exampleModalLong').modal('show');
+    // }
+    // else {
+    $('#exampleModalLong').modal('show');
       var flag = false;
       $.ajax({
         url: 'https://api.spotify.com/v1/me/player/devices',
@@ -130,7 +131,7 @@ and (max-device-width : 480px) {
           }
         }
       })
-    }
+    //}
     var spotifyId = '{{spotifyId}}';
     var imageURL = '{{{imageURL}}}';
     var username = '{{username}}';
