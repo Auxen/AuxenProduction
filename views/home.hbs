@@ -59,7 +59,6 @@ and (max-device-width : 480px) {
     <div class="modal-content">
       <div class="modal-header"  style="background-color: #1E1D1D">
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
-        <h2 class="text small">We need to sure your Spotify is set up properly</h2>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
 
@@ -123,8 +122,8 @@ and (max-device-width : 480px) {
             }
           }
         if(!flag){
-            $('#exampleModalLong').modal('show');
             $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+            $('#exampleModalLong').modal('show');
           }
         }
       })
