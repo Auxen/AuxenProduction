@@ -183,7 +183,7 @@ and (max-device-width : 480px) {
 
     getPlayback();
 
-    $('#songTest').on('click touch', function() {
+    $('#songTest').on('click touchstart', function() {
 
       $.ajax({
         url: 'https://api.spotify.com/v1/me/player/play',
