@@ -99,7 +99,7 @@ and (max-device-width : 480px) {
 </style>
 
 <script>
-  $(document).ready(function() {
+
 
     if(!localStorage.getItem('spotifyId')) {
       $('#exampleModalLong').modal('show');
@@ -115,22 +115,17 @@ and (max-device-width : 480px) {
         success: function(data){
           for (var i = 0; i < data.devices.length; i++) {
             if(data.devices[i].is_active){
-              flag =true;
-              // pop up modal saying good to go on this device or show somewhere that this device is active
-              //console.log(data.devices[i].name);
+              flag = true;
               break;
             }
           }
-        if(!flag){
+          if(!flag){
             $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
             $('#exampleModalLong').modal('show');
           }
         }
       })
     }
-
-    //console.log("this branch is working");
-
     var spotifyId = '{{spotifyId}}';
     var imageURL = '{{{imageURL}}}';
     var username = '{{username}}';
@@ -212,5 +207,6 @@ and (max-device-width : 480px) {
       }
 
     })
-  })
+
+
 </script>
