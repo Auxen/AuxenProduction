@@ -106,6 +106,7 @@ and (max-device-width : 480px) {
 
 
     if(!localStorage.getItem('spotifyId')) {
+      $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
       $('#exampleModalLong').modal('show');
     }
     else {
