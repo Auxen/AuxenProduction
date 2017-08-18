@@ -154,7 +154,7 @@ a:hover {
   animation-name: movement;
   animation-duration: 3s;
   animation-timing-function: ease-in;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
 }
 
 .request {
