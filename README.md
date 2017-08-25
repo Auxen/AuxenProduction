@@ -15,18 +15,18 @@ You can share gratitude to your Audience and see there responses. At the moment 
 ## Using the App
 
 ## Login screen
-  ![](./readmeImg/loginPage.png)
+  ![](./readmeImg/loginPage.png){:height="50%" width="50%"}
 
 ## Dj room view
 
-![](./readmeImg/dj_Room.png)
+![](./readmeImg/dj_Room.png){:height="50%" width="50%"}
 
 ## User room view
 
  <details>
  <summary>User room view </summary>
 
- ![](./readmeImg/user_Room.png)
+ ![](./readmeImg/user_Room.png){:height="50%" width="50%"}
  </details>
 
 
