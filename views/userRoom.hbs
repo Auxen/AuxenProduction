@@ -219,7 +219,7 @@ socket.on('takeBack', function(){
 /* Checking connnection to socket */
 socket.on('connect', function() {
 
-  //localStorage.setItem('active', 1);
+
   socket.emit('active', localStorage.getItem('spotifyId'));
   socket.emit('getflames');
   socket.on('getflames', function(count) {
