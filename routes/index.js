@@ -40,9 +40,10 @@ module.exports = function() {
   });
 
   router.get('/isActive', function(req, res, next) {
-    console.log('isActive', req.body);
-    User.findOne({'spotifyId':req.body.spotifyId})
+    console.log('isActive', req.query.spotifyId);
+    User.findOne({'spotifyId':req.query.spotifyId})
     .then(user => {
+      console.log('isActive', user);
       res.send(user.active);
     })
     .catch(err => {
