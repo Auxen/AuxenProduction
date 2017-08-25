@@ -309,7 +309,7 @@ and (max-device-width : 480px) {
 
   /* dj closes room emits event to server which then kicks people out of the room */
   $('#closeRoom').on('click', function(event){
-    //console.log("reached front end destination");
+    console.log("reached front end destination");
     localStorage.setItem('closing', 'true');
     socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
     $(window).unbind('beforeunload');
