@@ -75,8 +75,7 @@ module.exports = function(io) {
     }
 
 
-
-    /////////////////////////////
+    /////////////////////////////////////////////
 
     socket.on('passDJ',function(passDjObject){
       console.log("passDjObject", passDjObject);
@@ -113,7 +112,7 @@ module.exports = function(io) {
     })
 
 
-  /////////////////////////////s
+  ////////////////////////////////////////////////
 
     /* called every 30 minutes by user to refresh token */
     socket.on('toRefresh', function(refreshToken) {
@@ -143,7 +142,7 @@ module.exports = function(io) {
       console.log('user disconnected');
     });
 
-    // USER //
+    ///////////////// USER //////////////////////
 
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
@@ -242,9 +241,9 @@ module.exports = function(io) {
       io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
     });
 
-    // USER ENDS //
+    ////////////////// USER ENDS //////////////////
 
-    // DJ //
+    /////////////////// DJ ///////////////////////
 
     /* create room in socket with dj information */
     socket.on('createRoom', function(djObject) {
