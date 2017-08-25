@@ -20,7 +20,7 @@ You can share gratitude to your Audience and see there responses. At the moment 
 
 ## Dj room view and user view room
 
-<img src="./readmeImg/dj_Room.png" width="45%"></img>  <img src="./readmeImg/user_Room.png" width="45%"></img>
+<img src="./readmeImg/dj_Room.png" width="45%"></img>      <img src="./readmeImg/user_Room.png" width="45%"></img>
 
 ## User room view
 
