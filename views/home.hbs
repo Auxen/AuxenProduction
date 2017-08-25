@@ -157,10 +157,13 @@ and (max-device-width : 480px) {
 
     $(document).ready(function(){
       getPlayback();
+      console.log("1");
       if(!localStorage.getItem('spotifyId')) {
+        console.log("2");
         $('#exampleModalLong').modal('show');
       }
       else {
+        console.log("3");
         var flag = false;
         $.ajax({
           url: 'https://api.spotify.com/v1/me/player/devices',

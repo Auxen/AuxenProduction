@@ -35,7 +35,7 @@ and (max-device-width : 480px) {
 //   window.location.href = '/error'
 // }
 
-socket.emit('isActive', localStorage.getItem('sptofiyId'));
+socket.emit('isActive', localStorage.getItem('spotifyId'));
 socket.on('isActive', function(data){
   if(data) window.location.href = '/error';
 })
