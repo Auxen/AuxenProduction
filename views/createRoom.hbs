@@ -38,7 +38,7 @@ and (max-device-width : 480px) {
 $.ajax({
   url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
   success: function(response){
-    console.log("reached here", response.body);
+    console.log("reached here", response);
     if(response.body)window.location.href = '/error';
   }
 })
