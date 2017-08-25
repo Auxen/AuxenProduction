@@ -78,10 +78,10 @@ module.exports = function(io) {
       console.log('***************************');
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
-        console.log('inActive', user);
+        console.log('before change', user);
         user.active = false;
         user.save(function(err, user){
-          console.log('inActive',user);
+          console.log('after change',user);
         });
       })
       .catch( err => {
@@ -145,7 +145,9 @@ module.exports = function(io) {
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
         user.active = true;
-        user.save();
+        user.save(function(err, user){
+          console.log("changed user active status", user);
+        });
       })
       .catch( err => {
         console.log(err);
