@@ -99,50 +99,7 @@ and (max-device-width : 480px) {
 </style>
 
 <script>
-    console.log("1");
-    if(!localStorage.getItem('spotifyId')) {
-        console.log("2");
-        $('#exampleModalLong').modal('show');
-      }
-    else {
-        console.log("3");
-        var flag = false;
-        $.ajax({
-          url: 'https://api.spotify.com/v1/me/player/devices',
-          method: 'get',
-          headers: {
-              'Authorization': 'Bearer ' + '{{{accessToken}}}'
-          },
-          success: function(data){
-            if(data.devices){
-              for (var i = 0; i < data.devices.length; i++) {
-                if(data.devices[i].is_active){
-                  flag = true;
-                  break;
-                }
-              }
-            }
-            if(!flag){
-              $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
-              $('#exampleModalLong').modal('show');
-            }
-          }
-        })
-      }
-
-    var spotifyId = '{{spotifyId}}';
-    var imageURL = '{{{imageURL}}}';
-    var username = '{{username}}';
-    var accessToken = '{{{accessToken}}}';
-    var refreshToken = '{{{refreshToken}}}';
-    localStorage.setItem("spotifyId", spotifyId);
-    localStorage.setItem("imageURL", imageURL);
-    localStorage.setItem("username", username);
-    localStorage.setItem('closing', "false");
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('closing', "false");
-
+    
     function toggleRepeat(){
       $.ajax({
         url: 'https://api.spotify.com/v1/me/player/repeat?state=off',
@@ -186,6 +143,47 @@ and (max-device-width : 480px) {
     }
 
     $(document).ready(function(){
+      if(!localStorage.getItem('spotifyId')) {
+          console.log("2");
+          $('#exampleModalLong').modal('show');
+        }
+      else {
+          console.log("3");
+          var flag = false;
+          $.ajax({
+            url: 'https://api.spotify.com/v1/me/player/devices',
+            method: 'get',
+            headers: {
+                'Authorization': 'Bearer ' + '{{{accessToken}}}'
+            },
+            success: function(data){
+              if(data.devices){
+                for (var i = 0; i < data.devices.length; i++) {
+                  if(data.devices[i].is_active){
+                    flag = true;
+                    break;
+                  }
+                }
+              }
+              if(!flag){
+                $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+                $('#exampleModalLong').modal('show');
+              }
+            }
+          })
+        }
+      var spotifyId = '{{spotifyId}}';
+      var imageURL = '{{{imageURL}}}';
+      var username = '{{username}}';
+      var accessToken = '{{{accessToken}}}';
+      var refreshToken = '{{{refreshToken}}}';
+      localStorage.setItem("spotifyId", spotifyId);
+      localStorage.setItem("imageURL", imageURL);
+      localStorage.setItem("username", username);
+      localStorage.setItem('closing', "false");
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('closing', "false");
       getPlayback();
       $(document).on('click','#songTest' ,function() {
 
