@@ -35,15 +35,20 @@ and (max-device-width : 480px) {
 //   window.location.href = '/error'
 // }
 
+socket.emit('isActive', localStorage.getItem('sptofiyId'));
+socket.on('isActive', function(data){
+  if(data) window.location.href = '/error';
+})
+
 $('#startRoom').on('click', function() {
   $('#roomSubmit').submit();
 })
 
 $('#roomSubmit').on('submit', function (event) {
 
-  //  console.log("reached here");
+    // console.log("reached here");
     var existingRoomNames = '{{existingRoomNames}}';
-    //console.log("existingRoomNames", existingRoomNames);
+    // console.log("existingRoomNames", existingRoomNames);
     var proposedRoomName = $('#roomName').val();
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
       event.preventDefault();

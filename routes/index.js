@@ -171,18 +171,5 @@ module.exports = function() {
     })
   })
 
-  /* pass dj */
-  // do post from new dj, call this route from window.location of new dj
-  //for the old dj add emit event to backend add him to db as user
-  //then do window.location to userRoom so he goes to userRoom
-  //for rest of the users just do jquery and obviously change token in sockets
-  //if someone refreshes lets say, then as data is coming from db and i have
-  //saved new changes in db, it should not be a problem.
-
-
-  /* OR */
-  //if we do the halo thing all i do is toggle some variables and change sockets
-  //token
-
   return router;
 }

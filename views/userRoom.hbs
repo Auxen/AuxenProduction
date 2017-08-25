@@ -7,12 +7,7 @@ and (max-device-width : 480px) {
     width: 100% !important;
   }
 }
-
-
-
-
 </style>
-
 
 <div>
   <div class="row">
@@ -77,7 +72,6 @@ and (max-device-width : 480px) {
 
 <script type="text/javascript" src="/static/scripts/float.js"></script>
 
-<!-- <script src="/static/user.js"></script> -->
 
 <script type="text/javascript">
 var roomName = '{{room.roomName}}';
@@ -125,7 +119,7 @@ if(isSafari){
                 //  console.log(hash)
             if (hash === '') {
               //console.log("unloading safari");
-                  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+                  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
                 socket.emit('specialLeave', userObject);
               localStorage.setItem("disconnectTime", new Date().getTime());
               clearInterval(clearId);
@@ -135,25 +129,27 @@ if(isSafari){
             //console.log('hashname',hashName)
           }
         });
-    window.history.pushState('forward', null, `./${roomId}#`);
+        window.history.pushState('forward', null, `./${roomId}#`);
       }
     });
 
-  }
-  /* happens on refresh and close tab */
-  $(window).on("unload", function(){
-    localStorage.setItem('active', 0)
-    //console.log("unloading");
-     window.location = '/';
-    var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
-    //console.log("***********user object*************", userObject);
-    socket.emit('specialLeave', userObject);
-    localStorage.setItem("disconnectTime", new Date().getTime());
-    clearInterval(clearId);
-  });
+}
 
- /* user sends request */
 
+/* happens on refresh and close tab */
+$(window).on("unload", function(){
+  //localStorage.setItem('active', 0)
+  socket.emit('inactive', localStorage.getItem('spotifyId'));
+  //console.log("unloading");
+  window.location = '/';
+  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
+  //console.log("***********user object*************", userObject);
+  socket.emit('specialLeave', userObject);
+  localStorage.setItem("disconnectTime", new Date().getTime());
+  clearInterval(clearId);
+});
+
+/* user sends request */
 $('#request').on('click', function() {
   var request = $('#requestval').val();
   $('#requestval').val('');
@@ -174,11 +170,10 @@ $('#laflame').on('click', function() {
 
 /////////////////////////////
 
-/* if user wants to leave room it comes here */
+/* if user wants to leave room it comes here and
+if he is dj, passes aux back to host */
 $('#userLeave').on('click', function(event){
-  //console.log("********",isDJ, roomName);
-  if(isDJ === true){
-    //console.log("entered here");
+  if(isDJ){
     socket.emit('userDJLeaving', roomName);
   }
   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
@@ -186,9 +181,11 @@ $('#userLeave').on('click', function(event){
   window.location = $(this).attr('data-url');
 })
 
+/* room recieves the event of pass dj and if this guy is dj, he gets notification */
 socket.on('changedDJ', function(djObject){
-  //console.log(djObject.spotifyId);
+
   if(djObject.spotifyId === localStorage.getItem('spotifyId')) {
+    isDJ = true;
     $('#djstatus').text('You were passed the aux!');
     if (Notification.permission !== "granted" && Notification) {
         Notification.requestPermission(function(permission) {
@@ -197,20 +194,24 @@ socket.on('changedDJ', function(djObject){
             body: "You were passed the aux!",
           });
         });
-    } else {
+    }
+    else {
       var notification = new Notification('Notification title', {
         body: "You were passed the aux!",
       });
     }
-    isDJ = true;
-  } else {
-    $('#djstatus').text(`${djObject.username} was passed the aux`);
-    isDJ = false;
   }
+  else {
+    $('#djstatus').text(`${djObject.username} was passed the aux`);
+  }
+
 })
 
-socket.on('takenBack', function(){
-  if(isDJ)isDJ = false;
+/* host of the room voluntarily takes back aux*/
+socket.on('takeBack', function(){
+  if(isDJ){
+    isDJ = false;
+  }
   $('#djstatus').text(`DJ is: ${djName}`);
 })
 
@@ -220,13 +221,14 @@ socket.on('takenBack', function(){
 /* Checking connnection to socket */
 socket.on('connect', function() {
 
+  //localStorage.setItem('active', 1);
+  socket.emit('active', localStorage.getItem('spotifyId'));
+  socket.emit('getflames');
+  socket.on('getflames', function(count) {
+    $('#laflamecount').text(count);
+  })
 
-  //console.log('Connected!');
-  // if(localStorage.getItem('active') === "1"){
-  //   window.location.href = '/error';
-  // }
-  localStorage.setItem('active', 1);
-  //socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+  socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   }, 30*60000 );
@@ -250,8 +252,6 @@ socket.on('connect', function() {
     socket.emit('joinRoom', userObject);
   }
 });
-
-socket.emit('getflames');
 
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){
@@ -378,7 +378,4 @@ socket.on('laflame', function(count) {
     }, 2000)
 })
 
-socket.on('getflames', function(count) {
-  $('#laflamecount').text(count);
-})
 </script>

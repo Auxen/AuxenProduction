@@ -65,6 +65,10 @@ if(numRooms === '1') {
 //   window.location.href = '/error'
 // }
 
+socket.emit('isActive', localStorage.getItem('sptofiyId'));
+socket.on('isActive', function(data){
+  if(data) window.location.href = '/error';
+})
 
 function searchFunction() {
   // Declare variables

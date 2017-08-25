@@ -2,9 +2,6 @@
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-  #songTest{
-    cursor: pointer !important;
-  }
   /*a {
     width: 500px;
   }*/
@@ -103,35 +100,6 @@ and (max-device-width : 480px) {
 
 <script>
 
-
-
-    // if(!localStorage.getItem('spotifyId')) {
-    // //  $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
-    //   $('#exampleModalLong').modal('show');
-    // }
-    // else {
-    $('#exampleModalLong').modal('show');
-      var flag = false;
-      $.ajax({
-        url: 'https://api.spotify.com/v1/me/player/devices',
-        method: 'get',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
-        },
-        success: function(data){
-          for (var i = 0; i < data.devices.length; i++) {
-            if(data.devices[i].is_active){
-              flag = true;
-              break;
-            }
-          }
-          if(!flag){
-            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
-            $('#exampleModalLong').modal('show');
-          }
-        }
-      })
-    //}
     var spotifyId = '{{spotifyId}}';
     var imageURL = '{{{imageURL}}}';
     var username = '{{username}}';
@@ -190,7 +158,33 @@ and (max-device-width : 480px) {
     getPlayback();
 
     $(document).ready(function(){
-      $(document).on('click touchstart','#songTest' ,function() {
+      if(!localStorage.getItem('spotifyId')) {
+        $('#exampleModalLong').modal('show');
+      }
+      else {
+        var flag = false;
+        $.ajax({
+          url: 'https://api.spotify.com/v1/me/player/devices',
+          method: 'get',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+          },
+          success: function(data){
+            console.log(data);
+            for (var i = 0; i < data.devices.length; i++) {
+              if(data.devices[i].is_active){
+                flag = true;
+                break;
+              }
+            }
+            if(!flag){
+              $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+              $('#exampleModalLong').modal('show');
+            }
+          }
+        })
+      }
+      $(document).on('click','#songTest' ,function() {
 
         $.ajax({
           url: 'https://api.spotify.com/v1/me/player/play',
@@ -215,7 +209,5 @@ and (max-device-width : 480px) {
 
       })
     })
-
-
 
 </script>
