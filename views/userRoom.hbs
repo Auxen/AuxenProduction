@@ -138,10 +138,10 @@ if(isSafari){
 
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
-  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
   if(!localStorage.getItem('leaving')){
-      socket.emit('specialLeave', userObject);
-      localStorage.setItem("disconnectTime", new Date().getTime());
+    var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
+    socket.emit('specialLeave', userObject);
+    localStorage.setItem("disconnectTime", new Date().getTime());
   }
   clearInterval(clearId);
 });
