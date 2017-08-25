@@ -15,19 +15,21 @@ You can share gratitude to your Audience and see there responses. At the moment 
 ## Using the App
 
 ## Login screen
-<img src="./readmeImg/loginPage.png" width="45%"></img>
-  ![](./readmeImg/loginPage.png | width=150)
+<img src="./readmeImg/loginPage.png" width="80%"></img>
 
-## Dj room view
 
-![](./readmeImg/dj_Room.png | width=150)
+## Dj room view and user view room
+
+<img src="./readmeImg/dj_Room.png" width="45%"></img>
+
+<img src="./readmeImg/user_Room.png" width="45%"></img>
 
 ## User room view
 
  <details>
  <summary>User room view </summary>
 
- ![](./readmeImg/user_Room.png | width=150)
+ ![](./readmeImg/user_Room.png)
  </details>
 
 
