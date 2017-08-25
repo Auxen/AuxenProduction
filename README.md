@@ -1,6 +1,7 @@
+<img src="./readmeImg/auxenLogo.jpg" width="30%"></img>
+
 # Auxen - Build culture by sharing your music
 
-![](./readmeImg/auxenLogo.jpg)
 
 ## Product
 
