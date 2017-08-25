@@ -39,7 +39,7 @@ $.ajax({
   url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
   success: function(response){
     console.log("reached here", response);
-    if(response.body)window.location.href = '/error';
+    if(response)window.location.href = '/error';
   }
 })
 

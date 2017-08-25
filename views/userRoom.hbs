@@ -139,7 +139,7 @@ if(isSafari){
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
   //localStorage.setItem('active', 0)
-  socket.emit('inactive', localStorage.getItem('spotifyId'));
+  socket.emit('inActive', localStorage.getItem('spotifyId'));
   //console.log("unloading");
   window.location = '/';
   var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};

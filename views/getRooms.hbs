@@ -65,9 +65,17 @@ if(numRooms === '1') {
 //   window.location.href = '/error'
 // }
 
-socket.emit('isActive', localStorage.getItem('sptofiyId'));
-socket.on('isActive', function(data){
-  if(data) window.location.href = '/error';
+// socket.emit('isActive', localStorage.getItem('sptofiyId'));
+// socket.on('isActive', function(data){
+//   if(data) window.location.href = '/error';
+// })
+
+$.ajax({
+  url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
+  success: function(response){
+    console.log("reached here", response);
+    if(response)window.location.href = '/error';
+  }
 })
 
 function searchFunction() {
