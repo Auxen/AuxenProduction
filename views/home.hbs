@@ -148,7 +148,7 @@ and (max-device-width : 480px) {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-        //  console.log(data);
+          //  console.log(data);
           if(data.repeat_state !== 'off')toggleRepeat();
           if(data.shuffle_state)toggleShuffle();
         }
@@ -169,11 +169,12 @@ and (max-device-width : 480px) {
               'Authorization': 'Bearer ' + '{{{accessToken}}}'
           },
           success: function(data){
-            console.log(data);
-            for (var i = 0; i < data.devices.length; i++) {
-              if(data.devices[i].is_active){
-                flag = true;
-                break;
+            if(data.devices){
+              for (var i = 0; i < data.devices.length; i++) {
+                if(data.devices[i].is_active){
+                  flag = true;
+                  break;
+                }
               }
             }
             if(!flag){
