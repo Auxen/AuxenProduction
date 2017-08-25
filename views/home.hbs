@@ -156,7 +156,6 @@ and (max-device-width : 480px) {
     }
 
     $(document).ready(function(){
-      getPlayback();
       console.log("1");
       if(!localStorage.getItem('spotifyId')) {
         console.log("2");
@@ -187,6 +186,7 @@ and (max-device-width : 480px) {
           }
         })
       }
+      getPlayback();
       $(document).on('click','#songTest' ,function() {
 
         $.ajax({
