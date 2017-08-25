@@ -74,6 +74,17 @@ module.exports = function(io) {
       })
     }
 
+    function inActive(spotifyId){
+      User.findOne({'spotifyId' : spotifyId})
+      .then( user => {
+        user.active = false;
+        user.save();
+      })
+      .catch( err => {
+        console.log(err);
+      })
+    }
+
     ///////////////////// PASS DJ ////////////////////////
 
     /* finds the right user from db. sets accestoken of user to dj token */
@@ -112,7 +123,7 @@ module.exports = function(io) {
       })
     })
 
-    /* */
+    /* change token of room when user dj */
     socket.on('changeRoomTokenDJUser', function(userDJObject){
       User.findOne({spotifyId:userDJObject.spotifyId})
       .then(user => {
@@ -130,17 +141,6 @@ module.exports = function(io) {
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
         user.active = true;
-        user.save();
-      })
-      .catch( err => {
-        console.log(err);
-      })
-    })
-
-    socket.on('inActive', function(spotifyId){
-      User.findOne({'spotifyId' : spotifyId})
-      .then( user => {
-        user.active = false;
         user.save();
       })
       .catch( err => {
@@ -200,6 +200,7 @@ module.exports = function(io) {
 
     /* called by users while leaving room or when room closed altogether */
     socket.on('leaveRoom', function(userSpotifyId) {
+      inActive(userSpotifyId);
       if (userSpotifyId) {
         socket.to(socket.room).emit('userLeaving', userSpotifyId);
       }
@@ -244,6 +245,7 @@ module.exports = function(io) {
     /* user refreshed or closed tab */
     socket.on('specialLeave', function(userObject) {
       console.log("enetered specialLeave");
+      inActive(userObject.spotifyId);
       if (userObject.spotifyId) {
         socket.to(socket.room).emit('userLeaving', userObject.spotifyId);
       }
@@ -305,6 +307,7 @@ module.exports = function(io) {
 
     /* called by dj. closes room, dj leaves room, and emits events for users to leave room */
     socket.on('closingRoom', function(roomData) {
+      inActive(roomData.spotifyId);
       console.log("backend closingRoom");
       socket.to(socket.room).emit('roomClosed');
       socket.leave(socket.room);
@@ -313,6 +316,7 @@ module.exports = function(io) {
     /* dj closed tab or refreshed */
     socket.on('specialClose', function(roomObject) {
       console.log("backend closingRoom");
+      inActive(roomObject.spotifyId)
       socket.to(socket.room).emit('roomClosed');
       socket.leave(socket.room);
       console.log("reaching autoclose at backend");

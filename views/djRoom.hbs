@@ -127,9 +127,9 @@ and (max-device-width : 480px) {
     /* after refresh or close tab*/
     $(window).on("unload", function(){
       //localStorage.setItem('active', 0);
-      socket.emit('inActive', localStorage.getItem('spotifyId'))
+      //socket.emit('inActive', localStorage.getItem('spotifyId'))
       //console.log("unloading");
-      socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
+      socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
       clearInterval(clearId);
       localStorage.setItem("closing", "true");
     });
@@ -311,7 +311,7 @@ and (max-device-width : 480px) {
   /* dj closes room emits event to server which then kicks people out of the room */
   $('#closeRoom').on('click', function(event){
     //console.log("reached front end destination");
-    socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
+    socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
     $(window).unbind('beforeunload');
     window.location = $(this).attr('data-url');
   })
