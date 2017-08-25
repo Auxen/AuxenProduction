@@ -35,10 +35,17 @@ and (max-device-width : 480px) {
 //   window.location.href = '/error'
 // }
 
-socket.emit('isActive', localStorage.getItem('spotifyId'));
-socket.on('isActive', function(data){
-  if(data) window.location.href = '/error';
+$.ajax({
+  url:'/isActive',
+  data: {
+    spotifyId: localStorage.getItem('spotifyId')
+  },
+  success: function(response){
+    console.log("reached here", response.body);
+    if(response.body)window.location.href = '/error';
+  }
 })
+
 
 $('#startRoom').on('click', function() {
   $('#roomSubmit').submit();

@@ -148,16 +148,6 @@ module.exports = function(io) {
       })
     })
 
-    socket.on('isActive', function(spotifyId){
-      User.findOne({'spotifyId': spotifyId})
-      .then( user => {
-        socket.emit('isActive', user.active);
-      })
-      .catch( err => {
-        console.log(err);
-      })
-    })
-
     /////////////////// MULTIPLE TABS ///////////////////
 
     /* called every 30 minutes by user to refresh token */

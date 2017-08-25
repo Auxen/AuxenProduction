@@ -39,6 +39,16 @@ module.exports = function() {
 
   });
 
+  router.get('/isActive', function(req, res, next) {
+    console.log('isActive', req.body);
+    User.findOne({'spotifyId':req.body.spotifyId})
+    .then(user => {
+      res.send(user.active);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  })
 
   /* Get createRoom page. */
   router.get('/createRoom', function(req, res, next) {
