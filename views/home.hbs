@@ -155,9 +155,8 @@ and (max-device-width : 480px) {
       })
     }
 
-    getPlayback();
-
     $(document).ready(function(){
+      getPlayback();
       if(!localStorage.getItem('spotifyId')) {
         $('#exampleModalLong').modal('show');
       }
@@ -167,7 +166,7 @@ and (max-device-width : 480px) {
           url: 'https://api.spotify.com/v1/me/player/devices',
           method: 'get',
           headers: {
-              'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
+              'Authorization': 'Bearer ' + '{{{accessToken}}}'
           },
           success: function(data){
             console.log(data);
