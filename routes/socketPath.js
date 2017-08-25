@@ -186,6 +186,18 @@ module.exports = function(io) {
 
     ///////////////// USER //////////////////////
 
+    socket.on('isInRoom', function(data){
+      Room.findOne({"roomName": data.roomName})
+      .then(room => {
+        var user = room.usersInRoom.find(function(user){
+          return user.spotifyId === data.spotifyId;
+        })
+        var flag = user ? true : false;
+        socket.emit('isInRoom', flag);
+      })
+    })
+
+
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
       console.log(userObject);

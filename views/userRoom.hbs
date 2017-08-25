@@ -70,6 +70,19 @@ and (max-device-width : 480px) {
 
 <div class="center" id="flames"></div>
 
+<div class="modal fade" id="inRoom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background-color: #1E1D1D">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body" style="background-color: #1E1D1D">
+       <div id="instructions" class="row">
+        <h1 id="joinThisRoom" type="button" style="width: 20%; margin-left: 2%; margin-right: 2%; " class="text small boxed raise col-xs-2">Join</h1>
+        <h1 id="goToGetRooms" type="button" style="width: 20%; margin-left: 2%; margin-right: 2%; " class="text small boxed raise col-xs-2">Browse Rooms</h1>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript" src="/static/scripts/float.js"></script>
 
 
@@ -82,6 +95,14 @@ var socket = io();
 var clearId = -1;
 var isDJ = false;
 var djName = '{{room.djName}}'
+
+$(document).on('click', '#joinThisRoom', function(e){
+  window.location.href = '/joinRoom?roomId=' + roomId;
+})
+
+$(document).on('click', '#goToGetRooms', function(e){
+  window.location.href = '/getRooms';
+})
 
 function pausePlayback(){
   $.ajax({
@@ -220,7 +241,7 @@ socket.on('takeBack', function(){
 socket.on('connect', function() {
 
 
-  socket.emit('active', localStorage.getItem('spotifyId'));
+  //socket.emit('active', localStorage.getItem('spotifyId'));
   socket.emit('getflames');
   socket.on('getflames', function(count) {
     $('#laflamecount').text(count);
@@ -243,11 +264,22 @@ socket.on('connect', function() {
       //console.log("this was a refresh");
       //console.log("userObject", userObject);
       socket.emit("userRefreshed", userObject);
+      socket.emit('active', localStorage.getItem('spotifyId'));
       localStorage.removeItem("disconnectTime");
   }
   else{
     //console.log("new room joined without refresh");
-    socket.emit('joinRoom', userObject);
+    socket.emit('isInRoom', {spotifyId:localStorage.getItem('spotifyId'),roomName: roomName});
+    socket.on('isInRoom', function(data){
+      if(data){
+        socket.emit('joinRoom', userObject);
+        /* tells db that user is active to prevent multiple tabs */
+        socket.emit('active', localStorage.getItem('spotifyId'));
+      }
+      else {
+        $('#inRoom').modal('show');
+      }
+    })
   }
 });
 
