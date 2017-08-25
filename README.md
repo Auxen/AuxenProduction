@@ -15,7 +15,7 @@ You can share gratitude to your Audience and see there responses. At the moment 
 ## Using the App
 
 ## Login screen
-<img src="./readmeImg/loginPage.png" width="80%"></img>
+<img src="./readmeImg/loginPage.png" width="65%"></img>
 
 
 ## Dj room view and user view room
