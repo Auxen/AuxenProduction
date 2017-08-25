@@ -126,9 +126,12 @@ and (max-device-width : 480px) {
 
     /* after refresh or close tab*/
     $(window).on("unload", function(){
-      socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
+      if(localStorage.getItem('closing') === 'false'){
+        socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
+        localStorage.setItem("closing", "true");
+      }
       clearInterval(clearId);
-      localStorage.setItem("closing", "true");
+
     });
   }
 

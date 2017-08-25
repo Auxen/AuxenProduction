@@ -138,12 +138,11 @@ if(isSafari){
 
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
-  //localStorage.setItem('active', 0)
-  socket.emit('inActive', localStorage.getItem('spotifyId'));
   var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
-  //console.log("***********user object*************", userObject);
-  socket.emit('specialLeave', userObject);
-  localStorage.setItem("disconnectTime", new Date().getTime());
+  if(!localStorage.getItem('leaving')){
+      socket.emit('specialLeave', userObject);
+      localStorage.setItem("disconnectTime", new Date().getTime());
+  }
   clearInterval(clearId);
 });
 
@@ -171,6 +170,7 @@ $('#laflame').on('click', function() {
 /* if user wants to leave room it comes here and
 if he is dj, passes aux back to host */
 $('#userLeave').on('click', function(event){
+  localStorage.setItem('leaving', 'true');
   if(isDJ){
     socket.emit('userDJLeaving', roomName);
   }
