@@ -78,8 +78,11 @@ module.exports = function(io) {
       console.log('***************************');
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
+        console.log(user);
         user.active = false;
-        user.save();
+        user.save(function(err, user){
+          console.log(user);
+        });
       })
       .catch( err => {
         console.log(err);

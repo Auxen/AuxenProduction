@@ -126,9 +126,6 @@ and (max-device-width : 480px) {
 
     /* after refresh or close tab*/
     $(window).on("unload", function(){
-      //localStorage.setItem('active', 0);
-      //socket.emit('inActive', localStorage.getItem('spotifyId'))
-      //console.log("unloading");
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
       clearInterval(clearId);
       localStorage.setItem("closing", "true");
