@@ -75,6 +75,7 @@ module.exports = function(io) {
     }
 
     function inActive(spotifyId){
+      console.log('***************************');
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
         user.active = false;

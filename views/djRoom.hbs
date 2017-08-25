@@ -104,7 +104,7 @@ and (max-device-width : 480px) {
             var hash = window.location.hash;
             if (hash === '') {
               //console.log("unloading safari");
-              socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
+              socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId:localStorage.getItem('spotifyId')});
               clearInterval(clearId);
               localStorage.setItem("closing", "true");
               window.location.href = '/';
