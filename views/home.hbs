@@ -65,7 +65,7 @@ and (max-device-width : 480px) {
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
 
-        <h2 class="text small" id="setup">We need to sure your Spotify is set up properly</h2>
+        <h2 class="text small" id="setup">We need to make sure your Spotify is set up properly</h2>
        <h2 class="text smaller">
          <br>
          <br>
@@ -119,14 +119,14 @@ and (max-device-width : 480px) {
         },
         success: function(data){
           for (var i = 0; i < data.devices.length; i++) {
-            if(data.devices[i].is_active){
+            if(data.devices[i].is_active) {
               flag = true;
               break;
             }
           }
           if(!flag){
-            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
             $('#exampleModalLong').modal('show');
+            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
           }
         }
       })
@@ -195,7 +195,7 @@ and (max-device-width : 480px) {
           url: 'https://api.spotify.com/v1/me/player/play',
           method: 'PUT',
           headers: {
-            'Authorization': 'Bearer ' + accessToken,
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
             'Content-Type': "application/json"
           },
           data: JSON.stringify({
