@@ -75,8 +75,6 @@ and (max-device-width : 480px) {
 
 <div class="center" id="flames"></div>
 
-<script type="text/javascript" src="/static/scripts/float.js"></script>
-
 <!-- <script src="/static/user.js"></script> -->
 
 <script type="text/javascript">
@@ -362,7 +360,7 @@ socket.on('userTalk', function(data){
 
   setTimeout(function() {
     $('#flames').find('p:first').remove();
-  }, 8000)
+  }, 10000)
 });
 
 /* listens to flames in room */
