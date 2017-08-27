@@ -32,12 +32,13 @@ module.exports = function(io) {
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
           io.sockets.adapter.rooms[room].songName = data.body.item.name; //setting song name property to room
-
+          io.sockets.adapter.rooms[room].lastSongs = [data.body.item.name]; //setting lastSongs array property for the room
           console.log(data.body.item.name);
           var DJData = {
             songURI: data.body.item.uri,
             timeProgress: data.body.progress_ms + timeDiff,
-            songName: data.body.item.name
+            songName: data.body.item.name,
+            lastSongs: io.sockets.adapter.rooms[room].lastSongs //update last songs Benjamin
           };
           io.to(room).emit("DJData", DJData);
         } else { // not first song of room
@@ -47,10 +48,18 @@ module.exports = function(io) {
             io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
             io.sockets.adapter.rooms[room].songName = data.body.item.name; //setting song name property to room
+            if(io.sockets.adapter.rooms[room].lastSongs.length < 5){
+              io.sockets.adapter.rooms[room].lastSongs.push(data.body.item.name);
+            }else{
+              var arr = io.sockets.adapter.rooms[room].lastSongs.slice(1);
+              arr.push(data.body.item.name);
+              io.sockets.adapter.rooms[room].lastSongs = arr;
+            }
             var DJData = {
               songURI: data.body.item.uri,
               timeProgress: data.body.progress_ms + timeDiff,
-              songName: data.body.item.name
+              songName: data.body.item.name,
+              lastSongs: io.sockets.adapter.rooms[room].lastSongs
             };
             io.to(room).emit("DJData", DJData);
           } else {
