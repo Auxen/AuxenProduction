@@ -5,6 +5,7 @@ var User = models.User;
 var Room = models.Room;
 var existingRoomNames = [];
 
+
 module.exports = function(io) {
   io.on('connection', function(socket) {
 
@@ -15,7 +16,6 @@ module.exports = function(io) {
         clientSecret: process.env.SPOTIFY_SECRET,
         redirectUri: process.env.CALLBACK_URL
       });
-
       return spotifyApi;
     }
 
