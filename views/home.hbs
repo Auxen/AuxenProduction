@@ -65,20 +65,17 @@ and (max-device-width : 480px) {
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
 
-        <h2 class="text small" id="setup">We need to sure your Spotify is set up properly</h2>
+        <h2 class="text small" id="setup">We need to make sure your Spotify is set up properly</h2>
        <h2 class="text smaller">
          <br>
          <br>
-         1. Open your Spotify! This is very important
+         1. Open your Spotify AND play any song
          <br>
          <br>
-         2. Play a song. Whatever song you want.
+         2. Press Test
          <br>
          <br>
-         3. Press Test
-         <br>
-         <br>
-         4. If your music changed, you're good to go! If not make sure you're logged into the right Spotify account and then try again!
+         3. Congratulations!
        </h2>
        <br>
        <br>
@@ -96,21 +93,16 @@ and (max-device-width : 480px) {
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-
-
 }
 </style>
 
 <script>
 
-
-
-    // if(!localStorage.getItem('spotifyId')) {
-    // //  $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
-    //   $('#exampleModalLong').modal('show');
-    // }
-    // else {
-    $('#exampleModalLong').modal('show');
+    if(!localStorage.getItem('spotifyId')) {
+      mobileModal();
+      $('#exampleModalLong').modal('show');
+    }
+    else {
       var flag = false;
       $.ajax({
         url: 'https://api.spotify.com/v1/me/player/devices',
@@ -120,14 +112,15 @@ and (max-device-width : 480px) {
         },
         success: function(data){
           for (var i = 0; i < data.devices.length; i++) {
-            if(data.devices[i].is_active){
+            if(data.devices[i].is_active) {
               flag = true;
               break;
             }
           }
           if(!flag){
-            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+            mobileModal();
             $('#exampleModalLong').modal('show');
+            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be connected!')
           }
         }
       })
@@ -144,6 +137,13 @@ and (max-device-width : 480px) {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('closing', "false");
+
+
+    function mobileModal() {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+          // change the modal to mobile
+      }
+    }
 
     function toggleRepeat(){
       $.ajax({
@@ -196,7 +196,7 @@ and (max-device-width : 480px) {
           url: 'https://api.spotify.com/v1/me/player/play',
           method: 'PUT',
           headers: {
-            'Authorization': 'Bearer ' + accessToken,
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
             'Content-Type': "application/json"
           },
           data: JSON.stringify({
