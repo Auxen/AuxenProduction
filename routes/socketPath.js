@@ -3,7 +3,7 @@ var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
-var existingRoomNames = [];
+
 
 
 module.exports = function(io) {
@@ -82,7 +82,6 @@ module.exports = function(io) {
         console.log("error", error);
       })
     }
-
 
 
     /////////////////////////////
@@ -269,6 +268,12 @@ module.exports = function(io) {
           return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
         } else {
           console.log("this room no longer exists");
+          Room.remove({'roomName': roomName})
+          .then(() => {
+            console.log("***********Ben - room successfully removed****************************");
+          }).catch((error) => {
+            console.log("error", error);
+          });
           clearInterval(clearID);
         }
       }, 5000);
