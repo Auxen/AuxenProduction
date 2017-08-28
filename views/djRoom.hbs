@@ -24,13 +24,15 @@ and (max-device-width : 480px) {
       <div id="currentSong" class="center">
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
       </div>
+
       <div id="pass" class="center">
         <h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>
       </div>
+  l
     </div>
   </div>
   <h1 class="center text smaller">
-    Flame count:&nbsp;<p id ="laflamecount" >0</p>
+    Flame count:&nbsp;<p id ="laflamecount">0</p>
   </h1>
   <div id="sendgrace-container">
     <h1 id="sendgrace" class="center floating pointer" >
@@ -61,6 +63,9 @@ and (max-device-width : 480px) {
         <div class="modal-footer"  style="background-color: #1E1D1D">
           <h1 id="djtalk" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
+        <div id="lastSongs" class="center">
+          Last Songs
+        </div>
       </div>
     </div>
   </div>
@@ -78,22 +83,24 @@ and (max-device-width : 480px) {
 
 </div>
 
+<!-- <script src="/static/dj.js"></script> -->
 <script type="text/javascript">
-
+//jay
   var djRefreshToken = '{{room.djRefreshToken}}';
+  //console.log("djrefresh token", djRefreshToken);
   var roomId = '{{room._id}}';
+  //console.log("roomId", roomId);
   var roomName = '{{room.roomName}}';
+//  console.log("roomName", roomName);
   var socket = io();
   var clearId = -1;
-  var isDJ = true;
-  var userDJSpotifyId = '';
 
   var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                     navigator.userAgent && !navigator.userAgent.match('CriOS');
 
 
-  if(isSafari){
-    $(window).ready(function(){
+if(isSafari){
+  $(window).ready(function(){
     //  console.log("test");
       if (window.history && window.history.pushState) {
         $(window).on('popstate', function() {
@@ -104,7 +111,7 @@ and (max-device-width : 480px) {
             var hash = window.location.hash;
             if (hash === '') {
               //console.log("unloading safari");
-              socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId:localStorage.getItem('spotifyId')});
+              socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
               clearInterval(clearId);
               localStorage.setItem("closing", "true");
               window.location.href = '/';
@@ -114,43 +121,46 @@ and (max-device-width : 480px) {
       window.history.pushState('forward', null, './#forward');
       }
     });
-  }
-  else {
-    /* happens before refresh or close tab */
-    /* add logic for safari*/
-    $(window).bind('beforeunload', function(){
-      //console.log("before unloading");
-      return null;
-      // return "Are you sure you want to leave? This will take you to home page";
-    });
+}else{
 
-    /* after refresh or close tab*/
-    $(window).on("unload", function(){
-      if(localStorage.getItem('closing') === 'false'){
-        socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
-        localStorage.setItem("closing", "true");
-      }
-      clearInterval(clearId);
-    });
-  }
+  var isDJ = true;
+  var userDJSpotifyId = '';
+
+
+  /* happens before refresh or close tab */
+  /* add logic for safari*/
+  $(window).bind('beforeunload', function(){
+    //console.log("before unloading");
+    return null;
+    // return "Are you sure you want to leave? This will take you to home page";
+  });
+
+  /* after refresh or close tab*/
+  $(window).on("unload", function(){
+    localStorage.setItem('active', 0);
+    //console.log("unloading");
+    socket.emit('specialClose', {"roomName": roomName, "roomId": roomId});
+    clearInterval(clearId);
+    localStorage.setItem("closing", "true");
+  });
+}
 
 
   /* Checking connnection to socket */
   socket.on('connect', function(){
 
-    //console.log('Connected!');
+  //  console.log('Connected!');
 
     clearId = setInterval(function () {
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
     }, 20*60000);
 
-    if(localStorage.getItem('closing') === "true"){
+    if(localStorage.getItem('closing') === "true" /*|| localStorage.getItem('active') === "1"*/){
       window.location.href = '/';
     }
 
     else{
-      //localStorage.setItem('active', 1);
-      socket.emit('active',localStorage.getItem('spotifyId'))
+      localStorage.setItem('active', 1);
       var djObject = {
         roomName: roomName,
         accessToken: localStorage.getItem('accessToken')
@@ -162,9 +172,7 @@ and (max-device-width : 480px) {
   /* sets new access token after refresh */
   socket.on('setNewAccessToken', function(accessToken){
     localStorage.setItem('accessToken', accessToken);
-    if(isDJ === true){
-      socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
-    }
+    if(isDJ === true)socket.emit('changeRoomToken', {roomName: roomName, newToken: accessToken});
     else{
       //look who dj is get his sptofiy id, get his accesstoken from database and set it to room;
       //figure out time difference
@@ -189,26 +197,26 @@ and (max-device-width : 480px) {
       `)
       setTimeout(function() {
         $('#flames').find('span:first').remove();
-      }, 2000)
+      }, 1800)
   })
 
   /* listens to requests in room */
   socket.on('userTalk', function(data){
-    //console.log("**********", data);
+  //  console.log("**********", data);
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
-          <span style="width: 30%;">${data}</span>
+      <p class="request smaller text" style="position: absolute; left:${Math.floor(90 * Math.random())}%">
+          <span  style="width: 80%;">${data}</span>
       </p>
     `)
 
     setTimeout(function() {
       $('#flames').find('p:first').remove();
-    }, 8000)
+    }, 15000)
   });
 
   /* new user has joined */
   socket.on('userJoined', function(userData){
-    //console.log("user joined", userData);
+  //  console.log("user joined", userData);
     if($('#' + userData.spotifyId).length !== 0){
     //  console.log("this guy exists");
       return;
@@ -241,41 +249,38 @@ and (max-device-width : 480px) {
 
   ////////////////////
 
-  /* passed dj to some other user voluntarily*/
-  $(document).on('click', '.nextDJ', function(){
-    var nextDJSpotifyId = $(this).attr('data-id');
-    socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId});
-    isDJ = false;
-  })
-
-  /* passed dj to some other user voluntarily */
   socket.on('changedDJ', function(djObject){
+    //console.log("changedDJ", djObject.spotifyId);
     userDJSpotifyId = djObject.spotifyId;
     $('#djstatus').text(`Aux passed to ${djObject.username}`);
     $('#pass').empty();
+    // here yash will add a click handler to pass DJ back to initial host
     $('#pass').append(`<h1 style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" id="takeback">Take aux back</h1>`)
   })
 
-  /* taken back aux voluntarily */
+  //event propagation
   $(document).on('click', '#takeback', function(){
-    socket.emit('takeBack', localStorage.getItem('accessToken'));
+    //console.log("taken back");
     isDJ = true;
+    socket.emit('takeBack', localStorage.getItem('accessToken'));
   })
 
-  /* called whenver host gets back aux
-     1. user leaves by clicking button
-     2. host takes aux back
-     3. user refreshes or closes tab
- */
-  socket.on('takeBack', function(){
-    isDJ = true;
+  socket.on('takenBack', function(){
+    //console.log("entered taken back");
     $('#djstatus').text(`You are the DJ`);
     $('#pass').empty();
     $('#pass').append(`<h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>`)
   })
 
-  /* called when specialLeave of user -> calls above takeBack  */
+  $(document).on('click', '.nextDJ', function(){
+    var nextDJSpotifyId = $(this).attr('data-id');
+    console.log("nextDJSpotifyId", nextDJSpotifyId);
+    socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId});
+    isDJ = false;
+  })
+
   socket.on('DJTakeBack', function(){
+    //console.log("taken back");
     isDJ = true;
     socket.emit('takeBack', localStorage.getItem('accessToken'));
   })
@@ -290,14 +295,14 @@ and (max-device-width : 480px) {
     $('#djtalkval').val('');
 
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; color: green; left:${Math.floor(100 * Math.random())}%">
-          <span style="width: 50%;">${djTalk}</span>
+      <p class="request smaller text" style="position: absolute; color: green; left:${Math.floor(100 * Math.random())}%">
+          <span style="width: 80%;">${djTalk}</span>
       </p>
     `)
 
     setTimeout(function() {
         $('#flames').find('p:first').remove();
-      }, 8000)
+      }, 15000)
 
     socket.emit('djTalk', djTalk);
   });
@@ -309,9 +314,8 @@ and (max-device-width : 480px) {
 
   /* dj closes room emits event to server which then kicks people out of the room */
   $('#closeRoom').on('click', function(event){
-    console.log("reached front end destination");
-    localStorage.setItem('closing', 'true');
-    socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
+    //console.log("reached front end destination");
+    socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId});
     $(window).unbind('beforeunload');
     window.location = $(this).attr('data-url');
   })
@@ -325,7 +329,7 @@ and (max-device-width : 480px) {
     `)
     setTimeout(function() {
       $('#flames').find('span:first').remove();
-    }, 2000)
+    }, 1800)
     socket.emit('sendgrace');
   })
 
@@ -366,6 +370,13 @@ and (max-device-width : 480px) {
     var songName= DJData.songName;
     $('#currentSong').empty();
     $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
+    //Benjamin lastSongs
+    if(DJData.lastSongs){
+      $('#lastSongs').empty();
+      DJData.lastSongs.forEach(item => {
+      $('#lastSongs').append(`<br><h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">${item}</h2><br>`);
+    });
+    }
   })
 
 
