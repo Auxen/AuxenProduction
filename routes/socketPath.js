@@ -362,7 +362,8 @@ module.exports = function(io) {
     })
 
     socket.on('getflames', function() {
-      socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
+      if(socket.room)socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
+
     })
 
     //////////////////// DJ ENDS ///////////////////

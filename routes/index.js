@@ -8,6 +8,7 @@ var Room = models.Room;
 var existingRoomNames = [];
 
 module.exports = function() {
+  
   /* Check login page. */
   router.use('/', function(req, res, next) {
     if (req.user) {
@@ -19,8 +20,6 @@ module.exports = function() {
       res.redirect('/login');
     }
   })//ben
-
-
 
   router.get('/notPremium', function(req, res, next){
     res.send('shit');
@@ -133,10 +132,6 @@ module.exports = function() {
       res.render('error');
     })
   })
-  // router.get('/userRoom/',function(req,res,next){
-  //   console.log('hello world')
-  //   console.log(req.user);
-  // });
 
   /* renders room for user */
   router.get('/userRoom/:roomId', function(req, res, next) {
@@ -151,6 +146,7 @@ module.exports = function() {
 
   });
 
+  /* error */
   router.get('/error', function(req, res){
     res.render('error')
   })
