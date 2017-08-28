@@ -160,7 +160,8 @@ if(isSafari){
     }
 
     else{
-      localStorage.setItem('active', 1);
+
+      socket.emit('active',localStorage.getItem('spotifyId'))
       var djObject = {
         roomName: roomName,
         accessToken: localStorage.getItem('accessToken')

@@ -240,13 +240,6 @@ socket.on('takeBack', function(){
 /* Checking connnection to socket */
 socket.on('connect', function() {
 
-
-  //socket.emit('active', localStorage.getItem('spotifyId'));
-  socket.emit('getflames');
-  socket.on('getflames', function(count) {
-    $('#laflamecount').text(count);
-  })
-
   socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
@@ -282,6 +275,12 @@ socket.on('connect', function() {
     })
   }
 });
+
+socket.emit('getflames');
+
+socket.on('getflames', function(count) {
+  $('#laflamecount').text(count);
+})
 
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){

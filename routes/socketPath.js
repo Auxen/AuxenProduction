@@ -141,6 +141,7 @@ module.exports = function(io) {
     /////////////////////// PASS DJ /////////////////////
 
     /////////////////// MULTIPLE TABS ///////////////////
+
     socket.on('active', function(spotifyId){
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
@@ -186,6 +187,7 @@ module.exports = function(io) {
 
     ///////////////// USER //////////////////////
 
+    /* checks if user in particular room or not */
     socket.on('isInRoom', function(data){
       Room.findOne({"roomName": data.roomName})
       .then(room => {
@@ -196,7 +198,6 @@ module.exports = function(io) {
         socket.emit('isInRoom', flag);
       })
     })
-
 
     /* user joins room */
     socket.on('joinRoom', function(userObject) {
@@ -362,9 +363,11 @@ module.exports = function(io) {
     })
 
     socket.on('getflames', function() {
-      socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
+      if(socket.room)socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
+
     })
 
     //////////////////// DJ ENDS ///////////////////
   })
+  
 }
