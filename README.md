@@ -1,16 +1,15 @@
 <img src="./readmeImg/auxenLogo.jpg" width="10%"></img>
 
-# Auxen - Build culture by sharing your music
+# Auxen - Experience your music better by listening together
 
 
 ## Product
 
 ### [Live Web Site](https://www.auxen.live/)
 
-1. Auxen gives people the ability to hear what you are hearing on your local Spotify, you do not need to build complicated list or choose your music, just create a room and listen to what you live on your Spotify.
-You can share gratitude to your Audience and see there responses. At the moment Auxen is most suitable for web browser but soon you will be able to use it
+1. Auxen gives Spotify Premium users the ability to go live and project their music in real-time to a room which listeners can join. Whatever the "DJ" plays, the listener hears in real-time. The application emulates the experience of people listening in a room together.
 
-2. Here is the work flow of the system and some photos from a live Demo.
+2. Below you can find the flow and functionality of the application.
 
 
 ## Using the App
