@@ -64,9 +64,7 @@ and (max-device-width : 480px) {
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
-
-        <h2 class="text small" id="setup">We need to make sure your Spotify is set up properly</h2>
-       <h2 class="text smaller">
+       <h2 class="text small">
          <br>
          <br>
          1. Open your Spotify AND play any song
@@ -75,7 +73,7 @@ and (max-device-width : 480px) {
          2. Press Test
          <br>
          <br>
-         3. Congratulations!
+         3. Your song should change! (If not 😞 try again )
        </h2>
        <br>
        <br>
@@ -141,7 +139,12 @@ and (max-device-width : 480px) {
 
     function mobileModal() {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-          // change the modal to mobile
+          $('.modal-body').empty();
+          $('.modal-body').append(`<h2 class="text small" style="color: red">
+            This app does not work well on mobile 😞 but we're working hard to fix this!
+            </h2>
+            <h1 id="songTest" type="button" style="width: 20%; margin-left: 2%; margin-right: 2%; " class="text small boxed raise col-xs-2">Test!</h1>
+            `)
       }
     }
 
