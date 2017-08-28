@@ -140,11 +140,13 @@ and (max-device-width : 480px) {
     function mobileModal() {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
           $('.modal-body').empty();
-          $('.modal-body').append(`<h2 class="text small" style="color: red">
+          $('.modal-body').append(`<h2 class="text small">
             This app does not work well on mobile 😞 but we're working hard to fix this!
             </h2>
-            <h1 id="songTest" type="button" style="width: 20%; margin-left: 2%; margin-right: 2%; " class="text small boxed raise col-xs-2">Test!</h1>
-            `)
+            <div id="instructions" class="row">
+             <h1 id="songTest" type="button" style="width: 20%; margin-left: 2%; margin-right: 2%; " class="text small boxed raise col-xs-2">Try it!</h1>
+            </div>
+          `)
       }
     }
 
