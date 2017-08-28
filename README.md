@@ -14,22 +14,12 @@
 
 ## Using the App
 
-## Login screen
+### Login Screen
 <img src="./readmeImg/loginPage.png" width="65%"></img>
 
+### Home Screen
 
-## Dj room view and user view room
-
-<img src="./readmeImg/dj_Room.png" width="45%"></img>      <img src="./readmeImg/user_Room.png" width="45%"></img>
-
-## User room view
-
- <details>
- <summary>User room view </summary>
-
- ![](./readmeImg/user_Room.png)
- </details>
-
+<img src ="./readmeImg/home.png" width="100%"></img>
 
 ## API Reference
 
