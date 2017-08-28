@@ -8,7 +8,7 @@ var Room = models.Room;
 var existingRoomNames = [];
 
 module.exports = function() {
-  
+
   /* Check login page. */
   router.use('/', function(req, res, next) {
     if (req.user) {
@@ -43,7 +43,7 @@ module.exports = function() {
     User.findOne({'spotifyId':req.query.spotifyId})
     .then(user => {
       console.log('isActive', user);
-      res.send(user.active);
+      res.send({"active": user.active});
     })
     .catch(err => {
       console.log(err);
@@ -52,7 +52,9 @@ module.exports = function() {
 
   /* Get createRoom page. */
   router.get('/createRoom', function(req, res, next) {
-    res.render('createRoom', {existingRoomNames});
+    res.render('createRoom', {
+      existingRoomNames: existingRoomNames
+    });
   })
 
   /* Get list of available rooms. */
@@ -136,14 +138,14 @@ module.exports = function() {
   /* renders room for user */
   router.get('/userRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
-      Room.findById(roomId).then(room => {
+      Room.findById(roomId)
+      .then(room => {
         room.djRefreshToken = "";
         res.render('userRoom', {room})
-      }).catch(error => {
-        //console.log("error", error);
       })
-
-
+      .catch(error => {
+        console.log("error", error);
+      })
   });
 
   /* error */
