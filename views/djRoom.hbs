@@ -63,9 +63,9 @@ and (max-device-width : 480px) {
         <div class="modal-footer"  style="background-color: #1E1D1D">
           <h1 id="djtalk" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
-        <!-- <div id="lastSongs" class="center">
+        <div id="lastSongs" class="center">
           Last Songs
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -371,12 +371,12 @@ if(isSafari){
     $('#currentSong').empty();
     $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
     //Benjamin lastSongs
-    if(DJData.lastSongs){
-      $('#lastSongs').empty();
-      DJData.lastSongs.forEach(item => {
-      $('#lastSongs').append(`<br><h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">${item}</h2><br>`);
-    });
-    }
+    // if(DJData.lastSongs){
+    //   $('#lastSongs').empty();
+    //   DJData.lastSongs.forEach(item => {
+    //   $('#lastSongs').append(`<br><h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">${item}</h2><br>`);
+    // });
+    // }
   })
 
 
