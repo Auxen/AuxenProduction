@@ -45,6 +45,10 @@ Additionally, the DJ can "pass the Aux" to listeners in the room. The DJ can als
 The User Room View is very similar to the DJ view, with a few key differences.
 Like the DJ, the listener can send messages to the room, but instead of 🙏 there is 🔥. The listener can set the room on fire.
 
+## Conclusion
+
+Auxen is an application that will closer bonds with your friends, colleagues, and random people all over the world. The application allows you share experiences and share your taste. We hope to see this application used primarily in work places, or studying groups. If you want to read more about Auxen and our product-approach when building the product, check [this](https://medium.com/@mohammadsyed/our-thought-process-and-journey-when-building-auxen-157611fc26d4) link out.
+
 ## API Reference
 
 1. Communication with Spotify is based on Spotify web API
