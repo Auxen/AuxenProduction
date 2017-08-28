@@ -160,7 +160,7 @@ a:hover {
 .request {
   position: relative;
   animation-name: movement;
-  animation-duration: 15s;
+  animation-duration: 28s;
   animation-timing-function: linear;
   animation-iteration-count: 1;
 }
