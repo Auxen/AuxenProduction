@@ -328,13 +328,13 @@ socket.on('DJData', function(DJData){
 /* listens for dj message */
 socket.on('djTalk', function(data) {
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; color: green; left:${Math.floor(100 * Math.random())}%">
-          <span style="width: 50%;">${data}</span>
+      <p class="request smaller text" style="position: absolute; color: green; left:${Math.floor(90 * Math.random())}%">
+          <span style="width: 80%;">${data}</span>
       </p>
     `)
     setTimeout(function() {
       $('#flames').find('p:first').remove();
-    }, 8000)
+    }, 15000)
   });
 
 /* listens for dj thanks */
@@ -346,15 +346,15 @@ socket.on('sendgrace', function() {
   `)
   setTimeout(function() {
     $('#flames').find('span:first').remove();
-  }, 2000)
+  }, 1800)
 })
 
 /* listens to requests in room */
 socket.on('userTalk', function(data){
   //console.log("reached here ");
   $('#flames').append(`
-    <p class="request small text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
-        <span style="width: 30%;">${data}</span>
+    <p class="request smaller text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
+        <span style="width: 80%;">${data}</span>
     </p>
   `)
 
@@ -373,7 +373,7 @@ socket.on('laflame', function(count) {
     `)
     setTimeout(function() {
       $('#flames').find('span:first').remove();
-    }, 2000)
+    }, 1800)
 })
 
 socket.on('getflames', function(count) {

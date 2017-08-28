@@ -192,15 +192,15 @@ if(isSafari){
       `)
       setTimeout(function() {
         $('#flames').find('span:first').remove();
-      }, 2000)
+      }, 1800)
   })
 
   /* listens to requests in room */
   socket.on('userTalk', function(data){
   //  console.log("**********", data);
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
-          <span style="width: 30%;">${data}</span>
+      <p class="request smaller text" style="position: absolute; left:${Math.floor(90 * Math.random())}%">
+          <span  style="width: 80%;">${data}</span>
       </p>
     `)
 
@@ -293,14 +293,14 @@ if(isSafari){
     $('#djtalkval').val('');
 
     $('#flames').append(`
-      <p class="request small text" style="position: absolute; color: green; left:${Math.floor(100 * Math.random())}%">
-          <span style="width: 50%;">${djTalk}</span>
+      <p class="request smaller text" style="position: absolute; color: green; left:${Math.floor(100 * Math.random())}%">
+          <span style="width: 80%;">${djTalk}</span>
       </p>
     `)
 
     setTimeout(function() {
         $('#flames').find('p:first').remove();
-      }, 8000)
+      }, 15000)
 
     socket.emit('djTalk', djTalk);
   });
@@ -327,7 +327,7 @@ if(isSafari){
     `)
     setTimeout(function() {
       $('#flames').find('span:first').remove();
-    }, 2000)
+    }, 1800)
     socket.emit('sendgrace');
   })
 
