@@ -237,7 +237,6 @@ module.exports = function(io) {
 
     /* user sends flame to dj */
     socket.on('laflame', function() {
-      console.log('this is also happening');
       io.sockets.adapter.rooms[socket.room].laflame = io.sockets.adapter.rooms[socket.room].laflame + 1;
       io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
     });

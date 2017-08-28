@@ -32,7 +32,7 @@ and (max-device-width : 480px) {
     </div>
   </div>
   <h1 class="center text smaller">
-    Flame count:&nbsp;<p id="laflamecount" >0</p>
+    Flame count:&nbsp;<p id="laflamecount">0</p>
   </h1>
   <div id="laflame-container">
     <h1 id="laflame" class="center floating pointer" >
@@ -249,7 +249,7 @@ socket.on('connect', function() {
   }
 });
 
-socket.emit('getflames');
+  socket.emit('getflames');
 
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){
@@ -360,7 +360,7 @@ socket.on('userTalk', function(data){
 
   setTimeout(function() {
     $('#flames').find('p:first').remove();
-  }, 10000)
+  }, 15000)
 });
 
 /* listens to flames in room */
