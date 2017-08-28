@@ -31,17 +31,14 @@ and (max-device-width : 480px) {
 
 <script type="text/javascript">
 
-// if(localStorage.getItem('active') === "1"){
-//   window.location.href = '/error'
-// }
 
-// $.ajax({
-//   url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
-//   success: function(response){
-//     console.log("reached here", response);
-//     if(response)window.location.href = '/error';
-//   }
-// })
+$.ajax({
+  url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
+  success: function(response){
+    console.log("reached here", response);
+    if(response)window.location.href = '/error';
+  }
+})
 
 
 $('#startRoom').on('click', function() {
