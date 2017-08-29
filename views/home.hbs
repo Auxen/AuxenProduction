@@ -61,21 +61,16 @@ and (max-device-width : 480px) {
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
-
-        <h2 class="text small" id="setup">We need to sure your Spotify is set up properly</h2>
-       <h2 class="text smaller">
+       <h2 class="text small">
          <br>
          <br>
-         1. Open your Spotify! This is very important
+         1. Open your Spotify AND play any song
          <br>
          <br>
-         2. Play a song. Whatever song you want.
+         2. Press Test
          <br>
          <br>
-         3. Press Test
-         <br>
-         <br>
-         4. If your music changed, you're good to go! If not make sure you're logged into the right Spotify account and then try again!
+         3. Your song should change! (If not 😞 try again )
        </h2>
        <br>
        <br>
@@ -93,12 +88,26 @@ and (max-device-width : 480px) {
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-
-
 }
 </style>
 
 <script>
+
+
+    
+    function mobileModal() {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+          $('.modal-body').empty();
+          $('.modal-body').append(`<h2 class="text small">
+            This app does not work well on mobile 😞 but we're working hard to fix this!
+            </h2>
+            <div id="instructions" class="row">
+             <h1 id="songTest" type="button" style="width: 20%; margin-left: 2%; margin-right: 2%; " class="text small boxed raise col-xs-2">Try it!</h1>
+            </div>
+          `)
+      }
+    }
+
 
     function toggleRepeat(){
       $.ajax({
@@ -192,7 +201,7 @@ and (max-device-width : 480px) {
           url: 'https://api.spotify.com/v1/me/player/play',
           method: 'PUT',
           headers: {
-            'Authorization': 'Bearer ' + accessToken,
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken"),
             'Content-Type': "application/json"
           },
           data: JSON.stringify({

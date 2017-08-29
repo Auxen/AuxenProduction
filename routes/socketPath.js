@@ -3,7 +3,8 @@ var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
-var existingRoomNames = [];
+
+
 
 module.exports = function(io) {
   io.on('connection', function(socket) {
@@ -15,7 +16,6 @@ module.exports = function(io) {
         clientSecret: process.env.SPOTIFY_SECRET,
         redirectUri: process.env.CALLBACK_URL
       });
-
       return spotifyApi;
     }
 
@@ -32,12 +32,13 @@ module.exports = function(io) {
           io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
           io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
           io.sockets.adapter.rooms[room].songName = data.body.item.name; //setting song name property to room
-
+          io.sockets.adapter.rooms[room].lastSongs = [data.body.item.name]; //setting lastSongs array property for the room
           console.log(data.body.item.name);
           var DJData = {
             songURI: data.body.item.uri,
             timeProgress: data.body.progress_ms + timeDiff,
-            songName: data.body.item.name
+            songName: data.body.item.name,
+            lastSongs: io.sockets.adapter.rooms[room].lastSongs //update last songs Benjamin
           };
           io.to(room).emit("DJData", DJData);
         } else { // not first song of room
@@ -47,10 +48,18 @@ module.exports = function(io) {
             io.sockets.adapter.rooms[room].timeProgress = data.body.progress_ms; //setting time property to room
             io.sockets.adapter.rooms[room].songURI = data.body.item.uri; //setting song property to room
             io.sockets.adapter.rooms[room].songName = data.body.item.name; //setting song name property to room
+            if(io.sockets.adapter.rooms[room].lastSongs.length < 5){
+              io.sockets.adapter.rooms[room].lastSongs.push(data.body.item.name);
+            }else{
+              var arr = io.sockets.adapter.rooms[room].lastSongs.slice(1);
+              arr.push(data.body.item.name);
+              io.sockets.adapter.rooms[room].lastSongs = arr;
+            }
             var DJData = {
               songURI: data.body.item.uri,
               timeProgress: data.body.progress_ms + timeDiff,
-              songName: data.body.item.name
+              songName: data.body.item.name,
+              lastSongs: io.sockets.adapter.rooms[room].lastSongs
             };
             io.to(room).emit("DJData", DJData);
           } else {
@@ -295,7 +304,9 @@ module.exports = function(io) {
 
     /* user sends flame to dj */
     socket.on('laflame', function() {
+
       console.log('this is also happening');
+
       io.sockets.adapter.rooms[socket.room].laflame = io.sockets.adapter.rooms[socket.room].laflame + 1;
       io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
     });
@@ -319,6 +330,12 @@ module.exports = function(io) {
           return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
         } else {
           console.log("this room no longer exists");
+          Room.remove({'roomName': roomName})
+          .then(() => {
+            console.log("***********Ben - room successfully removed****************************");
+          }).catch((error) => {
+            console.log("error", error);
+          });
           clearInterval(clearID);
         }
       }, 5000);
