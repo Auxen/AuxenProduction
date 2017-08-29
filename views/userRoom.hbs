@@ -325,7 +325,7 @@ socket.on('DJData', function(DJData){
   var songName= DJData.songName;
   $('#currentSong').empty();
   $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
-
+  //
   //Benjamin lastSongs
   if(DJData.lastSongs){
     $('#lastSongs').empty();
