@@ -161,7 +161,7 @@ if(isSafari){
 
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
-  if(!localStorage.getItem('leaving')){
+  if(localStorage.getItem('leaving') === "false"){
     var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
     socket.emit('specialLeave', userObject);
     localStorage.setItem("disconnectTime", new Date().getTime());
@@ -278,10 +278,10 @@ socket.on('connect', function() {
   }
 });
 
-  socket.emit('getflames');
+socket.emit('getflames');
 
 socket.on('getflames', function(count) {
-  $('#laflamecount').text(count);
+    $('#laflamecount').text(count);
 })
 
 /* sets new access token after refresh */
