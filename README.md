@@ -1,36 +1,53 @@
 <img src="./readmeImg/auxenLogo.jpg" width="10%"></img>
 
-# Auxen - Build culture by sharing your music
-
-
-## Product
+# Auxen - Experience your music better by listening together
 
 ### [Live Web Site](https://www.auxen.live/)
 
-1. Auxen gives people the ability to hear what you are hearing on your local Spotify, you do not need to build complicated list or choose your music, just create a room and listen to what you live on your Spotify.
-You can share gratitude to your Audience and see there responses. At the moment Auxen is most suitable for web browser but soon you will be able to use it
+1. Auxen gives Spotify Premium users the ability to go live and project their music in real-time to a room which listeners can join. Whatever the "DJ" plays, the listener hears in real-time. The application emulates the experience of people listening in a room together.
 
-2. Here is the work flow of the system and some photos from a live Demo.
+2. Below you can find the flow and functionality of the application.
 
+### Login Screen
+<img src="./readmeImg/login.png" width="100%"></img>
 
-## Using the App
+On the login screen, users are prompted to log in with their Spotify Premium account.
+### Home Screen
 
-## Login screen
-<img src="./readmeImg/loginPage.png" width="65%"></img>
+<img src ="./readmeImg/home.png" width="100%"></img>
 
+On the home screen, users can choose to either create a room or to join a room. 
 
-## Dj room view and user view room
+### Create Room
 
-<img src="./readmeImg/dj_Room.png" width="45%"></img>      <img src="./readmeImg/user_Room.png" width="45%"></img>
+<img src ="./readmeImg/createRoom.png" width="100%"></img>
 
-## User room view
+The create room screen, is pretty simple. You just have to choose a unique name.
 
- <details>
- <summary>User room view </summary>
+### Join Room
 
- ![](./readmeImg/user_Room.png)
- </details>
+<img src ="./readmeImg/joinRoom.png" width="100%"></img>
 
+The join room screen allows you choose between the different rooms. 
+
+### DJ Room View
+
+<img src ="./readmeImg/djRoom.png" width="100%"></img>
+
+The DJ room view is simple. Users who join the room spread out below.
+The DJ can send floating 🙏 or send messages to all the room listeners.
+Additionally, the DJ can "pass the Aux" to listeners in the room. The DJ can also take back the Aux whenever he or she pleases.
+
+### Listener Room View
+
+<img src ="./readmeImg/userRoom.png" width="100%"></img>
+
+The User Room View is very similar to the DJ view, with a few key differences.
+Like the DJ, the listener can send messages to the room, but instead of 🙏 there is 🔥. The listener can set the room on fire.
+
+## Conclusion
+
+Auxen is an application that will closer bonds with your friends, colleagues, and random people all over the world. The application allows you share experiences and share your taste. We hope to see this application used primarily in work places, or studying groups. If you want to read more about Auxen and our product-approach when building the product, check [this](https://medium.com/@mohammadsyed/our-thought-process-and-journey-when-building-auxen-157611fc26d4) link out.
 
 ## API Reference
 
@@ -40,7 +57,7 @@ You can share gratitude to your Audience and see there responses. At the moment 
 
 ## Contributors
 
-Yash Navatia, Benjamin Segal , Mohamad Sayed
+[Yashvardhan Nevatia](https://github.com/yashnevatia), [Benjamin Segal](https://github.com/segalb) , [Mohammad Syed](https://github.com/mohammad-gitup)
 
 ## License
   MIT license

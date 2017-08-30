@@ -25,6 +25,12 @@ and (max-device-width : 480px) {
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
       </div>
 
+
+
+      <div id="lastSongs" class="center">
+      </div>
+
+
       <div id="pass" class="center">
         <h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>
       </div>
@@ -160,7 +166,8 @@ if(isSafari){
     }
 
     else{
-      localStorage.setItem('active', 1);
+
+      socket.emit('active',localStorage.getItem('spotifyId'))
       var djObject = {
         roomName: roomName,
         accessToken: localStorage.getItem('accessToken')
@@ -377,6 +384,7 @@ if(isSafari){
     //   $('#lastSongs').append(`<br><h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">${item}</h2><br>`);
     // });
     // }
+
   })
 
 
