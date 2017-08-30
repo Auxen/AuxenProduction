@@ -29,21 +29,32 @@ and (max-device-width : 480px) {
   </div>
 </div>
 
-<script>
+<script type="text/javascript">
 
-// if(localStorage.getItem('active') === "1"){
-//   window.location.href = '/error'
-// }
+
+$.ajax({
+  url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
+  success: function(response){
+    console.log("reached here", response.active);
+    if(response.active === true)window.location.href = '/error';
+  },
+  error: function(response){
+    console.log(response);
+  }
+})
+
 
 $('#startRoom').on('click', function() {
   $('#roomSubmit').submit();
 })
 
+var existingRoomNames = '{{existingRoomNames}}';
+console.log("existingRoomNames", existingRoomNames);
+
 $('#roomSubmit').on('submit', function (event) {
 
-  //  console.log("reached here");
-    var existingRoomNames = '{{existingRoomNames}}';
-    //console.log("existingRoomNames", existingRoomNames);
+    // console.log("reached here");
+
     var proposedRoomName = $('#roomName').val();
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
       event.preventDefault();

@@ -8,6 +8,7 @@ var Room = models.Room;
 var existingRoomNames = [];
 
 module.exports = function() {
+
   /* Check login page. */
   router.use('/', function(req, res, next) {
     if (req.user) {
@@ -19,8 +20,6 @@ module.exports = function() {
       res.redirect('/login');
     }
   })//ben
-
-
 
   router.get('/notPremium', function(req, res, next){
     res.send('shit');
@@ -39,10 +38,23 @@ module.exports = function() {
 
   });
 
+  router.get('/isActive', function(req, res, next) {
+    console.log('isActive', req.query.spotifyId);
+    User.findOne({'spotifyId':req.query.spotifyId})
+    .then(user => {
+      console.log('isActive', user);
+      res.send({"active": user.active});
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  })
 
   /* Get createRoom page. */
   router.get('/createRoom', function(req, res, next) {
-    res.render('createRoom', {existingRoomNames});
+    res.render('createRoom', {
+      existingRoomNames: existingRoomNames
+    });
   })
 
   /* Get list of available rooms. */
@@ -122,24 +134,21 @@ module.exports = function() {
       res.render('error');
     })
   })
-  // router.get('/userRoom/',function(req,res,next){
-  //   console.log('hello world')
-  //   console.log(req.user);
-  // });
 
   /* renders room for user */
   router.get('/userRoom/:roomId', function(req, res, next) {
     var roomId = req.params.roomId;
-      Room.findById(roomId).then(room => {
+      Room.findById(roomId)
+      .then(room => {
         room.djRefreshToken = "";
         res.render('userRoom', {room})
-      }).catch(error => {
-        //console.log("error", error);
       })
-
-
+      .catch(error => {
+        console.log("error", error);
+      })
   });
 
+  /* error */
   router.get('/error', function(req, res){
     res.render('error')
   })
@@ -170,19 +179,6 @@ module.exports = function() {
       //console.log("error", error);
     })
   })
-
-  /* pass dj */
-  // do post from new dj, call this route from window.location of new dj
-  //for the old dj add emit event to backend add him to db as user
-  //then do window.location to userRoom so he goes to userRoom
-  //for rest of the users just do jquery and obviously change token in sockets
-  //if someone refreshes lets say, then as data is coming from db and i have
-  //saved new changes in db, it should not be a problem.
-
-
-  /* OR */
-  //if we do the halo thing all i do is toggle some variables and change sockets
-  //token
 
   return router;
 }

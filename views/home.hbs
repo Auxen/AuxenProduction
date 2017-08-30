@@ -2,9 +2,6 @@
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-  #songTest{
-    cursor: pointer !important;
-  }
   /*a {
     width: 500px;
   }*/
@@ -64,9 +61,7 @@ and (max-device-width : 480px) {
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
-
-        <h2 class="text small" id="setup">We need to make sure your Spotify is set up properly</h2>
-       <h2 class="text smaller">
+       <h2 class="text small">
          <br>
          <br>
          1. Open your Spotify AND play any song
@@ -75,7 +70,7 @@ and (max-device-width : 480px) {
          2. Press Test
          <br>
          <br>
-         3. Congratulations!
+         3. Your song should change! (If not 😞 try again )
        </h2>
        <br>
        <br>
@@ -98,52 +93,21 @@ and (max-device-width : 480px) {
 
 <script>
 
-    if(!localStorage.getItem('spotifyId')) {
-      mobileModal();
-      $('#exampleModalLong').modal('show');
-    }
-    else {
-      var flag = false;
-      $.ajax({
-        url: 'https://api.spotify.com/v1/me/player/devices',
-        method: 'get',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
-        },
-        success: function(data){
-          for (var i = 0; i < data.devices.length; i++) {
-            if(data.devices[i].is_active) {
-              flag = true;
-              break;
-            }
-          }
-          if(!flag){
-            mobileModal();
-            $('#exampleModalLong').modal('show');
-            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be connected!')
-          }
-        }
-      })
-    //}
-    var spotifyId = '{{spotifyId}}';
-    var imageURL = '{{{imageURL}}}';
-    var username = '{{username}}';
-    var accessToken = '{{{accessToken}}}';
-    var refreshToken = '{{{refreshToken}}}';
-    localStorage.setItem("spotifyId", spotifyId);
-    localStorage.setItem("imageURL", imageURL);
-    localStorage.setItem("username", username);
-    localStorage.setItem('closing', "false");
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('closing', "false");
 
 
     function mobileModal() {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-          // change the modal to mobile
+          $('.modal-body').empty();
+          $('.modal-body').append(`<h2 class="text small">
+            This app does not work well on mobile 😞 but we're working hard to fix this!
+            </h2>
+            <div id="instructions" class="row">
+              <h1 type="button" id="dismiss" style="width: 95%; margin-left: 2%; margin-right: 2%;" class="text small center boxed raise" data-dismiss="modal">Dismiss</h1>
+            </div>
+          `)
       }
     }
+
 
     function toggleRepeat(){
       $.ajax({
@@ -180,17 +144,58 @@ and (max-device-width : 480px) {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-        //  console.log(data);
+          //  console.log(data);
           if(data.repeat_state !== 'off')toggleRepeat();
           if(data.shuffle_state)toggleShuffle();
         }
       })
     }
 
-    getPlayback();
-
     $(document).ready(function(){
-      $(document).on('click touchstart','#songTest' ,function() {
+      if(!localStorage.getItem('spotifyId')) {
+
+          $('#exampleModalLong').modal('show');
+        }
+      else {
+
+          var flag = false;
+          $.ajax({
+            url: 'https://api.spotify.com/v1/me/player/devices',
+            method: 'get',
+            headers: {
+                'Authorization': 'Bearer ' + '{{{accessToken}}}'
+            },
+            success: function(data){
+              if(data.devices){
+                for (var i = 0; i < data.devices.length; i++) {
+                  if(data.devices[i].is_active){
+                    flag = true;
+                    break;
+                  }
+                }
+              }
+              if(!flag){
+                $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+                $('#exampleModalLong').modal('show');
+              }
+            }
+          })
+        }
+      var spotifyId = '{{spotifyId}}';
+      var imageURL = '{{{imageURL}}}';
+      var username = '{{username}}';
+      var accessToken = '{{{accessToken}}}';
+      var refreshToken = '{{{refreshToken}}}';
+      localStorage.setItem("spotifyId", spotifyId);
+      localStorage.setItem("imageURL", imageURL);
+      localStorage.setItem("username", username);
+      localStorage.setItem('closing', "false");
+      localStorage.setItem('leaving', "false");
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('closing', "false");
+      getPlayback();
+      $(document).on('click','#songTest' ,function() {
 
         $.ajax({
           url: 'https://api.spotify.com/v1/me/player/play',
@@ -215,7 +220,5 @@ and (max-device-width : 480px) {
 
       })
     })
-
-
 
 </script>

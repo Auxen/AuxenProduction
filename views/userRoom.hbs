@@ -7,12 +7,7 @@ and (max-device-width : 480px) {
     width: 100% !important;
   }
 }
-
-
-
-
 </style>
-
 
 <div>
   <div class="row">
@@ -28,8 +23,6 @@ and (max-device-width : 480px) {
       <h2 id="djstatus" class="text-center standard-text small">DJ is: {{room.djName}}</h2>
       <div id="currentSong" class="center">
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
-      </div>
-      <div id="lastSongs" class="center">
       </div>
     </div>
   </div>
@@ -72,12 +65,31 @@ and (max-device-width : 480px) {
           <h1 id="request" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
         </div>
       </div>
+      <div id="lastSongs" class="text small">
+        Last Songs
+      </div>
     </div>
   </div>
 
 <div class="center" id="flames"></div>
 
-<!-- <script src="/static/user.js"></script> -->
+
+<div class="modal fade topLevel" id="inRoom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" data-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body" style="background-color: #1E1D1D">
+       <div id="instructions">
+        <h1 id="joinThisRoom" type="button" style="margin-left: 2%; margin-right: 2%; " class="text small boxed raise">Join this room</h1>
+        <h1 id="goToGetRooms" type="button" style="margin-left: 2%; margin-right: 2%; " class="text small boxed raise">Browse other rooms</h1>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="/static/scripts/float.js"></script>
+<!-- <script src="/static/user.js"></script> --> // ...........i am not sure what this is.........
+
 
 <script type="text/javascript">
 var roomName = '{{room.roomName}}';
@@ -88,6 +100,14 @@ var socket = io();
 var clearId = -1;
 var isDJ = false;
 var djName = '{{room.djName}}'
+
+$(document).on('click', '#joinThisRoom', function(e){
+  window.location.href = '/joinRoom?roomId=' + roomId;
+})
+
+$(document).on('click', '#goToGetRooms', function(e){
+  window.location.href = '/getRooms';
+})
 
 function pausePlayback(){
   $.ajax({
@@ -125,7 +145,7 @@ if(isSafari){
                 //  console.log(hash)
             if (hash === '') {
               //console.log("unloading safari");
-                  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
+                  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
                 socket.emit('specialLeave', userObject);
               localStorage.setItem("disconnectTime", new Date().getTime());
               clearInterval(clearId);
@@ -135,25 +155,24 @@ if(isSafari){
             //console.log('hashname',hashName)
           }
         });
-    window.history.pushState('forward', null, `./${roomId}#`);
+        window.history.pushState('forward', null, `./${roomId}#`);
       }
     });
 
-  }
-  /* happens on refresh and close tab */
-  $(window).on("unload", function(){
-    localStorage.setItem('active', 0)
-    //console.log("unloading");
-    window.location = '/';
-    var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId")};
-    //console.log("***********user object*************", userObject);
+}
+
+
+/* happens on refresh and close tab */
+$(window).on("unload", function(){
+  if(!localStorage.getItem('leaving')){
+    var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
     socket.emit('specialLeave', userObject);
     localStorage.setItem("disconnectTime", new Date().getTime());
-    clearInterval(clearId);
-  });
+  }
+  clearInterval(clearId);
+});
 
- /* user sends request */
-
+/* user sends request */
 $('#request').on('click', function() {
   var request = $('#requestval').val();
   $('#requestval').val('');
@@ -172,13 +191,13 @@ $('#laflame').on('click', function() {
   socket.emit('laflame');
 })
 
-/////////////////////////////
+///////////////////////////////
 
-/* if user wants to leave room it comes here */
+/* if user wants to leave room it comes here and
+if he is dj, passes aux back to host */
 $('#userLeave').on('click', function(event){
-  //console.log("********",isDJ, roomName);
-  if(isDJ === true){
-    //console.log("entered here");
+  localStorage.setItem('leaving', 'true');
+  if(isDJ){
     socket.emit('userDJLeaving', roomName);
   }
   socket.emit('leaveRoom', localStorage.getItem("spotifyId"));
@@ -186,9 +205,11 @@ $('#userLeave').on('click', function(event){
   window.location = $(this).attr('data-url');
 })
 
+/* room recieves the event of pass dj and if this guy is dj, he gets notification */
 socket.on('changedDJ', function(djObject){
-  //console.log(djObject.spotifyId);
+
   if(djObject.spotifyId === localStorage.getItem('spotifyId')) {
+    isDJ = true;
     $('#djstatus').text('You were passed the aux!');
     if (Notification.permission !== "granted" && Notification) {
         Notification.requestPermission(function(permission) {
@@ -197,36 +218,34 @@ socket.on('changedDJ', function(djObject){
             body: "You were passed the aux!",
           });
         });
-    } else {
+    }
+    else {
       var notification = new Notification('Notification title', {
         body: "You were passed the aux!",
       });
     }
-    isDJ = true;
-  } else {
-    $('#djstatus').text(`${djObject.username} was passed the aux`);
-    isDJ = false;
   }
+  else {
+    $('#djstatus').text(`${djObject.username} was passed the aux`);
+  }
+
 })
 
-socket.on('takenBack', function(){
-  if(isDJ)isDJ = false;
+/* host of the room voluntarily takes back aux*/
+socket.on('takeBack', function(){
+  if(isDJ){
+    isDJ = false;
+  }
   $('#djstatus').text(`DJ is: ${djName}`);
 })
 
-////////////////////////////
+//////////////////////////////
 
 
 /* Checking connnection to socket */
 socket.on('connect', function() {
 
-
-  //console.log('Connected!');
-  // if(localStorage.getItem('active') === "1"){
-  //   window.location.href = '/error';
-  // }
-  localStorage.setItem('active', 1);
-  //socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+  socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   }, 30*60000 );
@@ -243,15 +262,30 @@ socket.on('connect', function() {
       //console.log("this was a refresh");
       //console.log("userObject", userObject);
       socket.emit("userRefreshed", userObject);
+      socket.emit('active', localStorage.getItem('spotifyId'));
       localStorage.removeItem("disconnectTime");
   }
   else{
     //console.log("new room joined without refresh");
-    socket.emit('joinRoom', userObject);
+    socket.emit('isInRoom', {spotifyId:localStorage.getItem('spotifyId'),roomName: roomName});
+    socket.on('isInRoom', function(data){
+      if(data){
+        socket.emit('joinRoom', userObject);
+        /* tells db that user is active to prevent multiple tabs */
+        socket.emit('active', localStorage.getItem('spotifyId'));
+      }
+      else {
+        $('#inRoom').modal('show');
+      }
+    })
   }
 });
 
   socket.emit('getflames');
+
+socket.on('getflames', function(count) {
+  $('#laflamecount').text(count);
+})
 
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){
@@ -280,7 +314,6 @@ socket.on('userJoined', function(userData){
            </div>
        </div>`
        $('#users').append(data);
-
     }
 
 });
@@ -325,14 +358,14 @@ socket.on('DJData', function(DJData){
   var songName= DJData.songName;
   $('#currentSong').empty();
   $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
-
+  //
   //Benjamin lastSongs
-  if(DJData.lastSongs){
-    $('#lastSongs').empty();
-    DJData.lastSongs.forEach(item => {
-    $('#lastSongs').append(`<h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${item}</h2>`);
-  });
-  }
+  // if(DJData.lastSongs){
+  //   $('#lastSongs').empty();
+  //   DJData.lastSongs.forEach(item => {
+  //   $('#lastSongs').append(`<h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${item}</h2>`);
+  // });
+  // }
 })
 
 /* listens for dj message */
@@ -386,7 +419,4 @@ socket.on('laflame', function(count) {
     }, 1800)
 })
 
-socket.on('getflames', function(count) {
-  $('#laflamecount').text(count);
-})
 </script>

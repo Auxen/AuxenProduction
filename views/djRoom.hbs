@@ -24,15 +24,21 @@ and (max-device-width : 480px) {
       <div id="currentSong" class="center">
         <img src="/static/images/loading.gif" class="img-responsive" style="width: 5%; height: 5%;"></img>
       </div>
+
+
+
       <div id="lastSongs" class="center">
       </div>
+
+
       <div id="pass" class="center">
         <h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>
       </div>
+
     </div>
   </div>
   <h1 class="center text smaller">
-    Flame count:&nbsp;<p id ="laflamecount" >0</p>
+    Flame count:&nbsp;<p id ="laflamecount">0</p>
   </h1>
   <div id="sendgrace-container">
     <h1 id="sendgrace" class="center floating pointer" >
@@ -62,6 +68,9 @@ and (max-device-width : 480px) {
           </form>
         <div class="modal-footer"  style="background-color: #1E1D1D">
           <h1 id="djtalk" class="text-center text small boxed raise" style="width: 20%; " data-dismiss="modal">Submit</h1>
+        </div>
+        <div id="lastSongs" class="center">
+          Last Songs
         </div>
       </div>
     </div>
@@ -157,7 +166,8 @@ if(isSafari){
     }
 
     else{
-      localStorage.setItem('active', 1);
+
+      socket.emit('active',localStorage.getItem('spotifyId'))
       var djObject = {
         roomName: roomName,
         accessToken: localStorage.getItem('accessToken')
@@ -368,12 +378,13 @@ if(isSafari){
     $('#currentSong').empty();
     $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
     //Benjamin lastSongs
-    if(DJData.lastSongs){
-      $('#lastSongs').empty();
-      DJData.lastSongs.forEach(item => {
-      $('#lastSongs').append(`<h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${item}</h2>`);
-    });
-    }
+    // if(DJData.lastSongs){
+    //   $('#lastSongs').empty();
+    //   DJData.lastSongs.forEach(item => {
+    //   $('#lastSongs').append(`<br><h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">${item}</h2><br>`);
+    // });
+    // }
+
   })
 
 
