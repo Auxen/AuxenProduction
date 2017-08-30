@@ -61,6 +61,7 @@ and (max-device-width : 480px) {
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
       </div>
       <div class="modal-body" style="background-color: #1E1D1D">
+        <h2 class="text small" id="#setup"></h2>
        <h2 class="text small">
          <br>
          <br>
@@ -94,7 +95,7 @@ and (max-device-width : 480px) {
 <script>
 
 
-    
+
     function mobileModal() {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
           $('.modal-body').empty();
@@ -175,7 +176,8 @@ and (max-device-width : 480px) {
                 }
               }
               if(!flag){
-                $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+                $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!');
+                console.log('Here');
                 $('#exampleModalLong').modal('show');
               }
             }
