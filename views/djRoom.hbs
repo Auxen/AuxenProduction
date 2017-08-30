@@ -26,12 +26,15 @@ and (max-device-width : 480px) {
       </div>
 
 
+
       <div id="lastSongs" class="center">
       </div>
+
 
       <div id="pass" class="center">
         <h1  style="font-size: 10px; margin-top: 1%; cursor: pointer;" class="text-center grow text small" data-toggle="modal" data-target="#passDJ">Pass Aux</h1>
       </div>
+
     </div>
   </div>
   <h1 class="center text smaller">
@@ -375,16 +378,13 @@ if(isSafari){
     $('#currentSong').empty();
     $('#currentSong').append(`<h2 id="currentSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${songName}</h2>`);
     //Benjamin lastSongs
-    if(DJData.lastSongs){
-      $('#lastSongs').empty();
-      DJData.lastSongs.forEach(item => {
+    // if(DJData.lastSongs){
+    //   $('#lastSongs').empty();
+    //   DJData.lastSongs.forEach(item => {
+    //   $('#lastSongs').append(`<br><h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">${item}</h2><br>`);
+    // });
+    // }
 
-     // $('#lastSongs').append(`<br><h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">${item}</h2><br>`);
-
-     // $('#lastSongs').append(`<h2 id="lastSong" style="font-size: 14px;" class="text-center standard-text small  no-margin animated fadeIn">Currently playing : ${item}</h2>`);
-
-    });
-    }
   })
 
 
