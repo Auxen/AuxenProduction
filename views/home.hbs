@@ -2,9 +2,6 @@
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
-  #songTest{
-    cursor: pointer !important;
-  }
   /*a {
     width: 500px;
   }*/
@@ -96,47 +93,8 @@ and (max-device-width : 480px) {
 
 <script>
 
-    if(!localStorage.getItem('spotifyId')) {
-      mobileModal();
-      $('#exampleModalLong').modal('show');
-    }
-    else {
-      var flag = false;
-      $.ajax({
-        url: 'https://api.spotify.com/v1/me/player/devices',
-        method: 'get',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
-        },
-        success: function(data){
-          for (var i = 0; i < data.devices.length; i++) {
-            if(data.devices[i].is_active) {
-              flag = true;
-              break;
-            }
-          }
-          if(!flag){
-            mobileModal();
-            $('#exampleModalLong').modal('show');
-            $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be connected!')
-          }
-        }
-      })
-    }
-    var spotifyId = '{{spotifyId}}';
-    var imageURL = '{{{imageURL}}}';
-    var username = '{{username}}';
-    var accessToken = '{{{accessToken}}}';
-    var refreshToken = '{{{refreshToken}}}';
-    localStorage.setItem("spotifyId", spotifyId);
-    localStorage.setItem("imageURL", imageURL);
-    localStorage.setItem("username", username);
-    localStorage.setItem('closing', "false");
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('closing', "false");
 
-
+    
     function mobileModal() {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
           $('.modal-body').empty();
@@ -149,6 +107,7 @@ and (max-device-width : 480px) {
           `)
       }
     }
+
 
     function toggleRepeat(){
       $.ajax({
@@ -185,17 +144,58 @@ and (max-device-width : 480px) {
             'Authorization': 'Bearer ' + localStorage.getItem("accessToken")
         },
         success: function(data){
-        //  console.log(data);
+          //  console.log(data);
           if(data.repeat_state !== 'off')toggleRepeat();
           if(data.shuffle_state)toggleShuffle();
         }
       })
     }
 
-    getPlayback();
-
     $(document).ready(function(){
-      $(document).on('click touchstart','#songTest' ,function() {
+      if(!localStorage.getItem('spotifyId')) {
+
+          $('#exampleModalLong').modal('show');
+        }
+      else {
+
+          var flag = false;
+          $.ajax({
+            url: 'https://api.spotify.com/v1/me/player/devices',
+            method: 'get',
+            headers: {
+                'Authorization': 'Bearer ' + '{{{accessToken}}}'
+            },
+            success: function(data){
+              if(data.devices){
+                for (var i = 0; i < data.devices.length; i++) {
+                  if(data.devices[i].is_active){
+                    flag = true;
+                    break;
+                  }
+                }
+              }
+              if(!flag){
+                $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+                $('#exampleModalLong').modal('show');
+              }
+            }
+          })
+        }
+      var spotifyId = '{{spotifyId}}';
+      var imageURL = '{{{imageURL}}}';
+      var username = '{{username}}';
+      var accessToken = '{{{accessToken}}}';
+      var refreshToken = '{{{refreshToken}}}';
+      localStorage.setItem("spotifyId", spotifyId);
+      localStorage.setItem("imageURL", imageURL);
+      localStorage.setItem("username", username);
+      localStorage.setItem('closing', "false");
+      localStorage.setItem('leaving', "false");
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('closing', "false");
+      getPlayback();
+      $(document).on('click','#songTest' ,function() {
 
         $.ajax({
           url: 'https://api.spotify.com/v1/me/player/play',
@@ -220,7 +220,5 @@ and (max-device-width : 480px) {
 
       })
     })
-
-
 
 </script>
