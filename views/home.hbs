@@ -95,7 +95,10 @@ and (max-device-width : 480px) {
 <script>
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f22d34d2d505d3e783f0e3771d4db145053c7174
     function mobileModal() {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
           $('.modal-body').empty();
@@ -108,7 +111,6 @@ and (max-device-width : 480px) {
           `)
       }
     }
-
 
     function toggleRepeat(){
       $.ajax({
@@ -153,12 +155,11 @@ and (max-device-width : 480px) {
     }
 
     $(document).ready(function(){
+
       if(!localStorage.getItem('spotifyId')) {
-
           $('#exampleModalLong').modal('show');
-        }
+      }
       else {
-
           var flag = false;
           $.ajax({
             url: 'https://api.spotify.com/v1/me/player/devices',
@@ -182,7 +183,7 @@ and (max-device-width : 480px) {
               }
             }
           })
-        }
+      }
       var spotifyId = '{{spotifyId}}';
       var imageURL = '{{{imageURL}}}';
       var username = '{{username}}';
