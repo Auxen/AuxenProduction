@@ -1,4 +1,3 @@
-// demo version 4
 var express = require('express');
 var router = express.Router();
 var models = require('../models/models');
@@ -19,10 +18,6 @@ module.exports = function() {
       //console.log("here");
       res.redirect('/login');
     }
-  })//ben
-
-  router.get('/notPremium', function(req, res, next){
-    res.send('shit');
   })
 
   /* Get home page. */
@@ -37,6 +32,11 @@ module.exports = function() {
     });
 
   });
+  
+   /* not Premium */
+   router.get('/notPremium', function(req, res, next){
+      res.render('notPremium');
+   })
 
   router.get('/isActive', function(req, res, next) {
     console.log('isActive', req.query.spotifyId);
