@@ -22,21 +22,14 @@ module.exports = function() {
 
   /* Get home page. */
   router.get('/', function(req, res, next) {
-
-      res.render('home', {
-          spotifyId: req.user.spotifyId,
-          imageURL: req.user.imageURL,
-          username: req.user.username,
-          accessToken: req.user.accessToken,
-          refreshToken: req.user.refreshToken
-      });
-
+    res.render('home', {
+        spotifyId: req.user.spotifyId,
+        imageURL: req.user.imageURL,
+        username: req.user.username,
+        accessToken: req.user.accessToken,
+        refreshToken: req.user.refreshToken
+    });
   });
-  
-   /* not Premium */
-   router.get('/notPremium', function(req, res, next){
-      res.render('notPremium');
-   })
 
   /* checks if user is already in room or not */
   router.get('/isActive', function(req, res, next) {
