@@ -33,15 +33,20 @@ module.exports = function() {
 
   /* checks if user is already in room or not */
   router.get('/isActive', function(req, res, next) {
-    console.log('isActive', req.query.spotifyId);
+    //console.log('isActive', req.query.spotifyId);
     User.findOne({'spotifyId':req.query.spotifyId})
     .then(user => {
-      console.log('isActive', user);
+      //console.log('isActive', user);
       res.send({"active": user.active});
     })
     .catch(err => {
       console.log(err);
     })
+  })
+
+  /* multiple tabs error page */
+  router.get('/multipleTabs', function(req, res, next){
+    res.render('multipleTabs');
   })
 
   /* Get createRoom page. */
