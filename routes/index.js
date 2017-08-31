@@ -29,7 +29,7 @@ module.exports = function() {
           username: req.user.username,
           accessToken: req.user.accessToken,
           refreshToken: req.user.refreshToken
-    });
+      });
 
   });
   
@@ -38,6 +38,7 @@ module.exports = function() {
       res.render('notPremium');
    })
 
+  /* checks if user is already in room or not */
   router.get('/isActive', function(req, res, next) {
     console.log('isActive', req.query.spotifyId);
     User.findOne({'spotifyId':req.query.spotifyId})
@@ -105,7 +106,6 @@ module.exports = function() {
   })
 
   /* Join a room, add to db array and render room page. */
-  /*ask yash if needed*/
   router.get('/joinRoom', function(req, res, next) {
     ///console.log("joined room in database.");
     var roomId = req.query.roomId;
