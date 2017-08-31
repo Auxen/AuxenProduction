@@ -60,7 +60,7 @@ and (max-device-width : 480px) {
       <div class="modal-header"  style="background-color: #1E1D1D">
         <h5 class="modal-title text headertext" id="exampleModalLongTitle">Welcome to Auxen</h5>
       </div>
-      <div class="modal-body" style="background-color: #1E1D1D">
+      <div id="setup" class="modal-body" style="background-color: #1E1D1D">
        <h2 class="text small">
          <br>
          <br>
@@ -150,6 +150,7 @@ and (max-device-width : 480px) {
     }
 
     $(document).ready(function(){
+      mobileModal();
 
       if(!localStorage.getItem('spotifyId')) {
           $('#exampleModalLong').modal('show');
@@ -172,7 +173,7 @@ and (max-device-width : 480px) {
                 }
               }
               if(!flag){
-                $('#setup').addClass('red').text('Your Spotify doesn\'t seem to be open!')
+                $('#setup').prepend('<p class="red small text-center text">Your Spotify doesn\'t seem to be connected! Try opening it and playing a song.</p>');
                 $('#exampleModalLong').modal('show');
               }
             }
