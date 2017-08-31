@@ -88,13 +88,13 @@ module.exports = function() {
     var roomId = req.params.roomId;
     Room.findById(roomId)
     .then(room => {
-      if(room && req.user.spotifyId === room.spotifyId){
+      if(room && req.user.spotifyId === room.djSpotifyId){
           res.render('djRoom', {room})
       }
       else res.redirect('/');
     })
     .catch(err => {
-      console.log("error", err);
+      console.log("err")
     })
   })
 
