@@ -20,10 +20,6 @@ module.exports = function() {
     }
   })
 
-  router.get('/notPremium', function(req, res, next){
-    res.send('shit');
-  })
-
   /* Get home page. */
   router.get('/', function(req, res, next) {
 
@@ -36,6 +32,11 @@ module.exports = function() {
     });
 
   });
+  
+   /* not Premium */
+   router.get('/notPremium', function(req, res, next){
+      res.render('notPremium');
+   })
 
   router.get('/isActive', function(req, res, next) {
     console.log('isActive', req.query.spotifyId);
