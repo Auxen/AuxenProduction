@@ -38,9 +38,10 @@ module.exports = function() {
   }
 
   /* Get home page. */
+
   router.get('/', ifRedirected,function(req, res, next) {
 
-    console.log("THIS IS SESSION", req.session);
+    //console.log("THIS IS SESSION", req.session);
 
       res.render('home', {
           spotifyId: req.user.spotifyId,
@@ -56,17 +57,23 @@ module.exports = function() {
       res.render('notPremium');
    })
 
+  
   /* checks if user is already in room or not */
-  router.get('/isActive', ifRedirected,function(req, res, next) {
-    console.log('isActive', req.query.spotifyId);
+  router.get('/isActive', function(req, res, next) {
+    //console.log('isActive', req.query.spotifyId);
     User.findOne({'spotifyId':req.query.spotifyId})
     .then(user => {
-      console.log('isActive', user);
+      //console.log('isActive', user);
       res.send({"active": user.active});
     })
     .catch(err => {
       console.log(err);
     })
+  })
+
+  /* multiple tabs error page */
+  router.get('/multipleTabs', function(req, res, next){
+    res.render('multipleTabs');
   })
 
   /* Get createRoom page. */
@@ -119,7 +126,9 @@ module.exports = function() {
       else res.redirect('/');
     })
     .catch(err => {
+
       res.redirect('/error')
+
     })
   })
 
