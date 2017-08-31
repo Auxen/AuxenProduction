@@ -19,7 +19,7 @@ module.exports = function() {
       //console.log("here");
       res.redirect('/login');
     }
-  })//ben
+  })
 
   router.get('/notPremium', function(req, res, next){
     res.send('shit');
