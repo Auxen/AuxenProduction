@@ -19,7 +19,10 @@ module.exports = function(passport) {
 
   router.get('/auth/spotify/callback', passport.authenticate('spotify', { failureRedirect: '/login' }),
     function(req, res) {
-    res.redirect('/');
+      console.log("does it reach here",req.session.redirectUrl );
+      var redirectionUrl = req.session.redirectUrl || '/';
+      res.redirect(redirectionUrl);
+      //res.redirect('/');
   });
 
   router.get('/logout',function(req,res){
