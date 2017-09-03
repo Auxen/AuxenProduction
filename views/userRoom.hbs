@@ -269,6 +269,7 @@ socket.on('connect', function() {
         socket.emit('joinRoom', userObject);
         /* tells db that user is active to prevent multiple tabs */
         socket.emit('active', localStorage.getItem('spotifyId'));
+        socket.emit('getflames');
       }
       else {
         $('#inRoom').modal('show');
@@ -277,7 +278,7 @@ socket.on('connect', function() {
   }
 });
 
-socket.emit('getflames');
+
 
 socket.on('getflames', function(count) {
     $('#laflamecount').text(count);
