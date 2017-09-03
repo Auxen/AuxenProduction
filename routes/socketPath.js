@@ -306,9 +306,11 @@ module.exports = function(io) {
     socket.on('laflame', function() {
 
       console.log('this is also happening');
+      if (socket.room){
+        io.sockets.adapter.rooms[socket.room].laflame = io.sockets.adapter.rooms[socket.room].laflame + 1;
+        io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
+      }
 
-      io.sockets.adapter.rooms[socket.room].laflame = io.sockets.adapter.rooms[socket.room].laflame + 1;
-      io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
     });
 
     ////////////////// USER ENDS //////////////////
@@ -386,5 +388,5 @@ module.exports = function(io) {
 
     //////////////////// DJ ENDS ///////////////////
   })
-  
+
 }
