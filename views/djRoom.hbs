@@ -26,7 +26,6 @@ and (max-device-width : 480px) {
       </div>
 
 
-
       <div id="lastSongs" class="center">
       </div>
 
@@ -37,10 +36,14 @@ and (max-device-width : 480px) {
 
     </div>
   </div>
-  <h1 class="center text smaller">
+  <h1 class="center text smaller" style="margin-top: 0%; margin-bottom: 0%;">
     Flame count:&nbsp;<p id ="laflamecount">0</p>
   </h1>
+  <div class="center">
+    <h1 id="shareable" style="font-size: 10px; margin-top: 0%; cursor: pointer;" class="text-center grow text small">Get shareable link</h1>
+  </div>
   <div id="sendgrace-container">
+
     <h1 id="sendgrace" class="center floating pointer" >
       🙏
     </h1>
@@ -85,8 +88,8 @@ and (max-device-width : 480px) {
     </div>
     </div>
   </div>
+<h1 style="display: none;" id="linkHome"></h1>
 
-</div>
 
 <script type="text/javascript">
 
@@ -291,7 +294,17 @@ socket.on('DJTakeBack', function(){
 })
 
 /////////////////////
-
+$('#shareable').on('click', function() {
+  $('#shareable').text('Copied!');
+  var link = window.location.href;
+  var linkArr = link.split('/');
+  linkArr[3] = 'userRoom';
+  var newLink = linkArr.join('/');
+  $('#linkHome').append(ne wLink);
+  // copy and paste
+  var selectedLink = $('#linkHome').select();
+  document.execCommand('copy');
+})
 
 
  /* sends message of dj to room */
