@@ -26,9 +26,13 @@ and (max-device-width : 480px) {
       </div>
     </div>
   </div>
-  <h1 class="center text smaller">
+  <h1 class="center text smaller" style="margin-top: 0%;">
     Flame count:&nbsp;<p id="laflamecount">0</p>
   </h1>
+  <div class="center" style="margin-top: 0%; margin-bottom: 0%;">
+    <h1 id="shareable" style="font-size: 10px; margin-top: 0%; cursor: pointer;" class="text-center grow text small">Get shareable link</h1>
+  </div>
+
   <div id="laflame-container">
     <h1 id="laflame" class="center floating pointer" >
       🔥
@@ -85,6 +89,9 @@ and (max-device-width : 480px) {
     </div>
   </div>
 </div>
+
+<h1 style="display: none;" id="linkHome"></h1>
+
 
 
 <script type="text/javascript">
@@ -186,6 +193,14 @@ $('#requestform').on('submit', function(e) {
 $('#laflame').on('click', function() {
   socket.emit('laflame');
 })
+
+$('#shareable').on('click', function() {
+  $('#shareable').text('Copied!');
+  var link = window.location.href;
+  $('#linkHome').append(link)
+  // copy here
+})
+
 
 ///////////////////////////////
 
