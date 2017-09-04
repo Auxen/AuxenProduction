@@ -186,12 +186,13 @@ a:hover {
   0%{
 
     bottom: 0;
+    opacity: 0;
     /*right: 50px;*/
   }
-  /*20%{
-    right: 40px;
+  20%{
+    opacity: 100%;
   }
-  40%{
+  /*40%{
     right: 60px;
   }
 
