@@ -84,7 +84,6 @@ module.exports = function(io) {
     }
 
     function inActive(spotifyId){
-      console.log('***************************');
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
         console.log('before change', user);
@@ -306,9 +305,11 @@ module.exports = function(io) {
     socket.on('laflame', function() {
 
       console.log('this is also happening');
+      if (socket.room){
+        io.sockets.adapter.rooms[socket.room].laflame = io.sockets.adapter.rooms[socket.room].laflame + 1;
+        io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
+      }
 
-      io.sockets.adapter.rooms[socket.room].laflame = io.sockets.adapter.rooms[socket.room].laflame + 1;
-      io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
     });
 
     ////////////////// USER ENDS //////////////////
@@ -386,5 +387,5 @@ module.exports = function(io) {
 
     //////////////////// DJ ENDS ///////////////////
   })
-  
+
 }
