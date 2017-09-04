@@ -1,6 +1,3 @@
-
-
-
 <div class="center">
   <img class="img-responsive" style="width: 50%; height: 50%;" src="/static/images/finalized_color.jpg" alt="">
 </div>
@@ -8,4 +5,13 @@
 
 <div class="center">
   <h1 class="text-center small text">You hit a page that doesn't exist : - (</h1>
+  <br>
+  <br>
+  <h1 id="home" class="closeRoom text-center text small boxed raise"> Go back to home </h1>
 </div>
+
+<script>
+$('#home').on('click', function(){
+  window.location = '/';
+})
+</script>

@@ -84,7 +84,6 @@ module.exports = function(io) {
     }
 
     function inActive(spotifyId){
-      console.log('***************************');
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
         console.log('before change', user);

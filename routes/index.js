@@ -21,27 +21,30 @@ module.exports = function() {
   // })
 
   function ifRedirected(req, res, next){
-    console.log("1");
+    //console.log("1");
     if(req.user){
-      console.log("2");
-      if(req.user.premium === 'premium') next();
+      //console.log("2");
+      if(req.user.premium === 'premium'){
+        User.findOne({spotifyId:req.user.spotifyId})
+        .then(user => {
+          if(!user.active)next()
+          else res.redirect('/multipleTabs')
+        })
+      }
       else res.redirect('/notPremium');
     }
     else{
-      console.log("3");
+      //console.log("3");
       if(req.session){
-        console.log("4");
-        req.session.redirectUrl = req.headers.referer || req.originalUrl || req.url;  
+        //console.log("4");
+        req.session.redirectUrl = req.headers.referer || req.originalUrl || req.url;
         res.redirect('/login');
       }
     }
   }
 
   /* Get home page. */
-
   router.get('/', ifRedirected,function(req, res, next) {
-
-    //console.log("THIS IS SESSION", req.session);
 
       res.render('home', {
           spotifyId: req.user.spotifyId,
@@ -51,13 +54,12 @@ module.exports = function() {
           refreshToken: req.user.refreshToken
       });
   });
-  
-   /* not Premium */
-   router.get('/notPremium', ifRedirected,function(req, res, next){
+
+  /* not Premium */
+  router.get('/notPremium', ifRedirected,function(req, res, next){
       res.render('notPremium');
    })
 
-  
   /* checks if user is already in room or not */
   router.get('/isActive', function(req, res, next) {
     //console.log('isActive', req.query.spotifyId);
