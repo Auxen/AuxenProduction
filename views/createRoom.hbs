@@ -55,7 +55,10 @@ $('#roomSubmit').on('submit', function (event) {
 
     // console.log("reached here");
 
+
     var proposedRoomName = $('#roomName').val();
+
+
     if(existingRoomNames.indexOf(proposedRoomName) !== -1){
       event.preventDefault();
       $('#roomName').addClass('shake');
