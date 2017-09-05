@@ -4,7 +4,7 @@ var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
-var existingRoomNames = [];
+var existingRoomNames = ["yash", "mo", "ben"];
 
 module.exports = function() {
 
