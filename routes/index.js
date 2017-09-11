@@ -99,7 +99,8 @@ module.exports = function() {
   /* Create a room */
   router.post('/createRoom', ifRedirected,function(req, res, next) {
     //console.log("reaching create Room in backend post");
-    var roomName = req.body.roomNameBar.replace(/[^a-zA-Z]+/g, '');
+    var roomName = req.body.roomNameBar.replace(/[^A-Za-z0-9_\s]+/g, '');
+
     console.log(roomName);
     existingRoomNames.push(roomName);
     var newRoom = new Room({
