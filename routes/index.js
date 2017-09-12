@@ -21,9 +21,8 @@ module.exports = function() {
   // })
 
   function ifRedirected(req, res, next){
-    //console.log("1");
+
     if(req.user){
-      //console.log("2");
       if(req.user.premium === 'premium'){
         User.findOne({spotifyId:req.user.spotifyId})
         .then(user => {
@@ -34,9 +33,7 @@ module.exports = function() {
       else res.redirect('/notPremium');
     }
     else{
-      //console.log("3");
       if(req.session){
-        //console.log("4");
         req.session.redirectUrl = req.headers.referer || req.originalUrl || req.url;
         res.redirect('/login');
       }
