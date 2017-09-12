@@ -11,11 +11,18 @@ module.exports = function(passport) {
     res.render('login');
   })
 
-  router.get('/auth/spotify', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private', 'user-modify-playback-state', 'user-read-playback-state'] }));
+  router.get('/auth/spotify', 
+    passport.authenticate('spotify', {
+      scope: ['user-read-email', 'user-read-private', 'user-modify-playback-state', 'user-read-playback-state'] 
+    }
+  ));
 
   router.get('/auth/spotify/callback', passport.authenticate('spotify', { failureRedirect: '/login' }),
     function(req, res) {
-    res.redirect('/');
+      console.log("does it reach here",req.session.redirectUrl );
+      var redirectionUrl = req.session.redirectUrl || '/';
+      res.redirect(redirectionUrl);
+      //res.redirect('/');
   });
 
   router.get('/logout',function(req,res){

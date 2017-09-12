@@ -92,7 +92,7 @@ and (max-device-width : 480px) {
 
 
 <script type="text/javascript">
-//jay
+
 var djRefreshToken = '{{room.djRefreshToken}}';
 var roomId = '{{room._id}}';
 var roomName = '{{room.roomName}}';
@@ -152,7 +152,7 @@ else {
 socket.on('connect', function(){
 
   //console.log('Connected!');
-
+  
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   }, 20*60000);
@@ -162,7 +162,7 @@ socket.on('connect', function(){
   }
 
   else{
-    //localStorage.setItem('active', 1);
+
     socket.emit('active',localStorage.getItem('spotifyId'))
     var djObject = {
       roomName: roomName,
@@ -352,7 +352,7 @@ $('#sendgrace').on('click', function() {
   socket.emit('sendgrace');
 })
 
-
+/* if aux is passed change stuff for host accordingly */
 socket.on('DJData', function(DJData){
   if(!isDJ){
 
