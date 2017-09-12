@@ -4,7 +4,7 @@ var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
-var existingRoomNames = ["yash", "mo", "ben"];
+var existingRoomNames = [];
 
 module.exports = function() {
 
@@ -21,7 +21,6 @@ module.exports = function() {
   // })
 
   function ifRedirected(req, res, next){
-
     if(req.user){
       if(req.user.premium === 'premium'){
         User.findOne({spotifyId:req.user.spotifyId})
@@ -186,10 +185,12 @@ module.exports = function() {
   router.get('/closeRoom/:name', ifRedirected,function(req, res, next) {
     var roomId = req.query.roomId;
     var roomName = req.params.name;
-    Room.remove({'_id': roomId}).then(() => {
+    Room.remove({'_id': roomId})
+    .then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
       res.redirect('/');
-    }).catch(error => {
+    })
+    .catch(error => {
       res.redirect('/error')
     })
   })
