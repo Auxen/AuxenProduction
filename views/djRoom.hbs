@@ -40,7 +40,7 @@ and (max-device-width : 480px) {
     Flame count:&nbsp;<p id ="laflamecount">0</p>
   </h1>
   <div class="center">
-    <h1 id="shareable" style="font-size: 10px; margin-top: 0%; cursor: pointer;" class="text-center grow text small">Get shareable link</h1>
+    <h1 id="shareable" style="font-size: 10px; margin-top: 0%; cursor: pointer;" class="text-center grow text small" data-clipboard-target="#linkHome">Get shareable link</h1>
   </div>
   <div id="sendgrace-container">
 
@@ -88,7 +88,7 @@ and (max-device-width : 480px) {
     </div>
     </div>
   </div>
-<h1 id="linkHome"></h1>
+<h1 id="linkHome" style="opacity: 0;"></h1>
 
 
 <script type="text/javascript">
@@ -100,6 +100,8 @@ var socket = io();
 var clearId = -1;
 var isDJ = true;
 var userDJSpotifyId = '';
+new Clipboard('#shareable');
+
 
 var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                   navigator.userAgent && !navigator.userAgent.match('CriOS');
@@ -298,10 +300,8 @@ $('#shareable').on('click', function() {
   var linkArr = link.split('/');
   linkArr[3] = 'userRoom';
   var newLink = linkArr.join('/');
-  $('#linkHome').append(newLink);
-  // copy and paste
-  var selectedLink = $('#linkHome').select();
-  document.execCommand('copy');
+  $('#linkHome').text(newLink)
+  
 })
 
 
@@ -344,9 +344,7 @@ $('#sendgrace').on('click', function() {
         🙏
     </span>
   `)
-  setTimeout(function() {
-    $('#flames').find('span:first').remove();
-  }, 2000)
+
   socket.emit('sendgrace');
 })
 
