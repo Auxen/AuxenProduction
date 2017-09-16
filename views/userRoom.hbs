@@ -292,13 +292,13 @@ socket.on('roomClosed', function(){
   socket.emit('leaveRoom');
   pausePlayback();
   alert('Sorry, the dj closed the room');
-  window.location = '/';
+  //window.location = '/';
 })
 
 /* after room is closed backend emits this event */
-// socket.on('redirect', function(){
-//   window.location = '/';
-// })
+socket.on('redirect', function(){
+  window.location = '/';
+})
 
 /* new user has joined */
 socket.on('userJoined', function(userData){

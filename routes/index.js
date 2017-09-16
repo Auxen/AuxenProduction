@@ -40,7 +40,7 @@ module.exports = function() {
   }
 
   /* Get home page. */
-  router.get('/', function(req, res, next) {
+  router.get('/', ifRedirected,function(req, res, next) {
 
       res.render('home', {
           spotifyId: req.user.spotifyId,
@@ -185,12 +185,10 @@ module.exports = function() {
   router.get('/closeRoom/:name', ifRedirected,function(req, res, next) {
     var roomId = req.query.roomId;
     var roomName = req.params.name;
-    Room.remove({'_id': roomId})
-    .then(() => {
+    Room.remove({'_id': roomId}).then(() => {
       existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
       res.redirect('/');
-    })
-    .catch(error => {
+    }).catch(error => {
       res.redirect('/error')
     })
   })
