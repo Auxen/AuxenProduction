@@ -26,9 +26,13 @@ and (max-device-width : 480px) {
       </div>
     </div>
   </div>
-  <h1 class="center text smaller">
+  <h1 class="center text smaller" style="margin-top: 0%;">
     Flame count:&nbsp;<p id="laflamecount">0</p>
   </h1>
+  <div class="center" style="margin-top: 0%; margin-bottom: 0%;">
+    <h1 id="shareable" style="font-size: 10px; margin-top: 0%; cursor: pointer;" class="text-center grow text small">Get shareable link</h1>
+  </div>
+
   <div id="laflame-container">
     <h1 id="laflame" class="center floating pointer" >
       🔥
@@ -86,6 +90,9 @@ and (max-device-width : 480px) {
   </div>
 </div>
 
+<h1 style="opacity: 0;" id="linkHome"></h1>
+
+
 
 <script type="text/javascript">
 var roomName = '{{room.roomName}}';
@@ -96,6 +103,9 @@ var socket = io();
 var clearId = -1;
 var isDJ = false;
 var djName = '{{room.djName}}'
+new Clipboard('#shareable');
+
+
 
 $(document).on('click', '#joinThisRoom', function(e){
   window.location.href = '/joinRoom?roomId=' + roomId;
@@ -186,6 +196,14 @@ $('#requestform').on('submit', function(e) {
 $('#laflame').on('click', function() {
   socket.emit('laflame');
 })
+
+$('#shareable').on('click', function() {
+  $('#shareable').text('Copied!');
+  var link = window.location.href;
+  $('#linkHome').text(link)
+  // copy here
+})
+
 
 ///////////////////////////////
 
@@ -387,9 +405,7 @@ socket.on('sendgrace', function() {
         🙏
     </span>
   `)
-  setTimeout(function() {
-    $('#flames').find('span:first').remove();
-  }, 1800)
+
 })
 
 /* listens to requests in room */
@@ -408,15 +424,15 @@ socket.on('userTalk', function(data){
 
 /* listens to flames in room */
 socket.on('laflame', function(count) {
+
   $('#laflamecount').text(count)
+
   $('#flames').append(`
       <span class="small fire" style="position: absolute; left:${Math.floor(100 * Math.random())}%">
           🔥
       </span>
     `)
-    setTimeout(function() {
-      $('#flames').find('span:first').remove();
-    }, 1800)
+
 })
 
 </script>

@@ -150,6 +150,7 @@ a:hover {
 /*THIS IS GOING TO BE THE ANIMATION */
 
 .fire {
+  opacity: 0;
   position: relative;
   animation-name: movement;
   animation-duration: 3s;
@@ -184,7 +185,7 @@ a:hover {
 
 @keyframes movement {
   0%{
-
+    opacity: 1;
     bottom: 0;
     /*right: 50px;*/
   }
@@ -207,9 +208,10 @@ a:hover {
   80%{
     right: 25px;
   }
+  */
   90%{
-    right: 50px;
-  }*/
+    opacity: 1
+  }
   100%{
     bottom: 2000px;
     -webkit-opacity: 0;
