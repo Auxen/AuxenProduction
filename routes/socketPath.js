@@ -227,7 +227,7 @@ module.exports = function(io) {
       if (userSpotifyId) {
         socket.to(socket.room).emit('userLeaving', userSpotifyId);
       }
-      setTimeout(function(){socket.emit('redirect');},5000) // emit this event to front end to redirect to home page
+      //socket.emit('redirect'); // emit this event to front end to redirect to home page
       socket.leave(socket.room);
     });
 

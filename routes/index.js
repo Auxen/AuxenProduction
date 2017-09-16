@@ -40,7 +40,7 @@ module.exports = function() {
   }
 
   /* Get home page. */
-  router.get('/', ifRedirected,function(req, res, next) {
+  router.get('/', function(req, res, next) {
 
       res.render('home', {
           spotifyId: req.user.spotifyId,
