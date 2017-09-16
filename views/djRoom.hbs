@@ -152,7 +152,7 @@ else {
 socket.on('connect', function(){
 
   //console.log('Connected!');
-  
+
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
   }, 20*60000);
@@ -200,9 +200,7 @@ socket.on('laflame', function(count) {
           🔥
       </span>
     `)
-    setTimeout(function() {
-      $('#flames').find('span:first').remove();
-    }, 2000)
+
 })
 
 /* listens to requests in room */
