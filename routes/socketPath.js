@@ -4,8 +4,6 @@ var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
 
-
-
 module.exports = function(io) {
   io.on('connection', function(socket) {
 
@@ -86,11 +84,9 @@ module.exports = function(io) {
     function inActive(spotifyId){
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
-        console.log('before change', user);
+        //console.log('before change', user);
         user.active = false;
-        user.save(function(err, user){
-          console.log('after change',user);
-        });
+        user.save();
       })
       .catch( err => {
         console.log(err);
@@ -231,6 +227,7 @@ module.exports = function(io) {
       if (userSpotifyId) {
         socket.to(socket.room).emit('userLeaving', userSpotifyId);
       }
+      socket.emit('redirect'); // emit this event to front end to redirect to home page
       socket.leave(socket.room);
     });
 
@@ -303,13 +300,10 @@ module.exports = function(io) {
 
     /* user sends flame to dj */
     socket.on('laflame', function() {
-
-      console.log('this is also happening');
       if (socket.room){
         io.sockets.adapter.rooms[socket.room].laflame = io.sockets.adapter.rooms[socket.room].laflame + 1;
         io.to(socket.room).emit('laflame', io.sockets.adapter.rooms[socket.room].laflame);
       }
-
     });
 
     ////////////////// USER ENDS //////////////////

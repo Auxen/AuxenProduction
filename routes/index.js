@@ -4,7 +4,7 @@ var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
-var existingRoomNames = ["yash", "mo", "ben"];
+var existingRoomNames = [];
 
 module.exports = function() {
 
@@ -21,7 +21,6 @@ module.exports = function() {
   // })
 
   function ifRedirected(req, res, next){
-
     if(req.user){
       if(req.user.premium === 'premium'){
         User.findOne({spotifyId:req.user.spotifyId})
@@ -40,8 +39,23 @@ module.exports = function() {
     }
   }
 
+  function here(req, res, next){
+    if(req.user){
+      if(req.user.premium === 'premium'){
+        next()
+      }
+      else res.redirect('/notPremium');
+    }
+    else{
+      if(req.session){
+        req.session.redirectUrl = req.headers.referer || req.originalUrl || req.url;
+        res.redirect('/login');
+      }
+    }
+  }
+
   /* Get home page. */
-  router.get('/', ifRedirected,function(req, res, next) {
+  router.get('/', here, function(req, res, next) {
 
       res.render('home', {
           spotifyId: req.user.spotifyId,
