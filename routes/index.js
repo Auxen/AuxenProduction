@@ -31,7 +31,7 @@ module.exports = function() {
           next();
        }
        else res.redirect('/notPremium');
-      
+
     }
     else{
       if(req.session){
@@ -143,8 +143,8 @@ module.exports = function() {
       var euser = room.usersInRoom.find(function(user){
         return user.spotifyId === req.user.spotifyId;
       })
-      if(euser)res.redirect('/error')
-      else{
+      if(euser)return;
+      else {
         var userObject = {
           spotifyId: req.user.spotifyId,
           imageURL: req.user.imageURL,
