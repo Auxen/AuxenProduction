@@ -346,7 +346,7 @@ module.exports = function(io) {
     /* dj closed tab or refreshed */
     socket.on('specialClose', function(roomObject) {
       console.log("backend closingRoom");
-      inActive(roomObject.spotifyId)
+      inActive(roomObject.spotifyId);
       socket.to(socket.room).emit('roomClosed');
       socket.leave(socket.room);
       console.log("reaching autoclose at backend");
