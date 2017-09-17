@@ -30,7 +30,8 @@ module.exports = function() {
       //   })
       // }
       // else
-      res.redirect('/notPremium');
+        res.redirect('/notPremium');
+      }
     }
     else{
       if(req.session){
