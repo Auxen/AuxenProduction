@@ -84,7 +84,6 @@ module.exports = function(io) {
     function inActive(spotifyId){
       User.findOne({'spotifyId' : spotifyId})
       .then( user => {
-        //console.log('before change', user);
         user.active = false;
         user.save();
       })
@@ -235,7 +234,7 @@ module.exports = function(io) {
     socket.on('userRefreshed', function(userObject) {
       socket.room = userObject.roomName;
       socket.join(userObject.roomName);
-      console.log("user refreshed and add to database", userObject);
+      console.log("user refreshed and added to database", userObject);
       Room.findById(userObject.roomId)
       .then(room => {
         console.log("room", room);
