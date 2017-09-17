@@ -22,16 +22,16 @@ module.exports = function() {
 
   function ifRedirected(req, res, next){
     if(req.user){
-       if(req.user.premium !== 'premium'){
-      //   User.findOne({spotifyId:req.user.spotifyId})
-      //   .then(user => {
-      //     if(!user.active)next()
-      //     else res.redirect('/multipleTabs')
-      //   })
-      // }
-      // else
-        res.redirect('/notPremium');
-      }
+       if(req.user.premium === 'premium'){
+          //   User.findOne({spotifyId:req.user.spotifyId})
+          //   .then(user => {
+          //     if(!user.active)next()
+          //     else res.redirect('/multipleTabs')
+          //   })
+          next();
+       }
+       else res.redirect('/notPremium');
+      
     }
     else{
       if(req.session){
