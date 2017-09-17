@@ -22,29 +22,15 @@ module.exports = function() {
 
   function ifRedirected(req, res, next){
     if(req.user){
-      if(req.user.premium === 'premium'){
-        User.findOne({spotifyId:req.user.spotifyId})
-        .then(user => {
-          if(!user.active)next()
-          else res.redirect('/multipleTabs')
-        })
-      }
-      else res.redirect('/notPremium');
-    }
-    else{
-      if(req.session){
-        req.session.redirectUrl = req.headers.referer || req.originalUrl || req.url;
-        res.redirect('/login');
-      }
-    }
-  }
-
-  function here(req, res, next){
-    if(req.user){
-      if(req.user.premium === 'premium'){
-        next()
-      }
-      else res.redirect('/notPremium');
+       if(req.user.premium === 'premium'){
+      //   User.findOne({spotifyId:req.user.spotifyId})
+      //   .then(user => {
+      //     if(!user.active)next()
+      //     else res.redirect('/multipleTabs')
+      //   })
+      // }
+      // else
+      res.redirect('/notPremium');
     }
     else{
       if(req.session){
@@ -55,7 +41,7 @@ module.exports = function() {
   }
 
   /* Get home page. */
-  router.get('/', here, function(req, res, next) {
+  router.get('/', ifRedirected, function(req, res, next) {
 
       res.render('home', {
           spotifyId: req.user.spotifyId,
