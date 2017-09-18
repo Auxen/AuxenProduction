@@ -145,6 +145,7 @@ else {
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
       localStorage.setItem("closing", "true");
     }
+    localStorage.setItem('active', 'false');
     clearInterval(clearId);
   });
 }
@@ -154,6 +155,9 @@ else {
 socket.on('connect', function(){
 
   //console.log('Connected!');
+  if(localStorage.getItem('active') === 'true'){
+    window.location.href = '/multipleTabs';
+  }
 
   clearId = setInterval(function () {
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
@@ -162,15 +166,16 @@ socket.on('connect', function(){
   if(localStorage.getItem('closing') === "true"){
     window.location.href = '/';
   }
-
   else{
-    socket.emit('active',localStorage.getItem('spotifyId'))
+    socket.emit('active',localStorage.getItem('spotifyId'));
+    localStorage.setItem('active', 'true');
     var djObject = {
       roomName: roomName,
       accessToken: localStorage.getItem('accessToken')
     }
     socket.emit('createRoom', djObject);
   }
+
 })
 
 /* sets new access token after refresh */

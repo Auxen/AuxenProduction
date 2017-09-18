@@ -189,11 +189,15 @@ and (max-device-width : 480px) {
       localStorage.setItem("spotifyId", spotifyId);
       localStorage.setItem("imageURL", imageURL);
       localStorage.setItem("username", username);
-      localStorage.setItem('closing', "false");
-      localStorage.setItem('leaving', "false");
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      var a = localStorage.getItem('active');
+      if((a && a === 'false') || !localStorage.getItem('closing'))localStorage.setItem('closing', 'false');
+
+      localStorage.setItem('leaving', "false");
+
       getPlayback();
+
       $(document).on('click','#songTest' ,function() {
 
         $.ajax({
