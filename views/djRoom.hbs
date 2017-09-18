@@ -164,7 +164,6 @@ socket.on('connect', function(){
   }
 
   else{
-
     socket.emit('active',localStorage.getItem('spotifyId'))
     var djObject = {
       roomName: roomName,
