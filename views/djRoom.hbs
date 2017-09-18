@@ -100,6 +100,7 @@ var socket = io();
 var clearId = -1;
 var isDJ = true;
 var userDJSpotifyId = '';
+var unload = 0; // set to 1 when refresh or duplicated tab is closing so that specialClose does not happen...
 new Clipboard('#shareable');
 
 
@@ -141,12 +142,12 @@ else {
 
   /* after refresh or close tab*/
   $(window).on("unload", function(){
-    if(localStorage.getItem('closing') === 'false'){
+    if(localStorage.getItem('closing') === 'false' && unload === 0){
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
       localStorage.setItem("closing", "true");
+      localStorage.setItem('active', 'false');
+      clearInterval(clearId);
     }
-    localStorage.setItem('active', 'false');
-    clearInterval(clearId);
   });
 }
 
@@ -156,24 +157,27 @@ socket.on('connect', function(){
 
   //console.log('Connected!');
   if(localStorage.getItem('active') === 'true'){
+    unload = 1;
     window.location.href = '/multipleTabs';
   }
+  else {
+    clearId = setInterval(function () {
+      socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+    }, 20*60000);
 
-  clearId = setInterval(function () {
-    socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-  }, 20*60000);
-
-  if(localStorage.getItem('closing') === "true"){
-    window.location.href = '/';
-  }
-  else{
-    socket.emit('active',localStorage.getItem('spotifyId'));
-    localStorage.setItem('active', 'true');
-    var djObject = {
-      roomName: roomName,
-      accessToken: localStorage.getItem('accessToken')
+    if(localStorage.getItem('closing') === 'true'){
+      unload = 1;
+      window.location.href = '/';
     }
-    socket.emit('createRoom', djObject);
+    else{
+      socket.emit('active',localStorage.getItem('spotifyId'));
+      localStorage.setItem('active', 'true');
+      var djObject = {
+        roomName: roomName,
+        accessToken: localStorage.getItem('accessToken')
+      }
+      socket.emit('createRoom', djObject);
+    }
   }
 
 })
@@ -336,6 +340,8 @@ $('#djtalkform').on('submit', function(e) {
 $('#closeRoom').on('click', function(event){
   console.log("reached front end destination");
   localStorage.setItem('closing', 'true');
+  localStorage.setItem('active', 'false');
+  clearInterval(clearId);
   socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
   $(window).unbind('beforeunload');
   window.location = $(this).attr('data-url');
