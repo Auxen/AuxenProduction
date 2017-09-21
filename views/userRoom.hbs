@@ -264,7 +264,7 @@ socket.on('connect', function() {
   if(localStorage.getItem('active') === 'true'){
     unload = 1;
     window.location.href = '/multipleTabs';
-  }else {
+  } else {
 
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
 
@@ -305,6 +305,7 @@ socket.on('connect', function() {
       })
     }
   }
+
 });
 
 
@@ -445,6 +446,12 @@ socket.on('laflame', function(count) {
       </span>
     `)
 
+})
+
+socket.emit('startPinging', localStorage.getItem('spotifyId'));
+
+socket.on('ping', function(){
+  socket.emit('pong');
 })
 
 </script>

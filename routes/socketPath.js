@@ -392,8 +392,30 @@ module.exports = function(io) {
       socket.to(socket.room).emit('sendgrace');
     })
 
+    /* mantains flame count */
     socket.on('getflames', function() {
       if(socket.room)socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
+
+    })
+
+    socket.on('startPinging', function(spotifyId){
+
+      var flag = true;
+
+      var id = setInterval(function(){
+        flag  = false;
+        socket.emit('ping');
+      }, 30*60000);
+
+      socket.on('pong', function(){
+        flag = true;
+      })
+
+      var id2 = setInterval(function(){
+        if(!flag){
+          console.log("THIS IS AMAZING");
+        }
+      }, 35*60000);
 
     })
 
