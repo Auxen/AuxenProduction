@@ -451,6 +451,7 @@ socket.on('laflame', function(count) {
 socket.emit('startPinging', localStorage.getItem('spotifyId'));
 
 socket.on('ping', function(){
+  console.log("reached here");
   socket.emit('pong');
 })
 

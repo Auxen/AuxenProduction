@@ -410,9 +410,10 @@ module.exports = function(io) {
       socket.on('pong', function(){
         console.log("pong recieved");
         flag = true;
-      })
+      });
 
       var id2 = setInterval(function(){
+        console.log("flag", flag);
         if(!flag){
           console.log("THIS IS AMAZING");
         }
