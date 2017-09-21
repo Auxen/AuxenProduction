@@ -150,7 +150,7 @@ module.exports = function(io) {
       .then( user => {
         user.active = true;
         user.save(function(err, user){
-          console.log("changed user active status", user);
+          console.log("changed user active status");
         });
       })
       .catch( err => {
@@ -325,9 +325,10 @@ module.exports = function(io) {
         } else {
           console.log("this room no longer exists");
           Room.remove({'roomName': roomName})
-          .then(() => {
-            console.log("***********Ben - room successfully removed****************************");
-          }).catch((error) => {
+          .then(room => {
+            console.log("*********** room successfully removed ****************************", room);
+          })
+          .catch((error) => {
             console.log("error", error);
           });
           clearInterval(clearID);
