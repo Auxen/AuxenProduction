@@ -182,6 +182,11 @@ socket.on('connect', function(){
 
 })
 
+socket.on('disconnect', function(){
+  console.log("herrererereerere");
+  window.location.href = '/error';
+})
+
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){
   localStorage.setItem('accessToken', accessToken);
@@ -302,6 +307,7 @@ socket.on('DJTakeBack', function(){
 })
 
 /////////////////////
+
 $('#shareable').on('click', function() {
   $('#shareable').text('Copied!');
   var link = window.location.href;
@@ -314,6 +320,7 @@ $('#shareable').on('click', function() {
 
 
  /* sends message of dj to room */
+
 $('#djtalk').on('click', function() {
   var djTalk = $('#djtalkval').val();
   $('#djtalkval').val('');

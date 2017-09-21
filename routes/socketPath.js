@@ -185,7 +185,7 @@ module.exports = function(io) {
 
     /* called on disconnect, does not do anything */
     socket.on('disconnect', function() {
-      console.log('user disconnected');
+      console.log('########user disconnected');
     });
 
     ///////////////// USER //////////////////////
