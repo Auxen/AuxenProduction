@@ -96,11 +96,13 @@ module.exports = function(io) {
       console.log("clearing room and turning all members inactive");
       Room.findOne({"roomName":roomName})
       .then(room => {
-        inActive(room.djSpotifyId);
-        for(var i = 0;i<room.usersInRoom.length;i++){
-          inActive(room.usersInRoom[i].spotifyId);
-        };
-        room.remove();
+        if(room){
+          inActive(room.djSpotifyId);
+          for(var i = 0;i<room.usersInRoom.length;i++){
+            inActive(room.usersInRoom[i].spotifyId);
+          };
+          room.remove();
+        }
       })
       .catch(err => {
         console.log(err);
