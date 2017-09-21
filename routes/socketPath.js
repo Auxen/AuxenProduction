@@ -405,9 +405,10 @@ module.exports = function(io) {
       var id = setInterval(function(){
         flag  = false;
         socket.emit('ping');
-      }, 30*60000);
+      }, 7000);
 
       socket.on('pong', function(){
+        console.log("pong recieved");
         flag = true;
       })
 
@@ -415,7 +416,7 @@ module.exports = function(io) {
         if(!flag){
           console.log("THIS IS AMAZING");
         }
-      }, 35*60000);
+      }, 9000);
 
     })
 
