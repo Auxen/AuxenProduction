@@ -92,6 +92,21 @@ module.exports = function(io) {
       })
     }
 
+    function clearRoom(roomName){
+      console.log("clearing room and turning all members inactive");
+      Room.findOne({"roomName":roomName})
+      .then(room => {
+        inActive(room.djSpotifyId);
+        for(var i = 0;i<room.usersInRoom.length;i++){
+          inActive(room.usersInRoom[i].spotifyId);
+        };
+        room.remove();
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+
     ///////////////////// PASS DJ ////////////////////////
 
     /* finds the right user from db. sets accestoken of user to dj token */
@@ -324,13 +339,14 @@ module.exports = function(io) {
           return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
         } else {
           console.log("this room no longer exists");
-          Room.remove({'roomName': roomName})
-          .then(room => {
-            console.log("*********** room successfully removed ****************************", room);
-          })
-          .catch((error) => {
-            console.log("error", error);
-          });
+          // Room.remove({'roomName': roomName})
+          // .then(room => {
+          //   console.log("*********** room successfully removed ****************************");
+          // })
+          // .catch((error) => {
+          //   console.log("error", error);
+          // });
+          clearRoom(roomName);
           clearInterval(clearID);
         }
       }, 5000);
