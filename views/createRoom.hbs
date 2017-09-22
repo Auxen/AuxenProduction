@@ -54,6 +54,7 @@ $('#startRoom').on('click', function() {
 })
 
 var existingRoomNames = '{{existingRoomNames}}';
+existingRoomNames = existingRoomNames.split(" ");
 console.log("existingRoomNames", existingRoomNames);
 
 $('#roomSubmit').on('submit', function (event) {
