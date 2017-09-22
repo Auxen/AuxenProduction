@@ -322,6 +322,13 @@ module.exports = function(io) {
       }
     });
 
+    socket.on('ping', function(data){
+      if(Date.now() - data > 20*1000){
+        console.log("DISCONNECT SOCKET");
+      }
+      else socket.emit('pong', Date.now());
+    });
+
     ////////////////// USER ENDS //////////////////
 
     /////////////////// DJ ///////////////////////
@@ -398,28 +405,30 @@ module.exports = function(io) {
 
     })
 
-    socket.on('startPinging', function(spotifyId){
+    // socket.on('startPinging', function(spotifyId){
+    //
+    //   socket.flag = true;
+    //   socket.spotifyId = spotifyId;
+    //
+    //   var id = setInterval(function(){
+    //     socket.flag  = false;
+    //     socket.emit('ping');
+    //   }, 7000);
+    //
+    //   var id2 = setInterval(function(){
+    //     console.log("flag", socket.flag);
+    //     if(!socket.flag){
+    //       console.log("THIS IS AMAZING");
+    //     }
+    //   }, 9000);
+    //
+    // })
+    //
+    // socket.on('pong', function(){
+    //   socket.flag = true;
+    // })
 
-      var flag = true;
 
-      var id = setInterval(function(){
-        flag  = false;
-        socket.emit('ping');
-      }, 7000);
-
-      socket.on('pong', function(){
-        console.log("pong recieved");
-        flag = true;
-      });
-
-      var id2 = setInterval(function(){
-        console.log("flag", flag);
-        if(!flag){
-          console.log("THIS IS AMAZING");
-        }
-      }, 9000);
-
-    })
 
     //////////////////// DJ ENDS ///////////////////
   })

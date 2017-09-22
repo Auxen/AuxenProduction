@@ -107,10 +107,11 @@ module.exports = function() {
       djSpotifyId: req.user.spotifyId,
       imageURL: req.user.imageURL,
       djName: req.user.username
-    })
+    });
+
     newRoom.save(function(err, newRoom) {
       if (err) {
-        res.redirect('/error')
+        res.redirect('/error');
       } else {
         res.redirect('/djRoom/' + newRoom._id);
       }

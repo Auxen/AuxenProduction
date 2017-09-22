@@ -182,9 +182,9 @@ socket.on('connect', function(){
 
 })
 
-socket.on('disconnect', function(){
-  window.location.href = '/error';
-})
+// socket.on('disconnect', function(){
+//   window.location.href = '/error';
+// })
 
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){
