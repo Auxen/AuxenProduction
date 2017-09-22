@@ -145,7 +145,7 @@ else {
     if(localStorage.getItem('closing') === 'false' && unload === 0){
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
       localStorage.setItem("closing", "true");
-      localStorage.setItem('active', 'false');
+      localStorage.setItem('active', 'false'); // changed this
       clearInterval(clearId);
     }
   });
