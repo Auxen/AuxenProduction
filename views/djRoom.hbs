@@ -123,11 +123,12 @@ if(isSafari){
             socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId:localStorage.getItem('spotifyId')});
             clearInterval(clearId);
             localStorage.setItem("closing", "true");
+            localStorage.setItem('active', 'false');
             window.location.href = '/';
           }
         }
       });
-    window.history.pushState('forward', null, './#forward');
+      window.history.pushState('forward', null, './#forward');
     }
   });
 }
