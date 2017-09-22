@@ -455,7 +455,7 @@ socket.on('laflame', function(count) {
 //   socket.emit('pong');
 // })
 
-socket.emit('ping');
+socket.emit('ping', Date.now());
 
 socket.on('pong', function(data){
   socket.emit('ping', data)

@@ -323,7 +323,7 @@ module.exports = function(io) {
     });
 
     socket.on('ping', function(data){
-      if(Date.now() - data > 20*1000){
+      if(Date.now() - data > 10*1000){
         console.log("DISCONNECT SOCKET");
       }
       else socket.emit('pong', Date.now());
