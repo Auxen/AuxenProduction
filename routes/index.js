@@ -6,6 +6,8 @@ var User = models.User;
 var Room = models.Room;
 var existingRoomNames = [];
 
+// testing
+
 module.exports = function() {
 
   /* Check login page. */
