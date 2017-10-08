@@ -164,7 +164,7 @@ socket.on('connect', function(){
   if(localStorage.getItem('closing') === 'true'){
     unload = 1;
     window.location.href = '/';
-  // }
+  }
   else {
     clearId = setInterval(function () {
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
