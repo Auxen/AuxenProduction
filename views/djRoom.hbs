@@ -141,7 +141,7 @@ else {
     // return "Are you sure you want to leave? This will take you to home page";
   });
 
-  /* after refresh or close tab*/
+  /* after refresh or close tab */
   $(window).on("unload", function(){
     if(localStorage.getItem('closing') === 'false' && unload === 0){
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
