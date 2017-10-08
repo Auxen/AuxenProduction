@@ -145,7 +145,7 @@ else {
   $(window).on("unload", function(){
     if(localStorage.getItem('closing') === 'false' && unload === 0){
       socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
-      localStorage.setItem("closing", "true");
+      localStorage.setItem('closing', 'true');
       localStorage.setItem('active', 'false'); // changed this
       clearInterval(clearId);
     }
@@ -161,24 +161,21 @@ socket.on('connect', function(){
     unload = 1;
     window.location.href = '/multipleTabs';
   }
+  if(localStorage.getItem('closing') === 'true'){
+    unload = 1;
+    window.location.href = '/';
+  }
   else {
     clearId = setInterval(function () {
       socket.emit("toRefresh", localStorage.getItem("refreshToken"));
     }, 20*60000);
-
-    if(localStorage.getItem('closing') === 'true'){
-      unload = 1;
-      window.location.href = '/';
+    socket.emit('active',localStorage.getItem('spotifyId'));
+    localStorage.setItem('active', 'true');
+    var djObject = {
+      roomName: roomName,
+      accessToken: localStorage.getItem('accessToken')
     }
-    else{
-      socket.emit('active',localStorage.getItem('spotifyId'));
-      localStorage.setItem('active', 'true');
-      var djObject = {
-        roomName: roomName,
-        accessToken: localStorage.getItem('accessToken')
-      }
-      socket.emit('createRoom', djObject);
-    }
+    socket.emit('createRoom', djObject);
   }
 
 })

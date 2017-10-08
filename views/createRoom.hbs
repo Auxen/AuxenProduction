@@ -31,8 +31,6 @@ and (max-device-width : 480px) {
 
 <script type="text/javascript">
 
-
-
 $.ajax({
   url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
   success: function(response){
@@ -48,13 +46,12 @@ $.ajax({
   }
 })
 
-
 $('#startRoom').on('click', function() {
   $('#roomSubmit').submit();
 })
 
 var existingRoomNames = '{{existingRoomNames}}';
-existingRoomNames = existingRoomNames.split(" ");
+existingRoomNames = existingRoomNames.split(' ');
 console.log("existingRoomNames", existingRoomNames);
 
 $('#roomSubmit').on('submit', function (event) {

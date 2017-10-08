@@ -44,7 +44,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 //passport stuff
 
-var session=require('express-session');
+var session = require('express-session');
 app.use(session({ secret: 'auxen production' })); //changed key.
 
 passport.serializeUser(function(user, done) {
