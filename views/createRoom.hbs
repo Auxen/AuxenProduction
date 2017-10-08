@@ -38,7 +38,10 @@ $.ajax({
     if(response.active === true)window.location.href = '/multipleTabs';
     else{
       var a = localStorage.getItem('active');
-      if((a && a === 'false') || !localStorage.getItem('closing'))localStorage.setItem('closing', 'false');
+      if((a && a === 'false') || !localStorage.getItem('closing')){
+        localStorage.setItem('closing', 'false');
+        localStorage.setItem('active', 'false');
+      }
     }
   },
   error: function(response){

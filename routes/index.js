@@ -80,7 +80,7 @@ module.exports = function() {
   })
 
   /* Get list of available rooms. */
-  router.get('/getRooms', ifRedirected,function(req, res, next) {
+  router.get('/getRooms', ifRedirected, function(req, res, next) {
     Room.find(function(err, rooms) {
       var roomNameArray = [];
       roomNameArray = rooms.map(function(room) {
