@@ -107,6 +107,7 @@ module.exports = function() {
 
     newRoom.save(function(err, newRoom) {
       if (err) {
+        console.log("fuck this");
         res.redirect('/error');
       } else {
         res.redirect('/djRoom/' + newRoom._id);
