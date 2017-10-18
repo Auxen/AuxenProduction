@@ -446,17 +446,6 @@ socket.on('laflame', function(count) {
 
 })
 
-// socket.emit('startPinging', localStorage.getItem('spotifyId'));
-//
-// socket.on('ping', function(){
-//   console.log("reached here");
-//   socket.emit('pong');
-// })
 
-socket.emit('ping', Date.now());
-
-socket.on('pong', function(data){
-  socket.emit('ping', data)
-})
 
 </script>
