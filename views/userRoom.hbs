@@ -129,7 +129,7 @@ function pausePlayback(){
 
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
-  if(localStorage.getItem('counter') !== 'true'){
+  if(localStorage.getItem('counter') !== 'false'){
     socket.emit('leaveRoom', {
       "roomName": roomName,
       "roomId": roomId,
@@ -183,7 +183,7 @@ $('#userLeave').on('click', function(event){
       "isDJ": isDJ,
       "leave": true
     });
-    localStorage.setItem('counter', 'true');
+    localStorage.setItem('counter', 'false');
     clearInterval(clearId);
     window.location = '/';
   };
@@ -249,7 +249,7 @@ socket.on('connect', function() {
       if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 3000)){
           socket.emit("userRefreshed", userObject);
           socket.emit('active', localStorage.getItem('spotifyId'));
-          localStorage.setItem('counter', 'false');
+          localStorage.setItem('counter', 'true');
           localStorage.setItem('active', 'true');
           localStorage.removeItem("disconnectTime");
       }
@@ -259,7 +259,7 @@ socket.on('connect', function() {
           if(data){
             socket.emit('joinRoom', userObject);
             socket.emit('active', localStorage.getItem('spotifyId'));
-            localStorage.setItem('counter', 'false');
+            localStorage.setItem('counter', 'true');
             localStorage.setItem('active', 'true');
             socket.emit('getflames');
           }

@@ -112,7 +112,7 @@ $(window).bind('beforeunload', function(){
 
 /* after refresh or close tab */
 $(window).on("unload", function(){
-  if(localStorage.getItem('counter') !== 'true'){
+  if(localStorage.getItem('counter') !== 'false'){
     socket.emit('closeRoom', {
       "roomName": roomName,
       "roomId": roomId,
@@ -141,7 +141,7 @@ socket.on('connect', function(){
         }, 20*60000);
 
         socket.emit('active',localStorage.getItem('spotifyId'));
-        localStorage.setItem('counter', 'false');
+        localStorage.setItem('counter', 'true');
         localStorage.setItem('active', 'true');
 
         var djObject = {
@@ -319,7 +319,7 @@ $('#closeRoom').on('click', function(event){
       "roomId": roomId,
       "spotifyId": localStorage.getItem('spotifyId')
     });
-    localStorage.setItem('counter', 'true');
+    localStorage.setItem('counter', 'false');
     clearInterval(clearId);
     $(window).unbind('beforeunload');
     window.location = '/';
