@@ -191,11 +191,6 @@ and (max-device-width : 480px) {
       localStorage.setItem('username', username);
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      var a = localStorage.getItem('active');
-
-      if((a && a === 'false') || !localStorage.getItem('closing'))localStorage.setItem('closing', 'false');
-
-      if((a && a === 'false') || !localStorage.getItem('leaving'))localStorage.setItem('leaving', "false");
 
       getPlayback();
 

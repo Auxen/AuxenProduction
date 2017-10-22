@@ -3,6 +3,7 @@ var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
+var existingRoomNames = [];
 
 module.exports = function(io) {
   io.on('connection', function(socket) {
@@ -237,27 +238,33 @@ module.exports = function(io) {
       socket.emit("DJData", DJData);
     })
 
-    /* called by users while leaving room or when room closed altogether */
-    socket.on('leaveRoom', function(userSpotifyId) {
-      inActive(userSpotifyId);
-      if (userSpotifyId) {
-        socket.to(socket.room).emit('userLeaving', userSpotifyId);
-      }
-      socket.emit('redirect'); // emit this event to front end to redirect to home page
+    socket.on('leaveRoom', function(userData){
+      inActive(userData.spotifyId);
+      if(userData.leave === true){
+        socket.to(socket.room).emit('userLeaving', userData.userSpotifyId);
+      };
       socket.leave(socket.room);
+      Room.findById(userData.roomId).then(room => {
+        room.usersInRoom = room.usersInRoom.filter(function(user) {
+          return user.spotifyId !== userData.spotifyId;
+        })
+        room.save(function(err, room) {
+          res.redirect('/');
+        });
+      }).catch(error => {
+        res.redirect('/error');
+      });
     });
 
     /* user refreshed so adding to db */
     socket.on('userRefreshed', function(userObject) {
       socket.room = userObject.roomName;
       socket.join(userObject.roomName);
-      console.log("user refreshed and added to database", userObject);
       Room.findById(userObject.roomId)
       .then(room => {
-        console.log("room", room);
         var euser = room.usersInRoom.find(function(user) {
           return user.spotifyId === userObject.spotifyId;
-        })
+        });
         if (euser)return;
         else {
           var user = {
@@ -267,7 +274,6 @@ module.exports = function(io) {
           }
           room.usersInRoom.push(user);
           room.save(function(err, room) {
-            console.log("entered here");
             if (err)console.log(err);
             else {
               console.log("user successfully added");
@@ -284,7 +290,7 @@ module.exports = function(io) {
 
     /* user refreshed or closed tab */
     socket.on('specialLeave', function(userObject) {
-      console.log("enetered specialLeave");
+
       inActive(userObject.spotifyId);
       if (userObject.spotifyId) {
         socket.to(socket.room).emit('userLeaving', userObject.spotifyId);
@@ -337,6 +343,7 @@ module.exports = function(io) {
     socket.on('createRoom', function(djObject) {
       console.log("starting to create room");
       var roomName = djObject.roomName;
+      existingRoomNames.push(roomName);
       if (socket.room)
         socket.leave(socket.room); //if already in room leave
       socket.room = roomName; // set property
@@ -359,24 +366,17 @@ module.exports = function(io) {
           clearInterval(clearID);
         }
       }, 5000);
-    })
+    });
 
-    /* called by dj. closes room, dj leaves room, and emits events for users to leave room */
-    socket.on('closingRoom', function(roomData) {
-      inActive(roomData.spotifyId);
-      console.log("backend closingRoom");
-      socket.to(socket.room).emit('roomClosed');
-      socket.leave(socket.room);
-    })
-
-    /* dj closed tab or refreshed */
-    socket.on('specialClose', function(roomObject) {
-      console.log("backend closingRoom");
+    /* dj closed room ||  refreshed tab || closed tab */
+    socket.on('closeRoom', function(roomObject) {
       inActive(roomObject.spotifyId);
       socket.to(socket.room).emit('roomClosed');
       socket.leave(socket.room);
-      console.log("reaching autoclose at backend");
-      Room.remove({'_id': roomObject.roomId}).then(() => {
+      existingRoomNames.splice(existingRoomNames.indexOf(roomData.roomName), 1);
+      console.log("room successfully closed.");
+      Room.remove({'_id': roomObject.roomId})
+      .then(() => {
         console.log("room successfully removed");
       }).catch((error) => {
         console.log("error", error);
@@ -404,30 +404,6 @@ module.exports = function(io) {
       if(socket.room)socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
 
     })
-
-    // socket.on('startPinging', function(spotifyId){
-    //
-    //   socket.flag = true;
-    //   socket.spotifyId = spotifyId;
-    //
-    //   var id = setInterval(function(){
-    //     socket.flag  = false;
-    //     socket.emit('ping');
-    //   }, 7000);
-    //
-    //   var id2 = setInterval(function(){
-    //     console.log("flag", socket.flag);
-    //     if(!socket.flag){
-    //       console.log("THIS IS AMAZING");
-    //     }
-    //   }, 9000);
-    //
-    // })
-    //
-    // socket.on('pong', function(){
-    //   socket.flag = true;
-    // })
-
 
 
     //////////////////// DJ ENDS ///////////////////

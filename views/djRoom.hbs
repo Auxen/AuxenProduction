@@ -5,14 +5,13 @@ and (max-device-width : 480px) {
 
 #djtalk {
   width: 100% !important;
-}
-}
+}}
 </style>
 
 <div>
   <div class="row">
     <div class="col-md-2">
-      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom" data-url='/closeRoom/{{room.roomName}}?roomId={{room._id}}'>Close</h1>
+      <h1 data-id="{{room.roomName}}" style="margin-left: 5%; margin-right: 5%;"class="closeRoom text-center text small boxed raise" id="closeRoom">Close</h1>
     </div>
     <div class="col-md-offset-1 col-md-6">
       <h1 class="text-center standard-text middle animated slideInDown">{{room.roomName}}</h1>
@@ -100,89 +99,60 @@ var socket = io();
 var clearId = -1;
 var isDJ = true;
 var userDJSpotifyId = '';
-var unload = 0; // set to 1 when refresh or duplicated tab is closing so that specialClose does not happen...
+
+
 new Clipboard('#shareable');
 
 
-var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-                  navigator.userAgent && !navigator.userAgent.match('CriOS');
-
-
-if(isSafari){
-  $(window).ready(function(){
-  //  console.log("test");
-    if (window.history && window.history.pushState) {
-      $(window).on('popstate', function() {
-        var hashLocation = location.hash;
-        var hashSplit = hashLocation.split("#!/");
-        var hashName = hashSplit[1];
-        if (hashName !== '') {
-          var hash = window.location.hash;
-          if (hash === '') {
-            //console.log("unloading safari");
-            socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId:localStorage.getItem('spotifyId')});
-            clearInterval(clearId);
-            localStorage.setItem("closing", "true");
-            localStorage.setItem('active', 'false');
-            window.location.href = '/';
-          }
-        }
-      });
-      window.history.pushState('forward', null, './#forward');
-    }
-  });
-}
-else {
   /* happens before refresh or close tab */
   /* add logic for safari*/
-  $(window).bind('beforeunload', function(){
-    //console.log("before unloading");
-    return null;
-    // return "Are you sure you want to leave? This will take you to home page";
-  });
+$(window).bind('beforeunload', function(){
+  return null;
+});
 
-  /* after refresh or close tab */
-  $(window).on("unload", function(){
-    if(localStorage.getItem('closing') === 'false' && unload === 0){
-      socket.emit('specialClose', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
-      localStorage.setItem('closing', 'true');
-      localStorage.setItem('active', 'false'); // changed this
-      clearInterval(clearId);
-    }
-  });
-}
-// testing
+/* after refresh or close tab */
+$(window).on("unload", function(){
+  if(localStorage.getItem('counter') !== 'true'){
+    socket.emit('closeRoom', {
+      "roomName": roomName,
+      "roomId": roomId,
+      "spotifyId": localStorage.getItem('spotifyId'),
+    });
+    localStorage.setItem("disconnectTime", new Date().getTime());
+  };
+  localStorage.setItem('active', 'false');
+});
 
 /* Checking connnection to socket */
 socket.on('connect', function(){
 
-  //console.log('Connected!');
-  if(localStorage.getItem('active') === 'true'){
-    unload = 1;
-    window.location.href = '/multipleTabs';
-  }
-  if(localStorage.getItem('closing') === 'true'){
-    unload = 1;
-    window.location.href = '/';
-  }
-  else {
-    clearId = setInterval(function () {
-      socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-    }, 20*60000);
-    socket.emit('active',localStorage.getItem('spotifyId'));
-    localStorage.setItem('active', 'true');
-    var djObject = {
-      roomName: roomName,
-      accessToken: localStorage.getItem('accessToken')
+    if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 3000)){
+      localStorage.removeItem("disconnectTime");
+      localStorage.setItem('counter', 'true');
+      window.location = '/';
     }
-    socket.emit('createRoom', djObject);
-  }
+    else if(localStorage.getItem('active') === 'true'){
+      window.location = '/multipleTabs';
+    }
+    else {
+
+        clearId = setInterval(function () {
+          socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+        }, 20*60000);
+
+        socket.emit('active',localStorage.getItem('spotifyId'));
+        localStorage.setItem('counter', 'false');
+        localStorage.setItem('active', 'true');
+
+        var djObject = {
+          roomName: roomName,
+          accessToken: localStorage.getItem('accessToken')
+        };
+
+        socket.emit('createRoom', djObject);
+    }
 
 })
-
-// socket.on('disconnect', function(){
-//   window.location.href = '/error';
-// })
 
 /* sets new access token after refresh */
 socket.on('setNewAccessToken', function(accessToken){
@@ -264,7 +234,7 @@ socket.on('userJoined', function(userData){
 
 ////////////////////
 
-/* passed dj to some other user voluntarily*/
+/* passed dj to some other user voluntarily */
 $(document).on('click', '.nextDJ', function(){
   var nextDJSpotifyId = $(this).attr('data-id');
   socket.emit('passDJ', {nextDJSpotifyId: nextDJSpotifyId});
@@ -342,14 +312,19 @@ $('#djtalkform').on('submit', function(e) {
 
 /* dj closes room emits event to server which then kicks people out of the room */
 $('#closeRoom').on('click', function(event){
-  console.log("reached front end destination");
-  localStorage.setItem('closing', 'true');
-  localStorage.setItem('active', 'false');
-  clearInterval(clearId);
-  socket.emit('closingRoom', {"roomName": roomName, "roomId": roomId, spotifyId: localStorage.getItem('spotifyId')});
-  $(window).unbind('beforeunload');
-  window.location = $(this).attr('data-url');
-})
+  var close = confirm("Are you sure you want to close the room ?");
+  if(close === true){
+    socket.emit('closeRoom', {
+      "roomName": roomName,
+      "roomId": roomId,
+      "spotifyId": localStorage.getItem('spotifyId')
+    });
+    localStorage.setItem('counter', 'true');
+    clearInterval(clearId);
+    $(window).unbind('beforeunload');
+    window.location = '/';
+  };
+});
 
 /* sends thanks by dj to room */
 $('#sendgrace').on('click', function() {
@@ -423,4 +398,4 @@ socket.on('DJData', function(DJData){
      }
    }
  };
- </script>
+</script>

@@ -36,15 +36,6 @@ $.ajax({
   success: function(response){
     console.log("reached here", response.active);
     if(response.active === true)window.location.href = '/multipleTabs';
-    else{
-      localStorage.setItem('closing', 'false');
-      localStorage.setItem('active', 'false');
-      // var a = localStorage.getItem('active');
-      // if((a && a === 'false') || !localStorage.getItem('closing')){
-      //   localStorage.setItem('closing', 'false');
-      //   localStorage.setItem('active', 'false');
-      // }
-    }
   },
   error: function(response){
     console.log(response);

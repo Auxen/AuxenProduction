@@ -61,19 +61,11 @@ if(numRooms === '1') {
   $('#roomNums').text('There is 1 room to browse')
 }
 
-
-
 $.ajax({
   url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
   success: function(response){
     console.log("reached here", response);
     if(response.active === true)window.location.href = '/multipleTabs';
-    else {
-      var a = localStorage.getItem('active');
-      if((a && a === 'false') || !localStorage.getItem('leaving')){
-        localStorage.setItem('leaving', "false");
-      }
-    }
   }
 })
 

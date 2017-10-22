@@ -4,7 +4,6 @@ var models = require('../models/models');
 var SpotifyWebApi = require('spotify-web-api-node');
 var User = models.User;
 var Room = models.Room;
-var existingRoomNames = [];
 
 // testing
 
@@ -58,7 +57,7 @@ module.exports = function() {
   router.get('/isActive', function(req, res, next) {
     //console.log('isActive', req.query.spotifyId);
     User.findOne({'spotifyId':req.query.spotifyId})
-    .then(user => {
+    .then(user => { 
       //console.log('isActive', user);
       res.send({"active": user.active});
     })
@@ -92,11 +91,7 @@ module.exports = function() {
 
   /* Create a room */
   router.post('/createRoom', ifRedirected,function(req, res, next) {
-    //console.log("reaching create Room in backend post");
     var roomName = req.body.roomNameBar.replace(/[^A-Za-z0-9_\s]+/g, '');
-
-    console.log(roomName);
-    existingRoomNames.push(roomName);
     var newRoom = new Room({
       roomName: roomName,
       djRefreshToken: req.user.refreshToken,
@@ -104,7 +99,6 @@ module.exports = function() {
       imageURL: req.user.imageURL,
       djName: req.user.username
     });
-
     newRoom.save(function(err, newRoom) {
       if (err) {
         console.log("fuck this");
@@ -126,9 +120,7 @@ module.exports = function() {
       else res.redirect('/');
     })
     .catch(err => {
-
-      res.redirect('/error')
-
+      res.redirect('/error');
     })
   })
 
@@ -161,7 +153,7 @@ module.exports = function() {
     .catch( error => {
       res.redirect('/error')
     })
-  })
+  });
 
   /* renders room for user */
   router.get('/userRoom/:roomId', ifRedirected ,function(req, res, next) {
@@ -179,33 +171,6 @@ module.exports = function() {
   /* error */
   router.get('/error', ifRedirected,function(req, res){
     res.render('error')
-  })
-
-  /* closes room */
-  router.get('/closeRoom/:name', ifRedirected,function(req, res, next) {
-    var roomId = req.query.roomId;
-    var roomName = req.params.name;
-    Room.remove({'_id': roomId}).then(() => {
-      existingRoomNames.splice(existingRoomNames.indexOf(roomName), 1);
-      res.redirect('/');
-    }).catch(error => {
-      res.redirect('/error')
-    })
-  })
-
-  /* makes user leave room, deletes him from db as well*/
-  router.get('/leaveRoom', ifRedirected,function(req, res, next) {
-    var roomId = req.query.roomId;
-    Room.findById(roomId).then(room => {
-      room.usersInRoom = room.usersInRoom.filter(function(user) {
-        return user.spotifyId !== req.user.spotifyId;
-      })
-      room.save(function(err, room) {
-        res.redirect('/');
-      });
-    }).catch(error => {
-      res.redirect('/error')
-    })
   })
 
   return router;
