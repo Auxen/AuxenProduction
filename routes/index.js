@@ -82,7 +82,7 @@ module.exports = function() {
       existingRoomNames: existingRoomNames
     });
   })
- ///
+ /////
   /* Get list of available rooms. */
   router.get('/getRooms', ifRedirected,function(req, res, next) {
     Room.find(function(err, rooms) {
