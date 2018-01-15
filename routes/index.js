@@ -72,11 +72,16 @@ module.exports = function() {
   })
 
   /* Get createRoom page. */
+  // router.get('/createRoom', ifRedirected ,function(req, res, next) {
+  //   console.log("##########");
+  //   res.render('createRoom', {
+  //     existingRoomNames: existingRoomNames
+  //   });
+  // })
+
   router.get('/createRoom', ifRedirected ,function(req, res, next) {
     console.log("##########");
-    res.render('createRoom', {
-      existingRoomNames: existingRoomNames
-    });
+    res.send("Hello");
   })
 
   /* Get list of available rooms. */
