@@ -73,6 +73,7 @@ module.exports = function() {
 
   /* Get createRoom page. */
   router.get('/createRoom', ifRedirected ,function(req, res, next) {
+    console.log("##########");
     res.render('createRoom', {
       existingRoomNames: existingRoomNames
     });
@@ -91,6 +92,7 @@ module.exports = function() {
 
   /* Create a room */
   router.post('/createRoom', ifRedirected,function(req, res, next) {
+
     var roomName = req.body.roomNameBar.replace(/[^A-Za-z0-9_\s]+/g, '');
     var newRoom = new Room({
       roomName: roomName,
