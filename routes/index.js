@@ -57,7 +57,7 @@ module.exports = function() {
   router.get('/isActive', function(req, res, next) {
     //console.log('isActive', req.query.spotifyId);
     User.findOne({'spotifyId':req.query.spotifyId})
-    .then(user => { 
+    .then(user => {
       //console.log('isActive', user);
       res.send({"active": user.active});
     })
@@ -133,7 +133,10 @@ module.exports = function() {
       var euser = room.usersInRoom.find(function(user){
         return user.spotifyId === req.user.spotifyId;
       })
-      if(euser)res.redirect('/error');
+      if(euser){
+        console.log("1");
+        res.redirect('/error');
+      }
       else {
         var userObject = {
           spotifyId: req.user.spotifyId,
@@ -143,6 +146,7 @@ module.exports = function() {
         room.usersInRoom.push(userObject);
         room.save(function(err, room) {
           if (err) {
+            console.log("2");
             res.redirect('/error')
           } else {
             res.redirect('/userRoom/' + room._id);
@@ -151,6 +155,7 @@ module.exports = function() {
       }
     })
     .catch( error => {
+      console.log("3");
       res.redirect('/error')
     })
   });
