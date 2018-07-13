@@ -31,24 +31,32 @@ and (max-device-width : 480px) {
 
 <script type="text/javascript">
 
-
 $.ajax({
   url:'/isActive?spotifyId='+localStorage.getItem('spotifyId'),
   success: function(response){
     console.log("reached here", response.active);
     if(response.active === true)window.location.href = '/multipleTabs';
+    else{
+      localStorage.setItem('closing', 'false');
+      localStorage.setItem('active', 'false');
+      // var a = localStorage.getItem('active');
+      // if((a && a === 'false') || !localStorage.getItem('closing')){
+      //   localStorage.setItem('closing', 'false');
+      //   localStorage.setItem('active', 'false');
+      // }
+    }
   },
   error: function(response){
     console.log(response);
   }
 })
 
-
 $('#startRoom').on('click', function() {
   $('#roomSubmit').submit();
 })
 
 var existingRoomNames = '{{existingRoomNames}}';
+existingRoomNames = existingRoomNames.split(' ');
 console.log("existingRoomNames", existingRoomNames);
 
 $('#roomSubmit').on('submit', function (event) {

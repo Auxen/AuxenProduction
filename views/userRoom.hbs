@@ -76,7 +76,6 @@ and (max-device-width : 480px) {
 
 <div class="center" id="flames"></div>
 
-
 <div class="modal fade topLevel" id="inRoom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" data-backdrop="static" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -102,10 +101,9 @@ var roomId = '{{room._id}}';
 var socket = io();
 var clearId = -1;
 var isDJ = false;
-var djName = '{{room.djName}}'
+var djName = '{{room.djName}}';
+var unload = 0; // set to 1 to avoid multiple unloading
 new Clipboard('#shareable');
-
-
 
 $(document).on('click', '#joinThisRoom', function(e){
   window.location.href = '/joinRoom?roomId=' + roomId;
@@ -151,8 +149,8 @@ if(isSafari){
                 //  console.log(hash)
             if (hash === '') {
               //console.log("unloading safari");
-                  var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
-                socket.emit('specialLeave', userObject);
+              var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
+              socket.emit('specialLeave', userObject);
               localStorage.setItem("disconnectTime", new Date().getTime());
               clearInterval(clearId);
               socket.emit('leaveRoom', userObject.spotifyId);
@@ -169,12 +167,13 @@ if(isSafari){
 
 /* happens on refresh and close tab */
 $(window).on("unload", function(){
-  if(localStorage.getItem('leaving') === "false"){
+  if(localStorage.getItem('leaving') === "false" && unload === 0){
     var userObject = {roomId: roomId, spotifyId:localStorage.getItem("spotifyId"), isDJ:isDJ};
     socket.emit('specialLeave', userObject);
     localStorage.setItem("disconnectTime", new Date().getTime());
+    localStorage.setItem('active', 'false');
+    clearInterval(clearId);
   }
-  clearInterval(clearId);
 });
 
 /* user sends request */
@@ -210,6 +209,8 @@ $('#shareable').on('click', function() {
 if he is dj, passes aux back to host */
 $('#userLeave').on('click', function(event){
   localStorage.setItem('leaving', 'true');
+  localStorage.setItem('active', 'false');
+  clearInterval(clearId);
   if(isDJ){
     socket.emit('userDJLeaving', roomName);
   }
@@ -258,42 +259,53 @@ socket.on('takeBack', function(){
 /* Checking connnection to socket */
 socket.on('connect', function() {
 
-  socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-  clearId = setInterval(function () {
+  if(localStorage.getItem('active') === 'true'){
+    unload = 1;
+    window.location.href = '/multipleTabs';
+  } else {
+
     socket.emit("toRefresh", localStorage.getItem("refreshToken"));
-  }, 30*60000 );
 
-  var userObject = {
-    roomId: roomId,
-    roomName: roomName,
-    spotifyId: localStorage.getItem('spotifyId'),
-    imageURL: localStorage.getItem('imageURL'),
-    username: localStorage.getItem('username')
-  }
+    clearId = setInterval(function () {
+      socket.emit("toRefresh", localStorage.getItem("refreshToken"));
+    }, 30*60000 );
 
-  if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 3000)){
-      //console.log("this was a refresh");
-      //console.log("userObject", userObject);
-      socket.emit("userRefreshed", userObject);
-      socket.emit('active', localStorage.getItem('spotifyId'));
-      localStorage.removeItem("disconnectTime");
-  }
-  else{
-    //console.log("new room joined without refresh");
-    socket.emit('isInRoom', {spotifyId:localStorage.getItem('spotifyId'),roomName: roomName});
-    socket.on('isInRoom', function(data){
-      if(data){
-        socket.emit('joinRoom', userObject);
-        /* tells db that user is active to prevent multiple tabs */
+    var userObject = {
+      roomId: roomId,
+      roomName: roomName,
+      spotifyId: localStorage.getItem('spotifyId'),
+      imageURL: localStorage.getItem('imageURL'),
+      username: localStorage.getItem('username')
+    }
+
+    if(localStorage.getItem("disconnectTime") && (new Date().getTime() - localStorage.getItem("disconnectTime") < 3000)){
+        //console.log("this was a refresh");
+        //console.log("userObject", userObject);
+        socket.emit("userRefreshed", userObject);
         socket.emit('active', localStorage.getItem('spotifyId'));
-        socket.emit('getflames');
-      }
-      else {
-        $('#inRoom').modal('show');
-      }
-    })
+        localStorage.setItem('active', 'true');
+        localStorage.removeItem("disconnectTime");
+    }
+    else{
+      //console.log("new room joined without refresh");
+      socket.emit('isInRoom', {spotifyId:localStorage.getItem('spotifyId'),roomName: roomName});
+      socket.on('isInRoom', function(data){
+        if(data){
+          socket.emit('joinRoom', userObject);
+          /* tells db that user is active to prevent multiple tabs */
+          socket.emit('active', localStorage.getItem('spotifyId'));
+          localStorage.setItem('active', 'true');
+          socket.emit('getflames');
+        }
+        else {
+          $('#inRoom').modal('show');
+        }
+      })
+    }
   }
+
 });
+
 
 socket.on('getflames', function(count) {
     $('#laflamecount').text(count);
@@ -432,6 +444,19 @@ socket.on('laflame', function(count) {
       </span>
     `)
 
+})
+
+// socket.emit('startPinging', localStorage.getItem('spotifyId'));
+//
+// socket.on('ping', function(){
+//   console.log("reached here");
+//   socket.emit('pong');
+// })
+
+socket.emit('ping', Date.now());
+
+socket.on('pong', function(data){
+  socket.emit('ping', data)
 })
 
 </script>

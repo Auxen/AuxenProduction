@@ -6,6 +6,8 @@ var User = models.User;
 var Room = models.Room;
 var existingRoomNames = [];
 
+// testing
+
 module.exports = function() {
 
   /* Check login page. */
@@ -23,15 +25,9 @@ module.exports = function() {
   function ifRedirected(req, res, next){
     if(req.user){
        if(req.user.premium === 'premium'){
-          //   User.findOne({spotifyId:req.user.spotifyId})
-          //   .then(user => {
-          //     if(!user.active)next()
-          //     else res.redirect('/multipleTabs')
-          //   })
           next();
        }
        else res.redirect('/notPremium');
-
     }
     else{
       if(req.session){
@@ -84,7 +80,7 @@ module.exports = function() {
   })
  /////
   /* Get list of available rooms. */
-  router.get('/getRooms', ifRedirected,function(req, res, next) {
+  router.get('/getRooms', ifRedirected, function(req, res, next) {
     Room.find(function(err, rooms) {
       var roomNameArray = [];
       roomNameArray = rooms.map(function(room) {
@@ -107,10 +103,12 @@ module.exports = function() {
       djSpotifyId: req.user.spotifyId,
       imageURL: req.user.imageURL,
       djName: req.user.username
-    })
+    });
+
     newRoom.save(function(err, newRoom) {
       if (err) {
-        res.redirect('/error')
+        console.log("fuck this");
+        res.redirect('/error');
       } else {
         res.redirect('/djRoom/' + newRoom._id);
       }
@@ -143,7 +141,7 @@ module.exports = function() {
       var euser = room.usersInRoom.find(function(user){
         return user.spotifyId === req.user.spotifyId;
       })
-      if(euser)return;
+      if(euser)res.redirect('/error');
       else {
         var userObject = {
           spotifyId: req.user.spotifyId,

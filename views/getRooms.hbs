@@ -68,6 +68,12 @@ $.ajax({
   success: function(response){
     console.log("reached here", response);
     if(response.active === true)window.location.href = '/multipleTabs';
+    else {
+      var a = localStorage.getItem('active');
+      if((a && a === 'false') || !localStorage.getItem('leaving')){
+        localStorage.setItem('leaving', "false");
+      }
+    }
   }
 })
 

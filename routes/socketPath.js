@@ -92,6 +92,23 @@ module.exports = function(io) {
       })
     }
 
+    function clearRoom(roomName){
+      console.log("clearing room and turning all members inactive");
+      Room.findOne({"roomName":roomName})
+      .then(room => {
+        if(room){
+          inActive(room.djSpotifyId);
+          for(var i = 0;i<room.usersInRoom.length;i++){
+            inActive(room.usersInRoom[i].spotifyId);
+          };
+          room.remove();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+
     ///////////////////// PASS DJ ////////////////////////
 
     /* finds the right user from db. sets accestoken of user to dj token */
@@ -150,7 +167,7 @@ module.exports = function(io) {
       .then( user => {
         user.active = true;
         user.save(function(err, user){
-          console.log("changed user active status", user);
+          console.log("changed user active status");
         });
       })
       .catch( err => {
@@ -185,7 +202,7 @@ module.exports = function(io) {
 
     /* called on disconnect, does not do anything */
     socket.on('disconnect', function() {
-      console.log('user disconnected');
+      console.log('########user disconnected');
     });
 
     ///////////////// USER //////////////////////
@@ -305,6 +322,13 @@ module.exports = function(io) {
       }
     });
 
+    socket.on('ping', function(data){
+      if(Date.now() - data > 10*1000){
+        console.log("DISCONNECT SOCKET");
+      }
+      else socket.emit('pong', Date.now());
+    });
+
     ////////////////// USER ENDS //////////////////
 
     /////////////////// DJ ///////////////////////
@@ -324,12 +348,14 @@ module.exports = function(io) {
           return getDJData(io.sockets.adapter.rooms[roomName].DJToken, roomName);
         } else {
           console.log("this room no longer exists");
-          Room.remove({'roomName': roomName})
-          .then(() => {
-            console.log("***********Ben - room successfully removed****************************");
-          }).catch((error) => {
-            console.log("error", error);
-          });
+          // Room.remove({'roomName': roomName})
+          // .then(room => {
+          //   console.log("*********** room successfully removed ****************************");
+          // })
+          // .catch((error) => {
+          //   console.log("error", error);
+          // });
+          clearRoom(roomName);
           clearInterval(clearID);
         }
       }, 5000);
@@ -373,10 +399,36 @@ module.exports = function(io) {
       socket.to(socket.room).emit('sendgrace');
     })
 
+    /* mantains flame count */
     socket.on('getflames', function() {
       if(socket.room)socket.emit('getflames', io.sockets.adapter.rooms[socket.room].laflame)
 
     })
+
+    // socket.on('startPinging', function(spotifyId){
+    //
+    //   socket.flag = true;
+    //   socket.spotifyId = spotifyId;
+    //
+    //   var id = setInterval(function(){
+    //     socket.flag  = false;
+    //     socket.emit('ping');
+    //   }, 7000);
+    //
+    //   var id2 = setInterval(function(){
+    //     console.log("flag", socket.flag);
+    //     if(!socket.flag){
+    //       console.log("THIS IS AMAZING");
+    //     }
+    //   }, 9000);
+    //
+    // })
+    //
+    // socket.on('pong', function(){
+    //   socket.flag = true;
+    // })
+
+
 
     //////////////////// DJ ENDS ///////////////////
   })
